@@ -1,0 +1,49 @@
+
+.botão{
+    width: 2cm; 
+    margin: auto; 
+    text-align: center; 
+    border-style: outset; 
+    border-width: 2px; 
+    cursor: pointer; 
+    padding: 10px;
+    background-color: burlywood;
+}
+
+/*
+JOGO
+.table {
+    display:block;
+    float: left;
+ }
+
+.row { 
+    display:block;
+}
+
+.cell {
+    display:inline-block;
+    background-color: burlywood;
+    width:100px; 
+    height:50px;
+    margin-right:10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+.hole {
+    width:100px; 
+    height:100px;
+    background-color: rgb(255, 96, 96);
+    float: left;
+    margin-right:10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#logo {
+    width:150px; 
+    height:150px;
+}*/
