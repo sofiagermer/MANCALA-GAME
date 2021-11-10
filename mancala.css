@@ -1,0 +1,74 @@
+
+body{
+    background-color: rgb(255, 238, 215);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#logo {
+    width:150px; 
+    height:150px;
+    align-self: center;
+}
+
+.botão{
+    width: 2cm; 
+    margin: auto; 
+    text-align: center; 
+    border-style: outset; 
+    border-width: 2px; 
+    cursor: pointer; 
+    padding: 10px;
+    background-color: burlywood;
+}
+/*TABULEIRO*/
+
+label {
+    display: block;
+    font: 1rem 'Fira Sans', sans-serif;
+}
+
+input,
+label {
+    margin: .4rem 0;
+}
+
+
+.lateral{
+    background-color: burlywood;
+    width: 100px;
+    height: 80%;
+    align-self: center;
+}
+
+.quadrado {
+    background-color: burlywood;
+    height: 100px;
+    width: 100px;
+    align-self: center;
+    margin: 0px 10px
+}
+
+#tabuleiro{
+    align-self: center;
+    display:flex;
+    justify-content: space-around;
+    height: 50vh;
+    background-color: cadetblue;
+    width: 80%;
+}
+
+.sub-tabuleiro{
+    align-self: center;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 80%;
+
+}
+.sub-sub-tabuleiro{
+    display:flex;
+    justify-content: space-around;
+
+}
