@@ -87,3 +87,11 @@ label {
     text-align: center;
     align-self: center;
 }
+
+/*PUNCTUATION TABLE*/
+table, th, td {
+    border: 1.0px solid rgb(77, 60, 39);
+    border-collapse: collapse;
+    background-color: burlywood;
+    width: 300px;
+  }
