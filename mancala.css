@@ -22,6 +22,15 @@ body{
     padding: 10px;
     background-color: burlywood;
 }
+
+/*SEED*/
+#seed{
+    width: 20px;
+    height: 28px;
+    border-radius: 50%;
+    background-color:  rgb(156, 1, 40);
+}
+
 /*TABULEIRO*/
 
 label {
