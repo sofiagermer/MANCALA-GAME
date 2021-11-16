@@ -17,6 +17,49 @@
 <img src="logo.png" id = "logo">
 -->
 
+<!--REGRAS-->
+<!--
+<ul>
+  <li>Ínicio do jogo :</li>
+  <ul>
+    <li>Os armazéns estão vazios (sem sementes)</li>
+    <li>As restantes cavidades têm o mesmo número de sementes </li>          
+  </ul>
+  <li> Começar a semear :      
+    <ul>
+      <li>Escolher uma cavidade do seu lado (que não o armazém)</li>
+      <li>Recolher todas as N sementes dessa cavidade</li>
+      <li>Colocar 1 semente nas N cavidade seguintes</li>           
+      <li>A semeadura é feita no sentido anti-horário</li>
+    </ul>
+  </li>              
+  <li> Última semente em armazém :      
+    <ul>
+      <li>Volta a jogar se a última semente for semeada for no seu próprio armazém</li>
+      <li>Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar</li>
+    </ul>
+  </li> 
+  <li> Última semente em cavidade vazia :      
+    <ul>
+      <li>Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes</li>
+      <ul>
+        <li>na cavidade oposta, do adversário </li>
+        <li>assim como essa última semente semeada</li>
+      </ul>
+      <li>Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém</li>
+    </ul>
+  </li> 
+  <li> Terminar :
+    <ul>
+      <li>Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias</li>
+      <li>O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém</li>
+      <li>Ganha jogador cujo armazém tem mais sementes</li>
+    </ul>
+
+  </li>
+</ul>
+-->
+
 <!--TABELA PONTUAÇÃO-->
 <!--
 <table>
@@ -50,31 +93,137 @@
 </div>
 -->
 
-<!--
-<div id = "seed">
-</div>
--->
 
 <!-- TABULEIRO-->
+
 <!--
 <div id="tabuleiro">
    <div class="lateral"></div>
    <div class="sub-tabuleiro">
        <div class="sub-sub-tabuleiro">
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
+          <div class="quadrado">
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+          </div>
+
+          <div class="quadrado">
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+          </div>
+          <div class="quadrado">
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+          </div>
+          <div class="quadrado">
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+          </div>
+          <div class="quadrado">
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+          </div>
+          <div class="quadrado">
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+            <div>
+              <div class = "seed"></div>
+              <div class = "seed"></div>
+            </div>
+          </div>
        </div>
        <div class="sub-sub-tabuleiro">
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
-           <div class="quadrado"></div>
+        <div class="quadrado">
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+        </div>
+        <div class="quadrado">
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+        </div>
+        <div class="quadrado">
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+        </div>
+        <div class="quadrado">
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+        </div>
+        <div class="quadrado">
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+        </div>
+        <div class="quadrado">
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+          <div>
+            <div class = "seed"></div>
+            <div class = "seed"></div>
+          </div>
+        </div>
        </div>
    </div>
    <div class="lateral"></div>
@@ -85,10 +234,10 @@
 <!-- JOGO -->
 
 
-<!-- PEDIR NÚMERO DE BURACOS-->
+<!--PEDIR NÚMERO DE BURACOS-->
+
 <!--
 <label for="numHoles">Number of holes:</label>
 
 <input type="number" value="12" min="6" max="12" step="2">
-      
--->
+--> 
