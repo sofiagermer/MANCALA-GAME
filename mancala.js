@@ -28,8 +28,17 @@ function gameSetup() {
     isPlayer1Turn = isPlayer1Starting;
 }
 
-function verifyScoring() {
-    
+function verifyScoring(cavityIndex) {
+    if ((isPlayer1Turn && cavityIndex < playerCavityNumber) || (!isPlayer1Turn && cavityIndex >= playerCavityNumber)) {
+        if (board[cavityIndex] == 1) {
+            var oppositeCavity = totalCavities-cavityIndex-1
+
+            score[isPlayer1Turn ? 0 : 1] += board[oppositeCavity] + 1;
+
+            board[oppositeCavity] = 0;
+            board[cavityIndex] = 0;
+        }
+    }
 }
 
 function selectCavity() {
@@ -55,7 +64,7 @@ function executePlay(cavityIndex) { //TODO
     var seeds = board[cavityIndex];
     var loopCounter = Math.floor(seeds/totalCavities);
     var storageCounter = 0;
-    var didBoardSideSwitch = false;
+    //var didBoardSideSwitch = false;
     var lastSeedOnStorage = false;
 
     var debugCounter = 0;
@@ -70,7 +79,7 @@ function executePlay(cavityIndex) { //TODO
         var currentCavity = i % totalCavities;
         var isInitialCavity = (currentCavity == cavityIndex);
         var isOpositePlayerFirstCavity = (currentCavity == (isPlayer1Turn ? playerCavityNumber : 0));
-        var isCurrentPlayerLastCavity = (currentCavity == (isPlayer1Turn ? playerCavityNumber - 1 : totalCavities));
+        //var isCurrentPlayerLastCavity = (currentCavity == (isPlayer1Turn ? playerCavityNumber - 1 : totalCavities));
 
         console.log("\nSeeding iteration # " + debugCounter);
         console.log("Seeding at cavity # " + currentCavity);
@@ -86,6 +95,12 @@ function executePlay(cavityIndex) { //TODO
 
         else if (isCurrentPlayerLastCavity) {
             didBoardSideSwitch = true;
+        }
+
+        if (isOpositePlayerFirstCavity && !lastSeedOnStorage) {
+            lastSeedOnStorage = true;
+            score[(isPlayer1Turn ? 0 : 1)]++;
+            i--;
         }
 
         board[currentCavity]++;
@@ -105,6 +120,32 @@ function executePlay(cavityIndex) { //TODO
 
     verifyScoring((i + cavityIndex - 1) % totalCavities);
     switchTurn(lastSeedOnStorage);
+}
+
+function executePlay2 (cavityIndex) {
+    var initialSeeds = board[cavityIndex];
+    board[cavityIndex] = 0;
+    var lastCavityWasStorage = false;
+
+    for (var seeds = initialSeeds; seeds != 0; seeds--) {
+        cavityIndex = (cavityIndex + 1) % totalCavities;
+
+        var isPlayerStorage = (cavityIndex == (isPlayer1Turn? playerCavityNumber : 0));
+        if (isPlayerStorage && !lastCavityWasStorage) {
+            score[isPlayer1Turn? 0 : 1]++;
+            cavityIndex--;
+
+            lastCavityWasStorage = true;
+            continue;
+        }
+
+        board[cavityIndex]++;
+        lastCavityWasStorage = false;
+
+    }
+    
+    if (!lastCavityWasStorage) verifyScoring(cavityIndex);
+    switchTurn(lastCavityWasStorage);
 }
 
 function switchTurn(lastSeedOnStorage) {
@@ -189,16 +230,17 @@ function main() {
         switchTurn();
     }
     */
-    board[4] = 14;
+    //board[4] = 8;
 
+    console.log(isPlayer1Turn);
     viewBoard();
     viewScore();
 
-    executePlay(4);
+    executePlay2(3);
 
+    console.log(isPlayer1Turn);
     viewBoard();
     viewScore();
-
 }
 
 main();
