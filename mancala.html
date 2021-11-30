@@ -6,6 +6,7 @@
     <meta charset=UTF-8>        <!-- para caracteres acentuados   -->
     <title>Mancala</title>  <!-- texto na decoração da janela -->
     <link rel="stylesheet" href="mancala.css" type="text/css">
+    <script src = "sofia.js" defer> </script>
   </head>
 
 <body>
@@ -93,151 +94,146 @@
 </div>
 -->
 
-
-<!-- TABULEIRO-->
-
-<!--
-<div id="tabuleiro">
-   <div class="lateral"></div>
-   <div class="sub-tabuleiro">
-       <div class="sub-sub-tabuleiro">
-          <div class="quadrado">
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-          </div>
-
-          <div class="quadrado">
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-          </div>
-          <div class="quadrado">
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-          </div>
-          <div class="quadrado">
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-          </div>
-          <div class="quadrado">
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-          </div>
-          <div class="quadrado">
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-            <div>
-              <div class = "seed"></div>
-              <div class = "seed"></div>
-            </div>
-          </div>
-       </div>
-       <div class="sub-sub-tabuleiro">
-        <div class="quadrado">
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-        </div>
-        <div class="quadrado">
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-        </div>
-        <div class="quadrado">
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-        </div>
-        <div class="quadrado">
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-        </div>
-        <div class="quadrado">
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-        </div>
-        <div class="quadrado">
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-          <div>
-            <div class = "seed"></div>
-            <div class = "seed"></div>
-          </div>
-        </div>
-       </div>
-   </div>
-   <div class="lateral"></div>
-</div>
-
--->
-
-<!-- JOGO -->
-
-
 <!--PEDIR NÚMERO DE BURACOS-->
 
-<!--
-<label for="numHoles">Number of holes:</label>
+<label>Number of holes:<input type="number" value="12" min="6" max="12" step="2" id = "numHoles"></label>
+<button onclick="getNumberHoles()">Decide</button>
+<p id="demo"></p>
 
-<input type="number" value="12" min="6" max="12" step="2">
---> 
+<!-- TABULEIRO-->
+<!--
+<div id="tabuleiro">
+  <div class="lateral"></div>
+  <div class="sub-tabuleiro">
+      <div class="sub-sub-tabuleiro">
+         <div class="quadrado">
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+         </div>
+
+         <div class="quadrado">
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+         </div>
+         <div class="quadrado">
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+         </div>
+         <div class="quadrado">
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+         </div>
+         <div class="quadrado">
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+         </div>
+         <div class="quadrado">
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+           <div>
+             <div class = "seed"></div>
+             <div class = "seed"></div>
+           </div>
+         </div>
+      </div>
+      <div class="sub-sub-tabuleiro">
+       <div class="quadrado">
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+       </div>
+       <div class="quadrado">
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+       </div>
+       <div class="quadrado">
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+       </div>
+       <div class="quadrado">
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+       </div>
+       <div class="quadrado">
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+       </div>
+       <div class="quadrado">
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+         <div>
+           <div class = "seed"></div>
+           <div class = "seed"></div>
+         </div>
+       </div>
+      </div>
+  </div>
+  <div class="lateral"></div>
+</div>
+-->
+
+<button onclick="createBoard()">Criar tabuleiro</button>
+<!-- JOGO -->

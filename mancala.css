@@ -78,8 +78,8 @@ label {
     flex-direction: column;
     justify-content: space-between;
     height: 80%;
-
 }
+
 .sub-sub-tabuleiro{
     display:flex;
     justify-content: space-around;
