@@ -15,6 +15,7 @@ var aiLevel = 1;
 
 
 function gameSetup() {
+    // TODO - AI later on
     // PvP vs PvE setup
     // If PvE, AI level setup
 
@@ -43,15 +44,11 @@ function verifyScoring(cavityIndex) {
 
 function isCavityValid(index) {
     if (isPlayer1Turn) {
-        if (index >= 0 && index < playerCavityNumber) {
+        if (index >= 0 && index < playerCavityNumber)
             return board[index] != 0;
-        }
     }
-    else {
-        if (index >= playerCavityNumber && index < totalCavities) {
+    else if (index >= playerCavityNumber && index < totalCavities)
             return board[index] != 0;
-        }
-    }
 
     return false;
 }
@@ -62,7 +59,7 @@ function selectCavity() {
                 ' and ' + (isPlayer1Turn ? playerCavityNumber : totalCavities - 1));
 
 
-    var chosenCavity = Math.floor(Math.random() * totalCavities);
+    var chosenCavity = Math.floor(Math.random() * totalCavities); //TODO - change from random to user input
     // read input to chosen cavity
     
     while (true) {
@@ -71,75 +68,10 @@ function selectCavity() {
             return chosenCavity;
         }
         console.log("Wrong input. Choose another cavity.");
-        chosenCavity = Math.floor(Math.random() * totalCavities);
+        chosenCavity = Math.floor(Math.random() * totalCavities); //TODO - change from random to user input
         // read input to chosen cavity
     }
 }
-
-// Leagacy code
-/*
-function executePlay(cavityIndex) { //TODO
-    var seeds = board[cavityIndex];
-    var loopCounter = Math.floor(seeds/totalCavities);
-    var storageCounter = 0;
-    //var didBoardSideSwitch = false;
-    var lastSeedOnStorage = false;
-
-    var debugCounter = 0;
-
-    console.log("Seeds: " + seeds);
-    console.log("LoopCounter: " + loopCounter);
-
-    for (var i = cavityIndex; i < cavityIndex + seeds + loopCounter - storageCounter; i++) {
-        debugCounter++;
-
-        var lastSeedOnStorage = false;
-        var currentCavity = i % totalCavities;
-        var isInitialCavity = (currentCavity == cavityIndex);
-        var isOpositePlayerFirstCavity = (currentCavity == (isPlayer1Turn ? playerCavityNumber : 0));
-        //var isCurrentPlayerLastCavity = (currentCavity == (isPlayer1Turn ? playerCavityNumber - 1 : totalCavities));
-
-        console.log("\nSeeding iteration # " + debugCounter);
-        console.log("Seeding at cavity # " + currentCavity);
-
-        if (isOpositePlayerFirstCavity && didBoardSideSwitch) {
-            didBoardSideSwitch = false;
-            storageCounter++;
-            lastSeedOnStorage = true;
-
-            score[(isPlayer1Turn ? 0 : 1)]++;
-            //continue;
-        } 
-
-        else if (isCurrentPlayerLastCavity) {
-            didBoardSideSwitch = true;
-        }
-
-        if (isOpositePlayerFirstCavity && !lastSeedOnStorage) {
-            lastSeedOnStorage = true;
-            score[(isPlayer1Turn ? 0 : 1)]++;
-            i--;
-        }
-
-        board[currentCavity]++;
-
-        console.log("Max i value: " + (cavityIndex + seeds + loopCounter - storageCounter));
-    }
-    /*
-    for (var i = 1; i < seeds + loopCounter + 1; i++) {
-        if (i == totalCavities) loopCounter++;
-
-        board[(i + cavityIndex) % totalCavities]++;
-    }
-    
-
-
-    board[cavityIndex] = 0;
-
-    verifyScoring((i + cavityIndex - 1) % totalCavities);
-    switchTurn(lastSeedOnStorage);
-}
-*/
 
 function executePlay (cavityIndex) {
     var initialSeeds = board[cavityIndex];
@@ -168,11 +100,17 @@ function executePlay (cavityIndex) {
 }
 
 function switchTurn(lastSeedOnStorage) {
-    if (!lastSeedOnStorage) isPlayer1Turn = !isPlayer1Turn;
+    if (!lastSeedOnStorage) 
+        isPlayer1Turn = !isPlayer1Turn; // switch turn
     roundCounter++;
 }
 
 function isGameFinished() {
+
+    var minScoreToWin = totalCavities * initialSeedsPerCavity / 2
+    if (score[0] > minScoreToWin || score[1] > minScoreToWin)
+        return true;
+
     var canPlayer1Play = false;
     var canPlayer2Play = false;
 
@@ -217,10 +155,6 @@ function finishGame () {
     else console.log('Draw!')
 }
 
-function showBoard() {
-    console.log('Eventually the board will be shown...');
-}
-
 function viewScore() {
     console.log("Scoring. Player 1: " + score[0] + ", Player 2: " + score[1] + '\n');
 }
@@ -233,6 +167,7 @@ function viewBoard() {
     console.log("\n");
 }
 
+//TODO: clean-up
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -240,31 +175,18 @@ function sleep(ms) {
 async function main() {
     gameSetup();
 
-    ///*
     while(true){
-        viewBoard();
-        viewScore();
+        viewBoard(); //TODO - clean up
+        viewScore(); //TODO - clean up
         
         if (isGameFinished()) {
             finishGame();
             break;
         }
 
-        await sleep(3000);
+        await sleep(1000); //TODO - clean up
         executePlay(selectCavity());
     }
-    //*/ 
-    /*
-    board[4] = 0;
-
-    viewBoard();
-    viewScore();
-
-    executePlay(0);
-
-    viewBoard();
-    viewScore();
-    */
 }
 
 main();
