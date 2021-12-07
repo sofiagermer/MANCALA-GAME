@@ -41,25 +41,43 @@ function verifyScoring(cavityIndex) {
     }
 }
 
+function isCavityValid(index) {
+    if (isPlayer1Turn) {
+        if (index >= 0 && index < playerCavityNumber) {
+            return board[index] != 0;
+        }
+    }
+    else {
+        if (index >= playerCavityNumber && index < totalCavities) {
+            return board[index] != 0;
+        }
+    }
+
+    return false;
+}
+
 function selectCavity() {
     
     console.log('Choose a number between ' + (isPlayer1Turn ? 0 : playerCavityNumber - 1) + 
                 ' and ' + (isPlayer1Turn ? playerCavityNumber : totalCavities - 1));
 
-    return 5; //TODO
 
-    var chosenCavity;
+    var chosenCavity = Math.floor(Math.random() * totalCavities);
     // read input to chosen cavity
     
     while (true) {
-        if ((isPlayer1 && chosenCavity >= 0 && chosenCavity < playerCavityNumber) ||
-            (!isPlayer1 && chosenCavity >= playerCavityNumber && chosenCavity < totalCavities)) 
-                return chosenCavity;
-        console.log("Wrong input. Choose another cavity.\n");
+        if (isCavityValid(chosenCavity)) {
+            console.log("Chosen cavity = " + chosenCavity);
+            return chosenCavity;
+        }
+        console.log("Wrong input. Choose another cavity.");
+        chosenCavity = Math.floor(Math.random() * totalCavities);
         // read input to chosen cavity
     }
 }
 
+// Leagacy code
+/*
 function executePlay(cavityIndex) { //TODO
     var seeds = board[cavityIndex];
     var loopCounter = Math.floor(seeds/totalCavities);
@@ -113,7 +131,7 @@ function executePlay(cavityIndex) { //TODO
 
         board[(i + cavityIndex) % totalCavities]++;
     }
-    */
+    
 
 
     board[cavityIndex] = 0;
@@ -121,8 +139,9 @@ function executePlay(cavityIndex) { //TODO
     verifyScoring((i + cavityIndex - 1) % totalCavities);
     switchTurn(lastSeedOnStorage);
 }
+*/
 
-function executePlay2 (cavityIndex) {
+function executePlay (cavityIndex) {
     var initialSeeds = board[cavityIndex];
     board[cavityIndex] = 0;
     var lastCavityWasStorage = false;
@@ -214,33 +233,38 @@ function viewBoard() {
     console.log("\n");
 }
 
-function main() {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function main() {
     gameSetup();
 
-    /*
+    ///*
     while(true){
-        showBoard();
-
+        viewBoard();
+        viewScore();
+        
         if (isGameFinished()) {
             finishGame();
             break;
         }
 
+        await sleep(3000);
         executePlay(selectCavity());
-        switchTurn();
     }
+    //*/ 
+    /*
+    board[4] = 0;
+
+    viewBoard();
+    viewScore();
+
+    executePlay(0);
+
+    viewBoard();
+    viewScore();
     */
-    //board[4] = 8;
-
-    console.log(isPlayer1Turn);
-    viewBoard();
-    viewScore();
-
-    executePlay2(3);
-
-    console.log(isPlayer1Turn);
-    viewBoard();
-    viewScore();
 }
 
 main();
