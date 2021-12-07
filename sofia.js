@@ -14,33 +14,32 @@ function createBoard() {
     document.getElementById("tabuleiro").appendChild(b);
 
     var c = document.createElement("div");
-    c.setAttribute("class", "sub-tabuleiro");
-    c.setAttribute("id", "sub-tabuleiro-1");
-    document.getElementById("sub-tabuleiro-1").appendChild(c);
+    c.setAttribute("id", "sub-tabuleiro");
+    document.getElementById("tabuleiro").appendChild(c);
 
     var d = document.createElement("div");
     d.setAttribute("class", "sub-sub-tabuleiro");
-    d.setAttribute("id", "sub-tabuleiro-2")
-    document.getElementById("sub-tabuleiro-1").appendChild(d);
-  
+    d.setAttribute("id", "sub-sub-tabuleiro-1")
+    document.getElementById("sub-tabuleiro").appendChild(d);
+
     for (let i = 0; i < numHoles/2; i++) {
         var e = document.createElement("div");
         e.setAttribute("class", "quadrado");
-        //e.setAttribute("id", "buraco-1-".concat(i.toString));
-        document.getElementsByClassName("sub-sub-tabuleiro-1").appendChild(e);
+        document.getElementById("sub-sub-tabuleiro-1").appendChild(e);
     }
 
-/*    var f = document.createElement("div");
+    var f = document.createElement("div");
     f.setAttribute("class", "sub-sub-tabuleiro");
-    document.getElementById("tabuleiro").appendChild(f);
+    f.setAttribute("id", "sub-sub-tabuleiro-2")
+    document.getElementById("sub-tabuleiro").appendChild(f);
 
     for (let i = 0; i < numHoles/2; i++) {
         var g = document.createElement("div");
         g.setAttribute("class", "quadrado");
-        document.getElementById("tabuleiro").appendChild(g);
+        document.getElementById("sub-sub-tabuleiro-2").appendChild(g);
     }
 
     var h = document.createElement("div");
     h.setAttribute("class", "lateral");
-    document.getElementById("tabuleiro").appendChild(e);*/
+    document.getElementById("tabuleiro").appendChild(h);
 }
