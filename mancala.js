@@ -23,16 +23,12 @@ function getNumberSeeds(){
     numSeeds = document.getElementById("numSeeds").value;
 }
 
-function chooseHole(clicked_id){
-    return clicked_id;
-}
-
 function createHoleCima(id){
     ui[id] = document.createElement("button");
     ui[id].setAttribute("class", "quadrado");
     ui[id].setAttribute("id",id);
     document.getElementById("sub-sub-tabuleiro-2").appendChild(ui[id]);
-    ui[id].addEventListener("click", ()=> chooseHole(id));
+    ui[id].addEventListener("click", ()=> selectCavity(id));
 
     var seeds = document.createElement("div");
     seeds.setAttribute("class", "seedspace");
@@ -51,7 +47,7 @@ function createHoleBaixo(id){
     ui[id].setAttribute("class", "quadrado");
     ui[id].setAttribute("id", id);
     document.getElementById("sub-sub-tabuleiro-1").appendChild(ui[id]);
-    ui[id].addEventListener("click",chooseHole(id));
+    ui[id].addEventListener("click", ()=> selectCavity(id));
 
 
     var seeds = document.createElement("div");
@@ -141,9 +137,11 @@ function isCavityValid(index) {
 function selectCavity(idCavity) {
     while (true){
         if(isCavityValid(idCavity)){
-            return idCavity;
+            executePlay(idCavity);
+            break;
         }
     }
+
    /* var el_up = document.getElementById("0");
     var el_down = document.getElementById("1");
     el_up.innerHTML = "Click on button to get ID";
@@ -312,20 +310,15 @@ async function main() {
     gameSetup();
 
     while(true){
-        //clearBoard();
         hideBoard();
         drawBoard(); //TODO - clean up
-        //hideBoard();
        // viewScore(); //TODO - clean up
         /*
         if (isGameFinished()) {
             finishGame();
             break;
-        }
+        }*/
 
-        await sleep(1000); //TODO - clean up
-        executePlay(selectCavity());
-        */
         break;
     }
 }
