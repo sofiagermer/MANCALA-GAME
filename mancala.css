@@ -124,6 +124,9 @@ label {
     margin: .4rem 0;
 }
 
+#zonaTabuleiro{
+    align-self: center;
+}
 
 .lateral{
     background-color: rgb(136, 104, 61, 0.5);

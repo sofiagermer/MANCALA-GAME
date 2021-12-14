@@ -55,7 +55,9 @@ function createHoleBaixo(id){
     seeds.setAttribute("class", "seedspace");
     ui[id].appendChild(seeds);
 
-    for (let j = 0; j < board[numHoles/2+j]; j++) {
+    for (let j = 0; j < board[id]; j++) {
+
+        console.log("id : " + id + " seeds :" +  board[id]);
         var s2 = document.createElement("div");
         s2.setAttribute("class", "seed");
         seeds.appendChild(s2);
@@ -64,14 +66,24 @@ function createHoleBaixo(id){
 
 function drawBoard() {
     console.log("DENTRO DE DRAW BOARD");
-    document.getElementById("zonaTabuleiro").style.display = "block";
+    //document.getElementById("zonaTabuleiro").style.display = "block";
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
     document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
 
-    var b = document.createElement("div");
-    b.setAttribute("class", "lateral");
-    document.getElementById("tabuleiro").appendChild(b);
+    var lateralEsquerda = document.createElement("div");
+    lateralEsquerda.setAttribute("class", "lateral");
+    document.getElementById("tabuleiro").appendChild(lateralEsquerda);
+
+    var seedsE = document.createElement("div");
+    seedsE.setAttribute("class", "seedspace");
+    lateralEsquerda.appendChild(seedsE);
+
+    for(var i = 0; i < score[1]; i++){
+        var buracoEsquerda = document.createElement("div");
+        buracoEsquerda.setAttribute("class", "seed");
+        seedsE.appendChild(buracoEsquerda);
+    }
 
     var c = document.createElement("div");
     c.setAttribute("id", "sub-tabuleiro");
@@ -95,9 +107,19 @@ function drawBoard() {
         createHoleBaixo(i);
     }
 
-    var h = document.createElement("div");
-    h.setAttribute("class", "lateral");
-    document.getElementById("tabuleiro").appendChild(h);
+    var lateralDireita = document.createElement("div");
+    lateralDireita.setAttribute("class", "lateral");
+    document.getElementById("tabuleiro").appendChild(lateralDireita);
+
+    var seedsD = document.createElement("div");
+    seedsD.setAttribute("class", "seedspace");
+    lateralDireita.appendChild(seedsD);
+
+    for(var i = 0; i < score[0]; i++){
+        var buracoDireita = document.createElement("div");
+        buracoDireita.setAttribute("class", "seed");
+        seedsD.appendChild(buracoDireita);
+    }
 }
 
 function gameSetup() {
@@ -140,46 +162,8 @@ function selectCavity(idCavity) {
     if(isCavityValid(idCavity)){
         hideBoard();
         executePlay(idCavity);
-        showBoard();
+        drawBoard();
     }
-    /*while (true){
-        if(isCavityValid(idCavity)){
-            console.log(idCavity)
-            executePlay(idCavity);
-            break;
-        }
-    }*/
-
-   /* var el_up = document.getElementById("0");
-    var el_down = document.getElementById("1");
-    el_up.innerHTML = "Click on button to get ID";
-      
-    document.getElementById('1').onclick = GFG_click;
-    document.getElementById('2').onclick = GFG_click;
-    document.getElementById('3').onclick = GFG_click;
-      
-    function GFG_click(clicked) {
-        el_down.innerHTML = "Button clicked, id = "
-            + this.id;
-    }     */
-    /*
-    console.log('Choose a number between ' + (isPlayer1Turn ? 0 : (numHoles/2) - 1) + 
-                ' and ' + (isPlayer1Turn ? (numHoles/2) : numHoles - 1));
-
-
-    var chosenCavity = Math.floor(Math.random() * numHoles); //TODO - change from random to user input
-
-    // read input to chosen cavity
-    
-    while (true) {
-        if (isCavityValid(chosenCavity)) {
-            console.log("Chosen cavity = " + chosenCavity);
-            return chosenCavity;
-        }
-        console.log("Wrong input. Choose another cavity.");
-        chosenCavity = Math.floor(Math.random() * numHoles); //TODO - change from random to user input
-        // read input to chosen cavity
-    }*/
 }
 
 function executePlay (cavityIndex) {
@@ -311,7 +295,7 @@ function clearBoard(){
 }
 
 function hideBoard(){
-    document.getElementById("zonaTabuleiro").style.display = "none"; 
+    document.getElementById("tabuleiro").remove(); 
 }
 
 function showBoard(){
