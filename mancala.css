@@ -1,39 +1,118 @@
 body{
+    margin-top: 100px;
     background-color: rgb(255, 238, 215);
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial;
+  }
+
+#navbar{
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+  /* Style tab links */
+  .tablink {
+    background-color: #555;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 20%;
+  }
+  
+  .tablink:hover {
+    background-color: #777;
+  }
+  
+  /* Style the tab content (and add height:100% for full page content) */
+  .tabcontent {
+    color: black;
+    display: none;
+    padding: 100px 20px;
+    height: 100%;
+  }
+  
+  #Rules {background-color: rgb(255, 238, 215);}
+  #Play {background-color: rgb(255, 238, 215);}
+  #Login {background-color: rgb(255, 238, 215);}
+
+  
 #logo {
-    width:150px; 
-    height:150px;
+    width:180px; 
+    height:180px;
     align-self: center;
+    display: flex;
+    flex-flow: row;
 }
 
-.botão{
-    width: 2cm; 
-    margin: auto; 
-    text-align: center; 
-    border-style: outset; 
-    border-width: 2px; 
-    cursor: pointer; 
-    padding: 10px;
+#title{
+    padding-top: 40px;
+    font-size: 70px;
+    color: #333;
+}
+
+#header {
+    padding: 30px;
+    display: flex;
+    flex-flow: row;
+    background-image: url(header.jpg);
+    opacity: 0.9;
+    height: auto;
+    width: 100%;
+}
+
+.button {
     background-color: burlywood;
+    width: 100px;
+    height: auto;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
 }
 
-/SEED/
+.button:hover {
+    background-color: rgb(179, 149, 110)
+}
+
+.button:active {
+  background-color: burlywood;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
 .seed{
     width: 20px;
     height: 28px;
     border-radius: 50%;
-    background-color:  rgb(156, 1, 40);
-    margin: 3px;
-    display:flex;
-    justify-content: space-around;
+    /*background-color:  rgb(156, 1, 40);*/
+    background-image: url(seed.webp);
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 4px;
+    justify-content: space-between;
 }
 
-/TABULEIRO/
+.seedspace{
+    height: 100px;
+    width: 100px;
+    display:flex;
+    flex-flow: row wrap;
+}
 
 label {
     display: block;
@@ -47,18 +126,22 @@ label {
 
 
 .lateral{
-    background-color: burlywood;
+    background-color: rgb(136, 104, 61, 0.5);
     width: 100px;
     height: 80%;
     align-self: center;
     flex-flow: row;
+    border-radius: 40px;
+    padding: 20px;
 }
 
 .quadrado {
-    background-color: burlywood;
+    background-color: rgb(136, 104, 61,0.5);
     height: 100px;
     width: 100px;
+    border-radius : 15px;
     align-self: center;
+    display: flex;
     margin: 10px 10px 10px 10px;
 }
 
@@ -66,8 +149,9 @@ label {
     align-self: center;
     display:flex;
     justify-content: space-around;
-    height: 50vh;
-    background-color: cadetblue;
+    height: 40vh;
+    border-radius: 30px;
+    background-image: url(wood.png);
     width: 80%;
 }
 
@@ -98,3 +182,14 @@ table, th, td {
     background-color: burlywood;
     width: 300px;
   }
+
+#rulesBackground{
+    height: fit-content;
+    width: 50%;
+    /*background-color: rgb(1, 1, 1, 0.5);
+    background-image: url(header.jpg);*/
+    
+    outline-style: inset;
+    outline-width:thick;
+    outline-color: rgba(97, 71, 38, 0.5);
+}

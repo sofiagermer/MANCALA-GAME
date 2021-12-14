@@ -6,60 +6,85 @@
     <meta charset=UTF-8>        <!-- para caracteres acentuados   -->
     <title>Mancala</title>  <!-- texto na decoração da janela -->
     <link rel="stylesheet" href="mancala.css" type="text/css">
-    <script src = "sofia.js" defer> </script>
+    <script src = "mancala.js" defer> </script>
   </head>
 
 <body>
 
 
-<h1><center>Mancala</center></h1>
+<div id= "header"> 
+  <div id= "title">
+    Mancala
+  </div>
+  <div id = "logo">
+    <img src="logo.png">
+  </div>
+</div>
 
-<!-- LOGO
-<img src="logo.png" id = "logo">
--->
+<div id= "navbar">
+  <button class="tablink" onclick="openPage('Login', this, 'burlywood')" >Login</button>
+  <button class="tablink" onclick="openPage('Play', this, 'burlywood')" id="defaultOpen">Play</button>
+  <button class="tablink" onclick="openPage('Rules', this, 'burlywood')">Rules</button>
+</div>
 
-<!--REGRAS-->
-<!--
-<ul>
-  <li>Ínicio do jogo :</li>
+
+<div id="Rules" class="tabcontent">
+  <div id= "rulesBackground">
   <ul>
-    <li>Os armazéns estão vazios (sem sementes)</li>
-    <li>As restantes cavidades têm o mesmo número de sementes </li>          
-  </ul>
-  <li> Começar a semear :      
+    <li>Ínicio do jogo :</li>
     <ul>
-      <li>Escolher uma cavidade do seu lado (que não o armazém)</li>
-      <li>Recolher todas as N sementes dessa cavidade</li>
-      <li>Colocar 1 semente nas N cavidade seguintes</li>           
-      <li>A semeadura é feita no sentido anti-horário</li>
+      <li>Os armazéns estão vazios (sem sementes)</li>
+      <li>As restantes cavidades têm o mesmo número de sementes </li>          
     </ul>
-  </li>              
-  <li> Última semente em armazém :      
-    <ul>
-      <li>Volta a jogar se a última semente for semeada for no seu próprio armazém</li>
-      <li>Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar</li>
-    </ul>
-  </li> 
-  <li> Última semente em cavidade vazia :      
-    <ul>
-      <li>Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes</li>
+    <li> Começar a semear :      
       <ul>
-        <li>na cavidade oposta, do adversário </li>
-        <li>assim como essa última semente semeada</li>
+        <li>Escolher uma cavidade do seu lado (que não o armazém)</li>
+        <li>Recolher todas as N sementes dessa cavidade</li>
+        <li>Colocar 1 semente nas N cavidade seguintes</li>           
+        <li>A semeadura é feita no sentido anti-horário</li>
       </ul>
-      <li>Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém</li>
-    </ul>
-  </li> 
-  <li> Terminar :
-    <ul>
-      <li>Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias</li>
-      <li>O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém</li>
-      <li>Ganha jogador cujo armazém tem mais sementes</li>
-    </ul>
+    </li>              
+    <li> Última semente em armazém :      
+      <ul>
+        <li>Volta a jogar se a última semente for semeada for no seu próprio armazém</li>
+        <li>Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar</li>
+      </ul>
+    </li> 
+    <li> Última semente em cavidade vazia :      
+      <ul>
+        <li>Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes</li>
+        <ul>
+          <li>na cavidade oposta, do adversário </li>
+          <li>assim como essa última semente semeada</li>
+        </ul>
+        <li>Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém</li>
+      </ul>
+    </li> 
+    <li> Terminar :
+      <ul>
+        <li>Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias</li>
+        <li>O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém</li>
+        <li>Ganha jogador cujo armazém tem mais sementes</li>
+      </ul>
+  
+    </li>
+  </ul>
+</div>
+</div>
 
-  </li>
-</ul>
--->
+<div id="Play" class="tabcontent">
+  <label>Number of holes:<input type="number" value="12" min="6" max="12" step="2" id = "numHoles"></label>
+  <button onclick="getNumberHoles()" class="button " > Decide </button>
+  <p id="demo"></p>
+
+  <label>Number of seeds:<input type="number" value="4" min="1" max="4" step="1" id = "numSeeds"></label>
+  <button onclick="getNumberSeeds()" class="button " > Decide </button>
+  <p id="demo"></p>
+
+  <div id="zonaTabuleiro">
+    <button onclick="main()" class="button " > Criar tabuleiro </button>
+  </div>
+</div>
 
 <!--TABELA PONTUAÇÃO-->
 <!--
@@ -79,161 +104,22 @@
 
 <!-- LOGIN-->
 
-<!--
-<div id="login">
-  <h1>Login</h1>
-  <form>
-    <label>
-      Username <input type="text" name="username">
-    </label>
-    <label>
-      Password <input type="password" name="password">
-    </label>
-    <input type="submit" value="Login">
-  </form>
+<div id="Login" class = "tabcontent">
+  <div id="login">
+    <h1>Login</h1>
+    <form>
+      <label>
+        Username <input type="text" name="username">
+      </label>
+      <label>
+        Password <input type="password" name="password">
+      </label>
+      <input type="submit" value="Login">
+    </form>
+  </div>
 </div>
--->
 
 <!--PEDIR NÚMERO DE BURACOS-->
 
-<label>Number of holes:<input type="number" value="12" min="6" max="12" step="2" id = "numHoles"></label>
-<button onclick="getNumberHoles()">Decide</button>
-<p id="demo"></p>
 
-<!-- TABULEIRO-->
-<!--
-<div id="tabuleiro">
-  <div class="lateral"></div>
-  <div class="sub-tabuleiro">
-      <div class="sub-sub-tabuleiro">
-         <div class="quadrado">
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-         </div>
-
-         <div class="quadrado">
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-         </div>
-         <div class="quadrado">
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-         </div>
-         <div class="quadrado">
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-         </div>
-         <div class="quadrado">
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-         </div>
-         <div class="quadrado">
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-           <div>
-             <div class = "seed"></div>
-             <div class = "seed"></div>
-           </div>
-         </div>
-      </div>
-      <div class="sub-sub-tabuleiro">
-       <div class="quadrado">
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-       </div>
-       <div class="quadrado">
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-       </div>
-       <div class="quadrado">
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-       </div>
-       <div class="quadrado">
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-       </div>
-       <div class="quadrado">
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-       </div>
-       <div class="quadrado">
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-         <div>
-           <div class = "seed"></div>
-           <div class = "seed"></div>
-         </div>
-       </div>
-      </div>
-  </div>
-  <div class="lateral"></div>
-</div>
--->
-
-<button onclick="createBoard()">Criar tabuleiro</button>
 <!-- JOGO -->
