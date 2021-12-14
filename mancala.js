@@ -34,6 +34,7 @@ function createHoleCima(id){
     seeds.setAttribute("class", "seedspace");
     ui[id].appendChild(seeds);
 
+    console.log("id= " + id + " board[id]= "+ board[id]);
     
     for (let j = 0; j < board[id]; j++) {
         var s1 = document.createElement("div");
@@ -62,6 +63,7 @@ function createHoleBaixo(id){
 }
 
 function drawBoard() {
+    console.log("DENTRO DE DRAW BOARD");
     document.getElementById("zonaTabuleiro").style.display = "block";
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
@@ -135,12 +137,18 @@ function isCavityValid(index) {
 }
 
 function selectCavity(idCavity) {
-    while (true){
+    if(isCavityValid(idCavity)){
+        hideBoard();
+        executePlay(idCavity);
+        showBoard();
+    }
+    /*while (true){
         if(isCavityValid(idCavity)){
+            console.log(idCavity)
             executePlay(idCavity);
             break;
         }
-    }
+    }*/
 
    /* var el_up = document.getElementById("0");
     var el_down = document.getElementById("1");
@@ -176,8 +184,11 @@ function selectCavity(idCavity) {
 
 function executePlay (cavityIndex) {
     var initialSeeds = board[cavityIndex];
+    console.log("initial seeds :" + initialSeeds);
     board[cavityIndex] = 0;
+    console.log("board[cavityIndex]" + initialSeeds);
     var lastCavityWasStorage = false;
+    console.log("lastCavityWasStorage: " + lastCavityWasStorage );
 
     for (var seeds = initialSeeds; seeds != 0; seeds--) {
         cavityIndex = (cavityIndex + 1) % numHoles;
@@ -194,6 +205,10 @@ function executePlay (cavityIndex) {
         board[cavityIndex]++;
         lastCavityWasStorage = false;
 
+    }
+
+    for(var i = 0; i < numHoles; i++) {
+        console.log("board[" + i + "] = " + board[i]);
     }
     
     if (!lastCavityWasStorage) verifyScoring(cavityIndex);
@@ -260,14 +275,6 @@ function viewScore() {
     console.log("Scoring. Player 1: " + score[0] + ", Player 2: " + score[1] + '\n');
 }
 
-function viewBoard() {
-    for (var i = 0; i < numHoles; i++) {
-        console.log(board[i] + " at index " + i);
-    }
-
-    console.log("\n");
-}
-
 //TODO: clean-up
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -306,19 +313,22 @@ function clearBoard(){
 function hideBoard(){
     document.getElementById("zonaTabuleiro").style.display = "none"; 
 }
+
+function showBoard(){
+    document.getElementById("zonaTabuleiro").style.display = "block"; 
+}
 async function main() {
     gameSetup();
+    drawBoard();
 
+    /*
     while(true){
-        hideBoard();
-        drawBoard(); //TODO - clean up
+       //TODO - clean up
        // viewScore(); //TODO - clean up
-        /*
+
         if (isGameFinished()) {
             finishGame();
             break;
-        }*/
-
-        break;
-    }
+        }
+    }*/
 }
