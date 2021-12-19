@@ -219,7 +219,9 @@ function isCavityValid(index, b) {
 
 function selectCavity(idCavity, b, s) {
     if (isCavityValid(idCavity, b)){
+        hideBoard();
         executePlay(idCavity, b, s);
+        drawBoard();
     }
 }
 
@@ -335,7 +337,7 @@ function openPage(pageName, elmnt, color) {
   }
   
   // Get the element with id="defaultOpen" and click on it
-  //document.getElementById("defaultOpen").click(); 
+  document.getElementById("defaultOpen").click(); 
 
 function clearBoard(){
     for (i = 0; i < tablinks.length; i++) {
