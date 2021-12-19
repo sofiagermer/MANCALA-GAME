@@ -14,6 +14,60 @@ var isPlayer1Starting = true;
 var pvp = false;
 var aiLevel = 1;
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getBestMove(boardMock, scoreMock, isMaximizing, depth = 0) {
+    if (depth == 0) {
+        boardMock = [...board];
+        scoreMock = [...score];
+    } 
+
+    if (depth == 10) return scoreMock[1] - scoreMock[0];
+
+    var availablePlays = [];
+    var i = (isPlayer1Turn? 0 : numHoles/2);
+    for (var j = 0; j < numHoles/2; j++)
+        if (boardMock[i+j] != 0) 
+            availablePlays.push(i+j);
+    
+
+    if (availablePlays.length == 0) return scoreMock[1] - scoreMock[0];
+    
+    var index = -1;
+    var bestValue = isMaximizing ? -numHoles*numSeeds : numHoles*numSeeds;
+    var value = bestValue;
+    var boardMockCopy = [...boardMock];
+    var scoreMockCopy = [...scoreMock];
+    var playerTurnCopy = isPlayer1Turn;
+    
+    for (var i = 0; i < availablePlays.length; i++) {
+        
+        if (!isGameFinished(boardMock, scoreMock)) {
+            executePlay(availablePlays[i], boardMock, scoreMock);        
+            value = getBestMove(boardMock, scoreMock, !isPlayer1Turn, depth + 1);
+        } 
+        else return scoreMock[1] - scoreMock[0];
+
+        if (isMaximizing) {
+            if (value > bestValue) {
+                value = bestValue;
+                index = availablePlays[i];
+            }
+        }
+        else if (value < bestValue) {
+            value = bestValue;
+            index = availablePlays[i];
+        } 
+
+        boardMock = [...boardMockCopy];
+        scoreMock = [...scoreMockCopy];
+        isPlayer1Turn = playerTurnCopy;
+    }
+
+    return index;   
+}
 
 function getNumberHoles() {
     numHoles = document.getElementById("numHoles").value;
@@ -134,99 +188,92 @@ function gameSetup() {
     isPlayer1Turn = isPlayer1Starting;
 }
 
-function verifyScoring(cavityIndex) {
+function verifyScoring(cavityIndex, b, s) {
     if ((isPlayer1Turn && cavityIndex < (numHoles/2)) || (!isPlayer1Turn && cavityIndex >= (numHoles/2))) {
-        if (board[cavityIndex] == 1) {
-            var oppositeCavity = numHoles-cavityIndex-1
+        if (b[cavityIndex] == 1) {
+            var oppositeCavity = numHoles - cavityIndex - 1
 
-            score[isPlayer1Turn ? 0 : 1] += board[oppositeCavity] + 1;
+            s[isPlayer1Turn ? 0 : 1] += b[oppositeCavity] + 1;
 
-            board[oppositeCavity] = 0;
-            board[cavityIndex] = 0;
+            if (isNaN(s[0]) || isNaN(s[1])) {
+                console.log("NaN found, exiting...");
+                process.exit(1);
+            }
+
+            b[oppositeCavity] = 0;
+            b[cavityIndex] = 0;
         }
     }
 }
 
-function isCavityValid(index) {
+function isCavityValid(index, b) {
     if (isPlayer1Turn) {
         if (index >= 0 && index < (numHoles/2))
-            return board[index] != 0;
+            return b[index] != 0;
     }
     else if (index >= (numHoles/2) && index < numHoles)
-            return board[index] != 0;
+            return b[index] != 0;
 
     return false;
 }
 
-function selectCavity(idCavity) {
-    if(isCavityValid(idCavity)){
-        hideBoard();
-        executePlay(idCavity);
-        drawBoard();
+function selectCavity(idCavity, b, s) {
+    if (isCavityValid(idCavity, b)){
+        executePlay(idCavity, b, s);
     }
 }
 
-function executePlay (cavityIndex) {
-    var initialSeeds = board[cavityIndex];
-    console.log("initial seeds :" + initialSeeds);
-    board[cavityIndex] = 0;
-    console.log("board[cavityIndex]" + initialSeeds);
+function executePlay (cavityIndex, b, s) {
+
+    var initialSeeds = b[cavityIndex];
+    b[cavityIndex] = 0;
     var lastCavityWasStorage = false;
-    console.log("lastCavityWasStorage: " + lastCavityWasStorage );
 
     for (var seeds = initialSeeds; seeds != 0; seeds--) {
         cavityIndex = (cavityIndex + 1) % numHoles;
 
         var isPlayerStorage = (cavityIndex == (isPlayer1Turn? (numHoles/2) : 0));
         if (isPlayerStorage && !lastCavityWasStorage) {
-            score[isPlayer1Turn? 0 : 1]++;
+            s[isPlayer1Turn? 0 : 1]++;
             cavityIndex--;
 
             lastCavityWasStorage = true;
             continue;
         }
 
-        board[cavityIndex]++;
+        b[cavityIndex]++;
         lastCavityWasStorage = false;
 
     }
-
-    for(var i = 0; i < numHoles; i++) {
-        console.log("board[" + i + "] = " + board[i]);
-    }
-    
-    if (!lastCavityWasStorage) verifyScoring(cavityIndex);
+    if (!lastCavityWasStorage) verifyScoring(cavityIndex, b, s);
     switchTurn(lastCavityWasStorage);
 }
 
 function switchTurn(lastSeedOnStorage) {
     if (!lastSeedOnStorage) 
         isPlayer1Turn = !isPlayer1Turn; // switch turn
-    roundCounter++;
 }
 
-function isGameFinished() {
+function isGameFinished(b, s) {
 
-    var minScoreToWin = numHoles * numSeeds / 2
-    if (score[0] > minScoreToWin || score[1] > minScoreToWin)
+    var minScoreToWin = numHoles * numSeeds / 2;
+    if (s[0] > minScoreToWin || s[1] > minScoreToWin)
         return true;
 
     var canPlayer1Play = false;
     var canPlayer2Play = false;
 
-    for (var i = 0; i < (numHoles/2); i++) {
-        if (board[i] != 0) {
+    for (var i = 0; i < (numHoles/2); i++)
+        if (b[i] != 0) {
             canPlayer1Play = true;
             break;
         }
-    }
 
-    for (var i = (numHoles/2); i < numHoles;i++) {
-        if (board[i] != 0) {
+    for (var i = (numHoles/2); i < numHoles;i++)
+        if (b[i] != 0) {
             canPlayer2Play = true;
             break;
         }
-    }
 
     if (isPlayer1Turn && canPlayer1Play || !isPlayer1Turn && canPlayer2Play)
         return false;
@@ -234,19 +281,19 @@ function isGameFinished() {
     return true;
 }
 
-function finishGame () {
+function finishGame (b, s) {
     for (var i = 0; i < numHoles; i++) {
-        var seeds = board[i];
-        i < (numHoles/2) ? score[0] += seeds : score[1] += seeds;
+        var seeds = b[i];
+        i < (numHoles/2) ? s[0] += seeds : s[1] += seeds;
     }
 
-    if (score[0] > (numHoles/2) * numSeeds) {
+    if (s[0] > (numHoles/2) * numSeeds) {
         // Anounce player 1 victory
         console.log('Player 1 wins!');
         return;
     }
 
-    if (score[1] > (numHoles/2) * numSeeds) {
+    if (s[1] > (numHoles/2) * numSeeds) {
         // Anounce player 2 victory
         console.log('Player 2 wins!');
         return;
@@ -255,14 +302,16 @@ function finishGame () {
     else console.log('Draw!')
 }
 
-function viewScore() {
-    console.log("Scoring. Player 1: " + score[0] + ", Player 2: " + score[1] + '\n');
+function viewScore(s) {
+    console.log("Scoring. Player 1: " + s[0] + ", Player 2: " + s[1] + '\n');
 }
 
-//TODO: clean-up
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function viewBoard(b) {
+    for (var i = 0; i < numHoles; i++) {
+        console.log("board[" + i + "] = " + b[i]);
+    }
 }
+
 
 function openPage(pageName, elmnt, color) {
     // Hide all elements with class="tabcontent" by default */
@@ -286,7 +335,7 @@ function openPage(pageName, elmnt, color) {
   }
   
   // Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click(); 
+  //document.getElementById("defaultOpen").click(); 
 
 function clearBoard(){
     for (i = 0; i < tablinks.length; i++) {
@@ -301,18 +350,27 @@ function hideBoard(){
 function showBoard(){
     document.getElementById("zonaTabuleiro").style.display = "block"; 
 }
-async function main() {
+  
+
+async function main(){
     gameSetup();
-    drawBoard();
 
-    /*
-    while(true){
-       //TODO - clean up
-       // viewScore(); //TODO - clean up
-
-        if (isGameFinished()) {
-            finishGame();
+    while(true) {
+        if (isGameFinished(board, score)) {
+            finishGame(board, score);
             break;
         }
-    }*/
+
+        console.log("Round number " + roundCounter + ". Player " + (isPlayer1Turn?1:2)+ " to move.")
+        a = getBestMove([], [], !isPlayer1Turn);
+        console.log("Best move is " + a);
+        selectCavity(a, board, score);
+
+        viewBoard(board);
+        viewScore(score);
+        roundCounter++;
+
+    }
 }
+
+main()
