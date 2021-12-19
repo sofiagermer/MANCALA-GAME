@@ -341,12 +341,11 @@ function openPage(pageName, elmnt, color) {
 
 function clearBoard(){
     for (i = 0; i < tablinks.length; i++) {
-        tabuleiro.style.backgroundColor = "";
-      } 
-}
-
-function hideBoard(){
-    document.getElementById("tabuleiro").remove(); 
+        for (i = 0; i < tablinks.length; i++) {
+            tabuleiro.style.backgroundColor = "";
+            tabuleiro.style.backgroundColor = "";
+        } 
+    } 
 }
 
 function showBoard(){
@@ -356,8 +355,11 @@ function showBoard(){
 
 async function main(){
     gameSetup();
+    drawBoard();
 
     while(true) {
+        /*showBoard();
+        clearBoard();
         if (isGameFinished(board, score)) {
             finishGame(board, score);
             break;
@@ -367,12 +369,8 @@ async function main(){
         a = getBestMove([], [], !isPlayer1Turn);
         console.log("Best move is " + a);
         selectCavity(a, board, score);
-
-        viewBoard(board);
-        viewScore(score);
+        
         roundCounter++;
-
+        */
     }
 }
-
-main()
