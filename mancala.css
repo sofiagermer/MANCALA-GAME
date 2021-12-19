@@ -10,11 +10,15 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: Arial;
-  }
+}
 
 #navbar{
     display: flex;
     flex-flow: row nowrap;
+}
+
+#loginPage{
+    background-image: url(people.jpg);
 }
 
   /* Style tab links */
@@ -25,7 +29,7 @@ body, html {
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
+    padding: 5px 0px;
     font-size: 17px;
     width: 20%;
   }
@@ -38,7 +42,7 @@ body, html {
   .tabcontent {
     color: black;
     display: none;
-    padding: 100px 20px;
+    padding: 10px 20px;
     height: 100%;
   }
   
@@ -46,19 +50,26 @@ body, html {
   #Play {background-color: rgb(255, 238, 215);}
   #Login {background-color: rgb(255, 238, 215);}
 
-  
+
+#intro{
+    /*align-self: center;*/
+}
+
 #logo {
-    width:180px; 
-    height:180px;
-    align-self: center;
+    width:150px; 
+    height:150px;
     display: flex;
     flex-flow: row;
+    width: auto;
 }
 
 #title{
     padding-top: 40px;
     font-size: 70px;
     color: #333;
+    display: flex;
+    flex-flow: row;
+    width: auto;
 }
 
 #header {
@@ -156,6 +167,7 @@ label {
     border-radius: 30px;
     background-image: url(wood.png);
     width: 80%;
+    margin-top: 30px;
 }
 
 #sub-tabuleiro{
