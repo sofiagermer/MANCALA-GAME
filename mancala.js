@@ -206,6 +206,10 @@ function drawBoard() {
 }
 
 /*------------*/
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function getRandomMove() {
     var items = [];
     var i = (isPlayer1Turn? 0 : numHoles/2);
@@ -314,14 +318,19 @@ function isCavityValid(index, b) {
             return b[index] != 0;
 
     return false;
-}
+} 
 
 /**LÓGICA DO JOGO ESTÁ AQUI */
-function selectCavity(idCavity, b, s) {
+async function selectCavity(idCavity, b, s) {
     if (isCavityValid(idCavity, b)){
         clearBoard();
         executePlay(idCavity, b, s);
         drawBoard();
+        if(singlePlayer && !isPlayer1Turn){
+            console.log("cpu joga");
+            await sleep(1000);
+            selectCavity(getBestMove([],[],!isPlayer1Turn),b,s);
+        }
     }
     if (isGameFinished(board, score)) {
         finishGame(board, score);
@@ -430,10 +439,19 @@ function hidePlaySettings(playSettingsID){
 }
   
 function startGame(playSettingsID){
-  hidePlaySettings(playSettingsID);
-  gameSetup();
-  drawBoard();
-  //clearBoard();
+    console.log("OLÁ JOGO COMEÇOU");
+    if(singlePlayer){
+      console.log("single player");
+      hidePlaySettings(playSettingsID);
+      gameSetup();
+      drawBoard(); 
+    }
+    else{
+      console.log("multi player");
+      hidePlaySettings(playSettingsID);
+      gameSetup();
+      drawBoard(); 
+    }
 }
 /*
 async function main(){
