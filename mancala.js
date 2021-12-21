@@ -14,17 +14,23 @@ var isPlayer1Starting = true;
 var pvp = false;
 var aiLevel = 1;
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function getRandomMove() {
+    var items = [];
+    var i = (isPlayer1Turn? 0 : numHoles/2);
+    for (var j = 0; j < numHoles/2; j++)
+        if (board[i+j] != 0) 
+            items.push(i+j);
+
+    return items[Math.floor(Math.random()*items.length)];
 }
 
-function getBestMove(boardMock, scoreMock, isMaximizing, depth = 0) {
+function getBestMove(boardMock, scoreMock, isMaximizing, depth = 0, maxDepth = 10) {
     if (depth == 0) {
         boardMock = [...board];
         scoreMock = [...score];
     } 
 
-    if (depth == 10) return scoreMock[1] - scoreMock[0];
+    if (depth == maxDepth) return scoreMock[1] - scoreMock[0];
 
     var availablePlays = [];
     var i = (isPlayer1Turn? 0 : numHoles/2);
@@ -46,7 +52,7 @@ function getBestMove(boardMock, scoreMock, isMaximizing, depth = 0) {
         
         if (!isGameFinished(boardMock, scoreMock)) {
             executePlay(availablePlays[i], boardMock, scoreMock);        
-            value = getBestMove(boardMock, scoreMock, !isPlayer1Turn, depth + 1);
+            value = getBestMove(boardMock, scoreMock, !isPlayer1Turn, depth + 1, 10);
         } 
         else return scoreMock[1] - scoreMock[0];
 
@@ -82,7 +88,7 @@ function createHoleCima(id){
     ui[id].setAttribute("class", "quadrado");
     ui[id].setAttribute("id",id);
     document.getElementById("sub-sub-tabuleiro-2").appendChild(ui[id]);
-    ui[id].addEventListener("click", ()=> selectCavity(id));
+    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
 
     var seeds = document.createElement("div");
     seeds.setAttribute("class", "seedspace");
@@ -102,7 +108,7 @@ function createHoleBaixo(id){
     ui[id].setAttribute("class", "quadrado");
     ui[id].setAttribute("id", id);
     document.getElementById("sub-sub-tabuleiro-1").appendChild(ui[id]);
-    ui[id].addEventListener("click", ()=> selectCavity(id));
+    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
 
 
     var seeds = document.createElement("div");
@@ -219,9 +225,9 @@ function isCavityValid(index, b) {
 
 function selectCavity(idCavity, b, s) {
     if (isCavityValid(idCavity, b)){
-        hideBoard();
+        clearBoard();
         executePlay(idCavity, b, s);
-        drawBoard();
+        showBoard();
     }
 }
 
@@ -343,7 +349,6 @@ function clearBoard(){
     for (i = 0; i < tablinks.length; i++) {
         for (i = 0; i < tablinks.length; i++) {
             tabuleiro.style.backgroundColor = "";
-            tabuleiro.style.backgroundColor = "";
         } 
     } 
 }
@@ -357,8 +362,9 @@ async function main(){
     gameSetup();
     drawBoard();
 
+    /*
     while(true) {
-        /*showBoard();
+        showBoard();
         clearBoard();
         if (isGameFinished(board, score)) {
             finishGame(board, score);
@@ -371,6 +377,7 @@ async function main(){
         selectCavity(a, board, score);
         
         roundCounter++;
-        */
+        
     }
+    */
 }
