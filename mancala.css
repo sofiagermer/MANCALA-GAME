@@ -1,111 +1,199 @@
-body{
-    margin-top: 100px;
-    background-color: rgb(255, 238, 215);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-body, html {
+html,body{
+    width: 100%;
     height: 100%;
-    margin: 0;
-    font-family: Arial;
+}
+body{
+   background-color: rgb(249,249,249);
+   margin : 0;
+}
+/* ------------------------------------ */
+/* GERAL*/
+
+.button{
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    background: #ff9a76;
+    color: rgb(255,255,255);
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
 }
 
+/* ------------------------------------ */
+/* SLIDE SHOW*/
+.mySlides {
+    display:none;
+    margin-top: 50px;
+}
+
+/* ------------------------------------ */
+/* NAVBAR*/
 #navbar{
     display: flex;
     flex-flow: row nowrap;
+    margin-top : 25px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   /* background: #f9f9f9;  => COR BONITA*/ 
 }
 
-#loginPage{
-    background-image: url(people.jpg);
-}
-
-  /* Style tab links */
-  .tablink {
-    background-color: #555;
-    color: white;
-    float: left;
+ .tablink {
+    font-family: Hack,monospace;
+    text-transform: uppercase;
+    list-style: none;
+    display: flex;
+    color: #8f8f8f;
+    background-color: rgb(249,249,249);
+    margin-left : 50px;
+    font-size: 24px;
+    font-weight: 700;
+    transition: all 0.5s ease-in-out;
+    text-transform: uppercase;
     border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 5px 0px;
-    font-size: 17px;
-    width: 20%;
   }
   
   .tablink:hover {
-    background-color: #777;
+    color: black;
   }
   
-  /* Style the tab content (and add height:100% for full page content) */
   .tabcontent {
     color: black;
     display: none;
-    padding: 10px 20px;
+    width: 100%;
     height: 100%;
+    margin-top: 50px;
   }
   
-  #Rules {background-color: rgb(255, 238, 215);}
-  #Play {background-color: rgb(255, 238, 215);}
-  #Login {background-color: rgb(255, 238, 215);}
+  
+ #Rules {background-color: rgb(249, 249, 249);}
+ #Play {background-color: rgb(249,249,249);}
+ #Login {background-color: rgb(249, 249, 249);}
+  
 
+/* ------------------------------------ */
+/* LOGIN */
 
-#intro{
-    /*align-self: center;*/
-}
-
-#logo {
-    width:150px; 
-    height:150px;
+.active{
     display: flex;
-    flex-flow: row;
-    width: auto;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
 }
 
-#title{
-    padding-top: 40px;
-    font-size: 70px;
-    color: #333;
+#logo{
+    padding-bottom: 30px;
     display: flex;
-    flex-flow: row;
-    width: auto;
+    justify-content: center;
+    object-fit: cover;
 }
 
-#header {
-    padding: 30px;
-    display: flex;
-    flex-flow: row;
-    background-image: url(header.jpg);
-    opacity: 0.9;
-    height: auto;
-    width: 100%;
+#imgLogo{
+    width: 100%; /* or any custom size */
+    height: 100%; 
+    object-fit: contain;
 }
 
-.button {
-    background-color: burlywood;
-    width: 100px;
-    height: auto;
+input[type=email], input[type=password] {
+    outline: none;
     border: none;
-    color: white;
+}
+
+::placeholder {
+    color: hsl(0deg 0% 0%);
+	font-size: 0.9em;
+    /*padding-bottom: 2%;*/
+}
+
+.field {
+    background: hsl(0deg 0% 100%);
+    box-shadow: 0 0 2em hsl(231deg 62% 94%);
+    display: flex;
+    flex-flow: column nowrap;
+    border-radius: 20px;
+    color: hsl(0deg 0% 30%);
+    padding-bottom: 30px;
+    margin-bottom: 10%;
+}
+
+#caixaLogin{   
+    /*display: inline-grid;*/
+    background: white;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    width: 18%;
+    height: 20%;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ------------------------------------ */
+/* PLAY */
+
+#beforePlay{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.forumTitle {
+    font-size: 15px;
+    text-transform: uppercase;
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+/* forum */
+#beforePlay{
+    width: 400px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#caixaPlay{   
+    background: white;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    width: 18%;
+    display: flex;
+	flex-flow: column nowrap;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+#playingMode{
+    display: flex;
+    flex-flow: row nowrap;
+}
+.playerModeButton{
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
     cursor: pointer;
+    width: 100%;
+    display: flex;
+    background: #ff9a76;
+    color: rgb(255,255,255);
+    border: none;
+    font-weight: 600;
 }
 
-.button:hover {
-    background-color: rgb(179, 149, 110)
-}
-
-.button:active {
-  background-color: burlywood;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
-}
-
+/*-----------------*/
+/* BOARD*/
 .seed{
     width: 20px;
     height: 28px;
@@ -123,16 +211,6 @@ body, html {
     width: 100px;
     display:flex;
     flex-flow: row wrap;
-}
-
-label {
-    display: block;
-    font: 1rem 'Fira Sans', sans-serif;
-}
-
-input,
-label {
-    margin: .4rem 0;
 }
 
 #zonaTabuleiro{
@@ -184,27 +262,84 @@ label {
     flex-flow: row;
 }
 
-/* REGISTER /
-#login {
-    text-align: center;
-    align-self: center;
+/* ------------------------------------ */
+/* RULES */
+
+.rules{
+    display: none;
 }
 
-/PUNCTUATION TABLE*/
-table, th, td {
-    border: 1.0px solid rgb(77, 60, 39);
-    border-collapse: collapse;
-    background-color: burlywood;
-    width: 300px;
-  }
+#Rule1{
+    display: block;
+}
 
-#rulesBackground{
-    height: fit-content;
-    width: 50%;
-    /*background-color: rgb(1, 1, 1, 0.5);
-    background-image: url(header.jpg);*/
+#rulesContent{
+    display: flex;
+    color: black;
+}
+
+#caixaRules{   
+    background: white;
+    border: 0 none;
+    border-radius: 3px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+
+    width: 60%;
+    margin: 0 10%;
+
+    /*por causa das setas*/
+    display: flex;
+    flex-flow: row;
+
+}
+
+.arrowDiv{
+    width: 20%;
+    display: flex;
+    align-items: stretch;
+}
+.arrow-left{
+    display: flex;
+    align-self: center;
+    margin: 30px auto;
+    width: 25px;
+    height: 25px;
+    border-top: 2px solid #000;
+    border-left: 2px solid #000;
+    transform: rotate(-45deg);
+}
+
+.arrow-right{
+    display: flex;
+    align-self: center;
+    margin: 30px auto;
+    width: 25px;
+    height: 25px;
+    border-top: 2px solid #000;
+    border-left: 2px solid #000;
+    transform: rotate(135deg);
+}
+
+/* ------------------------------------ */
+/* FOOTER */
+
+footer {
+    position: absolute;
+    font-size: 12px;
+    font-weight: bolder;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    background-color: rgba(249, 249, 249, 0.8);
+    color: #000000;
+    text-align: center; 
     
-    outline-style: inset;
-    outline-width:thick;
-    outline-color: rgba(97, 71, 38, 0.5);
+}
+::a {
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid;
 }

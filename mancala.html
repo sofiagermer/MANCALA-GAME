@@ -2,123 +2,159 @@
 <!-- A declaração DOCTYPE declara a versão do HTML usado no documento -->
 
 <html lang="en-US">
-  <head>
-    <meta charset=UTF-8>        <!-- para caracteres acentuados   -->
-    <title>Mancala</title>  <!-- texto na decoração da janela -->
+
+<head>
+    <meta charset=UTF-8> <!-- para caracteres acentuados   -->
+    <title>Mancala</title> <!-- texto na decoração da janela -->
     <link rel="stylesheet" href="mancala.css" type="text/css">
     <script src = "mancala.js" defer> </script>
-  </head>
+</head>
 
 <body>
-
-
-<div id= "header"> 
-  <div id = "intro">
-    <div id= "title">
-      Mancala
+    <div id= "navbar">
+        <button class="tablink" onclick="openPage('SlideShow', this)" id="defaultOpen"> </button>
+        <button class="tablink" onclick="openPage('Login', this)" >Login</button>
+        <button class="tablink" onclick="openPage('Play', this)">Play</button>
+        <button class="tablink" onclick="openPage('Rules', this)">Rules</button>
     </div>
-    <div id = "logo">
-      <img src="logo.png">
+
+    <div id= "SlideShow" class="tabcontent">
+        <img class="mySlides" src="people.jpg">
+        <img class="mySlides" src="people2.jpg">
+        <img class="mySlides" src="people3.jpg">
     </div>
-  </div>
-</div>
 
-<div id= "navbar">
-  <button class="tablink" onclick="openPage('Login', this, 'burlywood')" >Login</button>
-  <button class="tablink" onclick="openPage('Play', this, 'burlywood')" id="defaultOpen">Play</button>
-  <button class="tablink" onclick="openPage('Rules', this, 'burlywood')">Rules</button>
-</div>
+    <!-- Login -->
+    <div id= "Login"  class="tabcontent">
+            <div class = "active">
+                <div id = "caixaLogin">
+                    <div id = "logo">
+                       <img src = "logo.png" id = "imgLogo"> 
+                   </div>
 
+                   <form>
+                        <div class= "field">
+                            <label for="email"><b>Email Adress</b></label>
+                            <input type="email" placeholder="username@gmail" name="email" required> 
+                        </div>
+                        <div class = "field">
+                            <label for="psw"><b>Password</b></label>
+                            <input type="password" placeholder="············" name="psw" required> 
+                        </div>
+                        <button type="submit" class= "button">Log In</button>
+                </form>
+                </div>
+        </div>
+    </div>
 
-<div id="Rules" class="tabcontent">
-  <div id= "rulesBackground">
-  <ul>
-    <li>Ínicio do jogo :</li>
-    <ul>
-      <li>Os armazéns estão vazios (sem sementes)</li>
-      <li>As restantes cavidades têm o mesmo número de sementes </li>          
-    </ul>
-    <li> Começar a semear :      
-      <ul>
-        <li>Escolher uma cavidade do seu lado (que não o armazém)</li>
-        <li>Recolher todas as N sementes dessa cavidade</li>
-        <li>Colocar 1 semente nas N cavidade seguintes</li>           
-        <li>A semeadura é feita no sentido anti-horário</li>
-      </ul>
-    </li>              
-    <li> Última semente em armazém :      
-      <ul>
-        <li>Volta a jogar se a última semente for semeada for no seu próprio armazém</li>
-        <li>Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar</li>
-      </ul>
-    </li> 
-    <li> Última semente em cavidade vazia :      
-      <ul>
-        <li>Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes</li>
-        <ul>
-          <li>na cavidade oposta, do adversário </li>
-          <li>assim como essa última semente semeada</li>
-        </ul>
-        <li>Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém</li>
-      </ul>
-    </li> 
-    <li> Terminar :
-      <ul>
-        <li>Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias</li>
-        <li>O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém</li>
-        <li>Ganha jogador cujo armazém tem mais sementes</li>
-      </ul>
-  
-    </li>
-  </ul>
-</div>
-</div>
+    <!-- Play -->
+    <div id="Play" class="tabcontent">
+        <form id= beforePlay>
+          <!--
+              <ul id="progressbar">
+            <li class="active">Holes</li>
+            <li class= "normal">Seeds</li>
+            <li class= "normal">Players</li>
+          </ul>
+        -->
+        <div id="caixaPlay">
+            <h2 class="forumTitle">Number of Holes</h2>
+            <input type="number" value="12" min="6" max="12" step="2" id = "numHoles">
+            <p id="demo"></p>
+          
+            <h2 class="forumTitle">Number of Seeds</h2>
+            <input type="number" value="4" min="1" max="4" step="1" id = "numSeeds">
+            <p id="demo"></p>
 
-<div id="Play" class="tabcontent">
-  <label>Number of holes:<input type="number" value="12" min="6" max="12" step="2" id = "numHoles"></label>
-  <button onclick="getNumberHoles()" class="button " > Decide </button>
-  <p id="demo"></p>
+            <h2 class="forumTitle">Number of Players</h2>
+            
+            <div id = "playingMode">
+                <div class= "playerModeButton" id="singlePlayer" onclick = "onePlayer()">Single Player</div>
+                <div class= "playerModeButton" id="multiPlayer" onclick = "multiPlayer()">Two Players</div>
+            </div>
+            <p id="demo"></p>
 
-  <label>Number of seeds:<input type="number" value="4" min="1" max="4" step="1" id = "numSeeds"></label>
-  <button onclick="getNumberSeeds()" class="button " > Decide </button>
-  <p id="demo"></p>
-
-  <div id="zonaTabuleiro">
-    <button onclick="main()" class="button " > Criar tabuleiro </button>
-  </div>
-</div>
-
-<!--
-
-<table>
-  <tr> <th colspan=2>Pontuaction Table</tr>
-    <tr>
-      <th>Player1 Score</th>
-      <th>Player2 Score</th>
-     </tr>
-     <tr>
-      <td><center>0</center></td>
-      <td><center>0</center></td>
-     </tr>
-  </tr>
- </table>
--->
-
-
-<div id="Login" class = "tabcontent">
-  <div id="login">
-    <h1>Login</h1>
-    <form>
-      <label>
-        Username <input type="text" name="username">
-      </label>
-      <label>
-        Password <input type="password" name="password">
-      </label>
-      <input type="submit" value="Login">
+            <div>
+                <div class= "button"  onclick = "startGame('beforePlay')">Criar tabuleiro</div>
+            </div>
+        </div>
     </form>
-  </div>
-</div>
+        <div id="zonaTabuleiro">
+        </div>
+      </div>
 
+    <!-- Rules -->
+    <div id= "Rules" class="tabcontent">
+        <div class = "active">
+            <div id="caixaRules">
+                <div class="arrowDiv" onclick="previousRule()">
+                    <div class = "arrow-left">
+                    </div>
+                </div>
+
+                <div class ="rules" id = "rulesContent">
+                    <div id = "Rule1">
+                        <h2 class="forumTitle">Ínicio do jogo :</h2>
+                        <ul>
+                            <li>Os armazéns estão vazios (sem sementes)</li>
+                            <li>As restantes cavidades têm o mesmo número de sementes </li>          
+                        </ul>
+                    </div>
+                    <div class ="rules" id = "Rule2">
+                        <h2 class="forumTitle">Começar a semear :</h2>    
+                            <ul>
+                            <li>Escolher uma cavidade do seu lado (que não o armazém)</li>
+                            <li>Recolher todas as N sementes dessa cavidade</li>
+                            <li>Colocar 1 semente nas N cavidade seguintes</li>           
+                            <li>A semeadura é feita no sentido anti-horário</li>
+                            </ul>     
+                    </div>
+                    <div class ="rules" id = "Rule3">
+                        <h2 class="forumTitle">Última semente em armazém :</h2>   
+                            <ul>
+                            <li>Volta a jogar se a última semente for semeada for no seu próprio armazém</li>
+                            <li>Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar</li>
+                            </ul>
+                    </div>   
+                    <div class ="rules" id = "Rule4">
+                        <h2 class="forumTitle"> Última semente em cavidade vazia : </h2>     
+                            <ul>
+                            <li>Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes</li>
+                            <ul>
+                                <li>na cavidade oposta, do adversário </li>
+                                <li>assim como essa última semente semeada</li>
+                            </ul>
+                            <li>Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém</li>
+                            </ul>
+                    </div>
+                    <div class ="rules" id = "Rule5">
+                        <h2 class="forumTitle"> Terminar :</h2>
+                            <ul>
+                            <li>Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias</li>
+                            <li>O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém</li>
+                            <li>Ganha jogador cujo armazém tem mais sementes</li>
+                            </ul>
+                        </ul>
+                    </div>
+                </div>
+                <div class="arrowDiv" onclick="nextRule()" >
+                    <div class = "arrow-right">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer-->
+    <footer>
+
+    <!-- Copyright -->
+    <div class="footer-copyright text-center">&copy; Developed with ❤️</i> by
+      <a href="https://github.com/sofiagermer" class="white-text" target="_blank">Sofia Germer</a>. 
+      <a href="https://github.com/edgarftorre" class="white-text" target="_blank">Edgar Torre </a>
+    </div>
+  
+    </footer>
 </body>
+
 </html>

@@ -1,19 +1,211 @@
+/* --------------------------------------------------- */
+/* GLOBAL VARIABLES*/
 
+var myIndex = 0;
+const RulesID = ["Rule1", "Rule2", "Rule3","Rule4","Rule5"];
+var currentRule = 0;
+
+/*game logic variables*/
+var singlePlayer = false;
 var board = [];
 var ui = [];
 var score = [0,0];
 var numHoles = 12;
 var numSeeds = 4;
 var tabuleiro;
-
 var roundCounter = 0;
-
 var isPlayer1Turn;
 var isPlayer1Starting = true;
-
 var pvp = false;
 var aiLevel = 1;
 
+/* --------------------------------------------------- */
+carousel();
+
+/* --------------------------------------------------- */
+/*SLIDESHOW*/
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  myIndex++;
+  if (myIndex > x.length) {myIndex = 1}    
+  x[myIndex-1].style.display = "block";  
+  setTimeout(carousel, 2000); // Change image every 2 seconds
+}
+
+/* --------------------------------------------------- */
+/*NAVBAR*/
+function openPage(pageName) {
+    console.log("mudar de pag");
+    // Hide all elements with class="tabcontent" by default */
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+  
+    // Remove the background color of all tablinks/buttons
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].style.backgroundColor = "";
+    }
+  
+    // Show the specific tab content
+    document.getElementById(pageName).style.display = "block";
+  
+  }
+  
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click(); 
+
+/* --------------------------------------------------- */
+/*PLAY CONFIGURATIONS*/
+
+function onePlayer(){
+  singlePlayer = true;
+  console.log(singlePlayer);
+  document.getElementById("singlePlayer").style.backgroundColor = (255,154,118,1);
+  document.getElementById("multiPlayer").style.backgroundColor = (0,0,0,0.5);
+}
+
+function multiPlayer(){
+  singlePlayer = false;
+  console.log(singlePlayer);
+}
+
+/* --------------------------------------------------- */
+/*RULES*/
+  
+function nextRule() {
+    let beforeRule = RulesID[currentRule];
+    currentRule += 1;
+    if(currentRule == 5) currentRule =0;
+    let afterRule = RulesID[currentRule];
+    document.getElementById(beforeRule).style.display = "none";
+    document.getElementById(afterRule).style.display = "block";
+  
+}
+
+  function previousRule() {
+    let beforeRule = RulesID[currentRule];
+    currentRule -= 1;
+    if(currentRule ==-1) currentRule =4;
+    let afterRule = RulesID[currentRule];
+    document.getElementById(beforeRule).style.display = "none";
+
+    document.getElementById(beforeRule).style.display = "none";
+    document.getElementById(afterRule).style.display = "block";
+  
+  }
+
+
+/* --------------------------------------------------- */
+/*GAME LOGIC*/
+
+/*------------*/
+/* DESENHAR TABULEIRO*/
+function createHoleCima(id){
+    ui[id] = document.createElement("button");
+    ui[id].setAttribute("class", "quadrado");
+    ui[id].setAttribute("id",id);
+    document.getElementById("sub-sub-tabuleiro-2").appendChild(ui[id]);
+    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
+
+    var seeds = document.createElement("div");
+    seeds.setAttribute("class", "seedspace");
+    ui[id].appendChild(seeds);
+
+    console.log("id= " + id + " board[id]= "+ board[id]);
+    
+    for (let j = 0; j < board[id]; j++) {
+        var s1 = document.createElement("div");
+        s1.setAttribute("class", "seed");
+        seeds.appendChild(s1);
+    }
+}
+
+function createHoleBaixo(id){
+    ui[id] = document.createElement("button");
+    ui[id].setAttribute("class", "quadrado");
+    ui[id].setAttribute("id", id);
+    document.getElementById("sub-sub-tabuleiro-1").appendChild(ui[id]);
+    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
+
+
+    var seeds = document.createElement("div");
+    seeds.setAttribute("class", "seedspace");
+    ui[id].appendChild(seeds);
+
+    for (let j = 0; j < board[id]; j++) {
+
+        console.log("id : " + id + " seeds :" +  board[id]);
+        var s2 = document.createElement("div");
+        s2.setAttribute("class", "seed");
+        seeds.appendChild(s2);
+}
+}
+
+function drawBoard() {
+    console.log("DENTRO DE DRAW BOARD");
+    var tabuleiro = document.createElement("div");
+    tabuleiro.setAttribute("id", "tabuleiro");
+    document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
+
+    var lateralEsquerda = document.createElement("div");
+    lateralEsquerda.setAttribute("class", "lateral");
+    document.getElementById("tabuleiro").appendChild(lateralEsquerda);
+
+    var seedsE = document.createElement("div");
+    seedsE.setAttribute("class", "seedspace");
+    lateralEsquerda.appendChild(seedsE);
+
+    for(var i = 0; i < score[1]; i++){
+        var buracoEsquerda = document.createElement("div");
+        buracoEsquerda.setAttribute("class", "seed");
+        seedsE.appendChild(buracoEsquerda);
+    }
+
+    var c = document.createElement("div");
+    c.setAttribute("id", "sub-tabuleiro");
+    document.getElementById("tabuleiro").appendChild(c);
+
+    var d = document.createElement("div");
+    d.setAttribute("class", "sub-sub-tabuleiro");
+    d.setAttribute("id", "sub-sub-tabuleiro-2");
+    document.getElementById("sub-tabuleiro").appendChild(d);
+
+    for (let i = 1; i < numHoles/2 + 1; i++) {
+        createHoleCima(numHoles-i);
+    }
+
+    var f = document.createElement("div");
+    f.setAttribute("class", "sub-sub-tabuleiro");
+    f.setAttribute("id", "sub-sub-tabuleiro-1")
+    document.getElementById("sub-tabuleiro").appendChild(f);
+
+    for (let i = 0; i < numHoles/2; i++) {
+        createHoleBaixo(i);
+    }
+
+    var lateralDireita = document.createElement("div");
+    lateralDireita.setAttribute("class", "lateral");
+    document.getElementById("tabuleiro").appendChild(lateralDireita);
+
+    var seedsD = document.createElement("div");
+    seedsD.setAttribute("class", "seedspace");
+    lateralDireita.appendChild(seedsD);
+
+    for(var i = 0; i < score[0]; i++){
+        var buracoDireita = document.createElement("div");
+        buracoDireita.setAttribute("class", "seed");
+        seedsD.appendChild(buracoDireita);
+    }
+}
+
+/*------------*/
 function getRandomMove() {
     var items = [];
     var i = (isPlayer1Turn? 0 : numHoles/2);
@@ -83,105 +275,6 @@ function getNumberSeeds(){
     numSeeds = document.getElementById("numSeeds").value;
 }
 
-function createHoleCima(id){
-    ui[id] = document.createElement("button");
-    ui[id].setAttribute("class", "quadrado");
-    ui[id].setAttribute("id",id);
-    document.getElementById("sub-sub-tabuleiro-2").appendChild(ui[id]);
-    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
-
-    var seeds = document.createElement("div");
-    seeds.setAttribute("class", "seedspace");
-    ui[id].appendChild(seeds);
-
-    console.log("id= " + id + " board[id]= "+ board[id]);
-    
-    for (let j = 0; j < board[id]; j++) {
-        var s1 = document.createElement("div");
-        s1.setAttribute("class", "seed");
-        seeds.appendChild(s1);
-    }
-}
-
-function createHoleBaixo(id){
-    ui[id] = document.createElement("button");
-    ui[id].setAttribute("class", "quadrado");
-    ui[id].setAttribute("id", id);
-    document.getElementById("sub-sub-tabuleiro-1").appendChild(ui[id]);
-    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
-
-
-    var seeds = document.createElement("div");
-    seeds.setAttribute("class", "seedspace");
-    ui[id].appendChild(seeds);
-
-    for (let j = 0; j < board[id]; j++) {
-
-        console.log("id : " + id + " seeds :" +  board[id]);
-        var s2 = document.createElement("div");
-        s2.setAttribute("class", "seed");
-        seeds.appendChild(s2);
-}
-}
-
-function drawBoard() {
-    console.log("DENTRO DE DRAW BOARD");
-    //document.getElementById("zonaTabuleiro").style.display = "block";
-    var tabuleiro = document.createElement("div");
-    tabuleiro.setAttribute("id", "tabuleiro");
-    document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
-
-    var lateralEsquerda = document.createElement("div");
-    lateralEsquerda.setAttribute("class", "lateral");
-    document.getElementById("tabuleiro").appendChild(lateralEsquerda);
-
-    var seedsE = document.createElement("div");
-    seedsE.setAttribute("class", "seedspace");
-    lateralEsquerda.appendChild(seedsE);
-
-    for(var i = 0; i < score[1]; i++){
-        var buracoEsquerda = document.createElement("div");
-        buracoEsquerda.setAttribute("class", "seed");
-        seedsE.appendChild(buracoEsquerda);
-    }
-
-    var c = document.createElement("div");
-    c.setAttribute("id", "sub-tabuleiro");
-    document.getElementById("tabuleiro").appendChild(c);
-
-    var d = document.createElement("div");
-    d.setAttribute("class", "sub-sub-tabuleiro");
-    d.setAttribute("id", "sub-sub-tabuleiro-2");
-    document.getElementById("sub-tabuleiro").appendChild(d);
-
-    for (let i = 1; i < numHoles/2 + 1; i++) {
-        createHoleCima(numHoles-i);
-    }
-
-    var f = document.createElement("div");
-    f.setAttribute("class", "sub-sub-tabuleiro");
-    f.setAttribute("id", "sub-sub-tabuleiro-1")
-    document.getElementById("sub-tabuleiro").appendChild(f);
-
-    for (let i = 0; i < numHoles/2; i++) {
-        createHoleBaixo(i);
-    }
-
-    var lateralDireita = document.createElement("div");
-    lateralDireita.setAttribute("class", "lateral");
-    document.getElementById("tabuleiro").appendChild(lateralDireita);
-
-    var seedsD = document.createElement("div");
-    seedsD.setAttribute("class", "seedspace");
-    lateralDireita.appendChild(seedsD);
-
-    for(var i = 0; i < score[0]; i++){
-        var buracoDireita = document.createElement("div");
-        buracoDireita.setAttribute("class", "seed");
-        seedsD.appendChild(buracoDireita);
-    }
-}
-
 function gameSetup() {
     // TODO - AI later on
     // PvP vs PvE setup
@@ -223,11 +316,15 @@ function isCavityValid(index, b) {
     return false;
 }
 
+/**LÓGICA DO JOGO ESTÁ AQUI */
 function selectCavity(idCavity, b, s) {
     if (isCavityValid(idCavity, b)){
         clearBoard();
         executePlay(idCavity, b, s);
-        showBoard();
+        drawBoard();
+    }
+    if (isGameFinished(board, score)) {
+        finishGame(board, score);
     }
 }
 
@@ -320,49 +417,29 @@ function viewBoard(b) {
     }
 }
 
-
-function openPage(pageName, elmnt, color) {
-    // Hide all elements with class="tabcontent" by default */
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-  
-    // Remove the background color of all tablinks/buttons
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].style.backgroundColor = "";
-    }
-  
-    // Show the specific tab content
-    document.getElementById(pageName).style.display = "block";
-  
-    // Add the specific color to the button used to open the tab content
-    elmnt.style.backgroundColor = color;
-  }
-  
-  // Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click(); 
-
 function clearBoard(){
-    for (i = 0; i < tablinks.length; i++) {
-        for (i = 0; i < tablinks.length; i++) {
-            tabuleiro.style.backgroundColor = "";
-        } 
-    } 
+    document.getElementById("zonaTabuleiro").innerHTML = "";
 }
 
 function showBoard(){
     document.getElementById("zonaTabuleiro").style.display = "block"; 
 }
-  
 
+function hidePlaySettings(playSettingsID){
+  document.getElementById(playSettingsID).style.display = "none"; 
+}
+  
+function startGame(playSettingsID){
+  hidePlaySettings(playSettingsID);
+  gameSetup();
+  drawBoard();
+  //clearBoard();
+}
+/*
 async function main(){
     gameSetup();
     drawBoard();
 
-    /*
     while(true) {
         showBoard();
         clearBoard();
@@ -370,14 +447,13 @@ async function main(){
             finishGame(board, score);
             break;
         }
-
+        /*
         console.log("Round number " + roundCounter + ". Player " + (isPlayer1Turn?1:2)+ " to move.")
         a = getBestMove([], [], !isPlayer1Turn);
         console.log("Best move is " + a);
         selectCavity(a, board, score);
         
-        roundCounter++;
+        roundCounter++;*/
         
-    }
-    */
-}
+   // }
+//}
