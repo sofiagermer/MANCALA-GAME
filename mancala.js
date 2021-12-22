@@ -64,17 +64,46 @@ function openPage(pageName) {
 /* --------------------------------------------------- */
 /*PLAY CONFIGURATIONS*/
 
-function onePlayer(){
-  singlePlayer = true;
-  console.log(singlePlayer);
-  document.getElementById("singlePlayer").style.backgroundColor = (255,154,118,1);
-  document.getElementById("multiPlayer").style.backgroundColor = (0,0,0,0.5);
+/* choose number of holes*/
+function getNumberHoles() {
+    //numHoles = document.getElementById("numHoles").value;
 }
 
-function multiPlayer(){
-  singlePlayer = false;
-  console.log(singlePlayer);
+/* choose number of seeds*/
+function getNumberSeeds(){
+    //numSeeds = document.getElementById("numSeeds").value;
 }
+
+/* choose player mode*/
+function onePlayer(id,idOptions){
+    singlePlayer = true;
+    console.log(singlePlayer);
+    document.getElementById(id).style.color = (255,154,118,1);
+    document.getElementById(id).style.color= (0,0,0,0.5);
+
+    document.getElementById(idOptions).style.display = "block";
+}
+
+function multiPlayer(id){
+    singlePlayer = false;
+    console.log(singlePlayer);
+    document.getElementById(id).style.color = (255,154,118,1);
+    document.getElementById(id).style.color = (0,0,0,0.5);
+}
+
+/*choose who starts game*/
+function personStarts(){
+
+}
+
+function computerStarts(){
+
+}
+
+function chooseLevel(){
+
+}
+
 
 /* --------------------------------------------------- */
 /*RULES*/
@@ -269,14 +298,6 @@ function getBestMove(boardMock, scoreMock, isMaximizing, depth = 0, maxDepth = 1
     }
 
     return index;   
-}
-
-function getNumberHoles() {
-    numHoles = document.getElementById("numHoles").value;
-}
-
-function getNumberSeeds(){
-    numSeeds = document.getElementById("numSeeds").value;
 }
 
 function gameSetup() {

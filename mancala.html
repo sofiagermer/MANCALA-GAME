@@ -59,21 +59,50 @@
         -->
         <div id="caixaPlay">
             <h2 class="forumTitle">Number of Holes</h2>
-            <input type="number" value="12" min="6" max="12" step="2" id = "numHoles">
-            <p id="demo"></p>
+            <div class = "playingMode">
+                <div class= "playerModeButton" id="4holes" onclick = "getNumberHoles()">4</div>
+                <div class= "playerModeButton" id="6holes" onclick = "getNumberHoles()">6</div>
+                <div class= "playerModeButton" id="8holes" onclick = "getNumberHoles()">8</div>
+                <div class= "playerModeButton" id="10holes" onclick = "getNumberHoles()">10</div>
+                <div class= "playerModeButton" id="12holes" onclick = "getNumberHoles()">12</div>
+            </div>
+            <p></p>
           
             <h2 class="forumTitle">Number of Seeds</h2>
-            <input type="number" value="4" min="1" max="4" step="1" id = "numSeeds">
-            <p id="demo"></p>
+
+            <div class = "playingMode">
+                <div class= "playerModeButton" id="1seed" onclick = "getNumberSeeds()">1</div>
+                <div class= "playerModeButton" id="2seed" onclick = "getNumberSeeds()">2</div>
+                <div class= "playerModeButton" id="3seed" onclick = "getNumberSeeds()">3</div>
+                <div class= "playerModeButton" id="4seed" onclick = "getNumberSeeds()">4</div>
+            </div>
+            <p></p>
 
             <h2 class="forumTitle">Number of Players</h2>
             
-            <div id = "playingMode">
-                <div class= "playerModeButton" id="singlePlayer" onclick = "onePlayer()">Single Player</div>
-                <div class= "playerModeButton" id="multiPlayer" onclick = "multiPlayer()">Two Players</div>
+            <div class = "playingMode">
+                <div class= "playerModeButton" id="sP" onclick = "onePlayer('sP','singlePlayerOptions')">Single Player</div>
+                <div class= "playerModeButton" id="mP" onclick = "multiPlayer('mP')">Two Players</div>
             </div>
-            <p id="demo"></p>
+            <p></p>
+            
+            <div id = "singlePlayerOptions">
+                <h2 class="forumTitle">Who Starts?</h2>
+                <div class = "playingMode">
+                    <div class= "playerModeButton" id="iStart" onclick = "personStarts('iStart')">I Start</div>
+                    <div class= "playerModeButton" id="cpuStarts" onclick = "computerStarts('cpuStarts')">Computer Starts</div>
+                </div> 
 
+                <h2 class="forumTitle">Difficulty Level</h2>
+                <div class = "playingMode">
+                    <div class= "playerModeButton" id="1level" onclick = "chooseLevel()">1</div>
+                    <div class= "playerModeButton" id="2level" onclick = "chooseLevel()">2</div>
+                    <div class= "playerModeButton" id="3level" onclick = "chooseLevel()">3</div>
+                    <div class= "playerModeButton" id="4level" onclick = "chooseLevel()">4</div>
+                    <div class= "playerModeButton" id="5level" onclick = "chooseLevel()">5</div>
+                </div> 
+
+            </div>
             <div>
                 <div class= "button"  onclick = "startGame('beforePlay')">Criar tabuleiro</div>
             </div>
@@ -85,7 +114,7 @@
 
     <!-- Rules -->
     <div id= "Rules" class="tabcontent">
-        <div class = "active">
+        <div class = "active" id = "activeRules">
             <div id="caixaRules">
                 <div class="arrowDiv" onclick="previousRule()">
                     <div class = "arrow-left">
@@ -150,7 +179,7 @@
 
     <!-- Copyright -->
     <div class="footer-copyright text-center">&copy; Developed with ❤️</i> by
-      <a href="https://github.com/sofiagermer" class="white-text" target="_blank">Sofia Germer</a>. 
+      <a href="https://github.com/sofiagermer" class="white-text" target="_blank">Sofia Germer</a>,
       <a href="https://github.com/edgarftorre" class="white-text" target="_blank">Edgar Torre </a>
     </div>
   
