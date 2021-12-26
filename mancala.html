@@ -7,7 +7,13 @@
     <meta charset=UTF-8> <!-- para caracteres acentuados   -->
     <title>Mancala</title> <!-- texto na decoração da janela -->
     <link rel="stylesheet" href="mancala.css" type="text/css">
+
+    <!-- Mancala Java Script -->
     <script src = "mancala.js" defer> </script>
+
+    <!-- Fontawesome Icons -->
+    <script src="https://kit.fontawesome.com/8d94371726.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 
 <body>
@@ -35,11 +41,17 @@
                    <form>
                         <div class= "field">
                             <label for="email"><b>Email Adress</b></label>
-                            <input type="email" placeholder="username@gmail" name="email" required> 
+                            <div class = "inputPlaceHolder">
+                                <i class="fas fa-envelope icon"></i>
+                                <input type="email" placeholder="username@gmail" name="email" required> 
+                            </div>
                         </div>
                         <div class = "field">
                             <label for="psw"><b>Password</b></label>
-                            <input type="password" placeholder="············" name="psw" required> 
+                            <div class = "inputPlaceHolder">
+                                <i class="login__icon fas fa-lock icon"></i>
+                                <input type="password" placeholder="············" name="psw" required> 
+                            </div>
                         </div>
                         <button type="submit" class= "button">Log In</button>
                 </form>
