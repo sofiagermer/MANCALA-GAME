@@ -110,7 +110,6 @@ input[type=email], input[type=password] {
 ::placeholder {
     color: hsl(0deg 0% 0%);
 	font-size: 0.9em;
-    /*padding-bottom: 2%;*/
 }
 
 .field {
@@ -127,7 +126,6 @@ input[type=email], input[type=password] {
 }
 
 #caixaLogin{   
-    /*display: inline-grid;*/
     background: white;
     border: 0 none;
     border-radius: 3px;
@@ -201,7 +199,7 @@ input[type=email], input[type=password] {
     cursor: pointer;
     width: 100%;
     display: flex;
-    background-color: #679b9b;
+    background-color: rgb(103,155,155,0.5);
     color: rgb(255,255,255);
     border: none;
     font-weight: 600;
@@ -217,7 +215,6 @@ input[type=email], input[type=password] {
     width: 20px;
     height: 28px;
     border-radius: 50%;
-    /*background-color:  rgb(156, 1, 40);*/
     background-image: url(seed.webp);
     margin-left: 4px;
     margin-right: 4px;

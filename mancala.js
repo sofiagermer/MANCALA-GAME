@@ -65,30 +65,41 @@ function openPage(pageName) {
 /*PLAY CONFIGURATIONS*/
 
 /* choose number of holes*/
-function getNumberHoles() {
-    //numHoles = document.getElementById("numHoles").value;
+function getNumberHoles(numberHoles, idActive, idNonActive1, idNonActive2 , idNonActive3, idNonActive4) {
+    numHoles = numberHoles;
+    console.log(numberHoles);
+    document.getElementById(idActive).style.background = "rgb(103,155,155)";
+    document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive3).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive4).style.background = "rgb(103,155,155,0.5)";
 }
 
 /* choose number of seeds*/
-function getNumberSeeds(){
-    //numSeeds = document.getElementById("numSeeds").value;
+function getNumberSeeds(numberSeeds, idActive, idNonActive1, idNonActive2 , idNonActive3){
+    numSeeds = numberSeeds;
+    console.log(numberSeeds);
+    document.getElementById(idActive).style.background = "rgb(103,155,155)";
+    document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive3).style.background = "rgb(103,155,155,0.5)";
 }
 
 /* choose player mode*/
-function onePlayer(id,idOptions){
+function onePlayer(idActive, idOther,idOptions){
     singlePlayer = true;
     console.log(singlePlayer);
-    document.getElementById(id).style.color = (255,154,118,1);
-    document.getElementById(id).style.color= (0,0,0,0.5);
-
+    document.getElementById(idActive).style.background = "rgb(103,155,155)";
+    document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idOptions).style.display = "block";
 }
 
-function multiPlayer(id){
+function multiPlayer(idActive, idOther, idOptions){
     singlePlayer = false;
     console.log(singlePlayer);
-    document.getElementById(id).style.color = (255,154,118,1);
-    document.getElementById(id).style.color = (0,0,0,0.5);
+    document.getElementById(idActive).style.background = "rgb(103,155,155)";
+    document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idOptions).style.display = "none";
 }
 
 /*choose who starts game*/
