@@ -5,19 +5,25 @@ var myIndex = 0;
 const RulesID = ["Rule1", "Rule2", "Rule3","Rule4","Rule5"];
 var currentRule = 0;
 
-/*game logic variables*/
+/*GAME LOCIC*/
+
+/*variáveis escolhidas pelo utilizador*/
+var numHoles = 12;
+var numSeeds = 4;
 var singlePlayer = false;
+var isComputerStarting = false;
+var aiLevel = 1;
+
+/*variáveis auxiliares*/
 var board = [];
 var ui = [];
 var score = [0,0];
-var numHoles = 12;
-var numSeeds = 4;
 var tabuleiro;
 var roundCounter = 0;
 var isPlayer1Turn;
 var isPlayer1Starting = true;
 var pvp = false;
-var aiLevel = 1;
+
 
 /* --------------------------------------------------- */
 carousel();
@@ -103,16 +109,19 @@ function multiPlayer(idActive, idOther, idOptions){
 }
 
 /*choose who starts game*/
-function personStarts(){
-
+function whoStarts(boolWhoStart,idActive, idOther){
+    isComputerStarting = boolWhoStart;
+    console.log(isComputerStarting);
+    document.getElementById(idActive).style.background = "rgb(103,155,155)";
+    document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
 }
 
-function computerStarts(){
-
-}
-
-function chooseLevel(){
-
+function chooseLevel(level, idActive, idNonActive1, idNonActive2 , idNonActive3){
+    aiLevel = level;
+    document.getElementById(idActive).style.background = "rgb(103,155,155)";
+    document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive3).style.background = "rgb(103,155,155,0.5)";
 }
 
 

@@ -101,17 +101,17 @@
             <div id = "singlePlayerOptions">
                 <h2 class="forumTitle">Who Starts?</h2>
                 <div class = "playingMode">
-                    <div class= "playerModeButton" id="iStart" onclick = "personStarts('iStart')">I Start</div>
-                    <div class= "playerModeButton" id="cpuStarts" onclick = "computerStarts('cpuStarts')">Computer Starts</div>
+                    <div class= "playerModeButton" id="iStart" onclick = "whoStarts(false,'iStart','cpuStarts')">I Start</div>
+                    <div class= "playerModeButton" id="cpuStarts" onclick = "whoStarts(true,'cpuStarts','iStart')">Computer Starts</div>
                 </div> 
 
                 <h2 class="forumTitle">Difficulty Level</h2>
                 <div class = "playingMode">
-                    <div class= "playerModeButton" id="1level" onclick = "chooseLevel()">1</div>
-                    <div class= "playerModeButton" id="2level" onclick = "chooseLevel()">2</div>
-                    <div class= "playerModeButton" id="3level" onclick = "chooseLevel()">3</div>
-                    <div class= "playerModeButton" id="4level" onclick = "chooseLevel()">4</div>
-                    <div class= "playerModeButton" id="5level" onclick = "chooseLevel()">5</div>
+                    <div class= "playerModeButton" id="1level" onclick = "chooseLevel(1, '1level', '2level', '3level', '4level', '5level')">1</div>
+                    <div class= "playerModeButton" id="2level" onclick = "chooseLevel(2, '2level', '1level', '3level', '4level', '5level')">2</div>
+                    <div class= "playerModeButton" id="3level" onclick = "chooseLevel(3, '3level', '1level', '2level', '4level', '5level')">3</div>
+                    <div class= "playerModeButton" id="4level" onclick = "chooseLevel(4, '4level', '1level', '2level', '3level', '5level')">4</div>
+                    <div class= "playerModeButton" id="5level" onclick = "chooseLevel(5, '5level', '1level', '2level', '3level', '4level')">5</div>
                 </div> 
 
             </div>
