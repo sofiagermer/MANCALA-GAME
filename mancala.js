@@ -155,12 +155,16 @@ function nextRule() {
 
 /*CANCEL GAME*/
 
-function cancelGame(idGame, idOptions){
+function cancelGame() {
     console.log("carreguei aqui");
     console.log("apaguei board");
     //document.getElementById(idGame).style.display = "none";
-    document.getElementById('tabuleiro').remove();
-    document.getElementById(idOptions).style.display = "flex";
+    //document.getElementById('tabuleiro').remove();
+    //document.getElementById(idOptions).style.display = "flex";
+
+    const myNode = document.getElementById('playZone');
+    myNode.textContent = '';
+    document.getElementById('beforePlay').style.display = "flex";
 }
 
 /*------------*/
@@ -209,14 +213,14 @@ function createHoleBaixo(id){
 function drawBoard() {
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
-   
-    if(document.getElementById("zonaTabuleiro")){
+    document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
+    /*if(document.getElementById("zonaTabuleiro")){
         console.log("yey já havia zona do tabuleiro");
         document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
     }
     else{
         document.createElement("zonaTabuleiroo").appendChild(tabuleiro);
-    }
+    }*/
 
     var lateralEsquerda = document.createElement("div");
     lateralEsquerda.setAttribute("class", "lateral");
@@ -378,10 +382,15 @@ function isCavityValid(index, b) {
 
 /**LÓGICA DO JOGO ESTÁ AQUI */
 async function selectCavity(idCavity, b, s) {
+    console.log("estou na select cavity");
     if (isCavityValid(idCavity, b)){
+        console.log("cavity válida");
         clearBoard();
+        console.log("após limpar board");
         executePlay(idCavity, b, s);
+        console.log("após jogar");
         drawBoard();
+        console.log("após desenhar board again");
         if(singlePlayer && !isPlayer1Turn){
             console.log("cpu joga");
             await sleep(1000);
@@ -483,7 +492,7 @@ function viewBoard(b) {
 }
 
 function clearBoard(){
-    document.getElementById("playZone").innerHTML = "";
+    document.getElementById("zonaTabuleiro").innerHTML = "";
 }
 
 function showBoard(){
@@ -494,8 +503,9 @@ function hidePlaySettings(playSettingsID){
   document.getElementById(playSettingsID).style.display = "none"; 
 }
   
-function startGame(zonaJogoID,playSettingsID){
-    //document.getElementById(zonaJogoID).style.display = "flex";
+function startGame(playSettingsID){
+    //var x = document.createElement("div");
+    //x.setAttribute("id", "zonaTabuleiro");
     if(singlePlayer){
       hidePlaySettings(playSettingsID);
       gameSetup();
