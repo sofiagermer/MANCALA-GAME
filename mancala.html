@@ -116,11 +116,15 @@
 
             </div>
             <div>
-                <div class= "button"  onclick = "startGame('beforePlay')">Criar tabuleiro</div>
+                <div class= "button"  onclick = "startGame('playZone','beforePlay')">Criar tabuleiro</div>
             </div>
         </div>
     </form>
-        <div id="zonaTabuleiro">
+        <div id = "playZone">
+            <div id = "giveUp">
+                <i class="far fa-window-close icon"  onclick = "cancelGame('playZone', 'beforePlay')"></i>
+            </div>
+            <div id="zonaTabuleiro"> </div>
         </div>
       </div>
 

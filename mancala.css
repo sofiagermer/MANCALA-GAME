@@ -208,6 +208,19 @@ input[type=email], input[type=password] {
 #singlePlayerOptions{
     display: none;
 }
+/*-----------------*/
+/* GIVE UP BUTTON*/
+
+#playZone{
+    display: flex;
+    flex-flow: column;
+}
+
+#giveUp{
+    padding-left: 70%;
+    width: 100%;
+    height: 10%;
+}   
 
 /*-----------------*/
 /* BOARD*/

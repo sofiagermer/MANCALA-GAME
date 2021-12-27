@@ -150,9 +150,18 @@ function nextRule() {
   
   }
 
-
 /* --------------------------------------------------- */
 /*GAME LOGIC*/
+
+/*CANCEL GAME*/
+
+function cancelGame(idGame, idOptions){
+    console.log("carreguei aqui");
+    console.log("apaguei board");
+    //document.getElementById(idGame).style.display = "none";
+    document.getElementById('tabuleiro').remove();
+    document.getElementById(idOptions).style.display = "flex";
+}
 
 /*------------*/
 /* DESENHAR TABULEIRO*/
@@ -167,7 +176,7 @@ function createHoleCima(id){
     seeds.setAttribute("class", "seedspace");
     ui[id].appendChild(seeds);
 
-    console.log("id= " + id + " board[id]= "+ board[id]);
+    //console.log("id= " + id + " board[id]= "+ board[id]);
     
     for (let j = 0; j < board[id]; j++) {
         var s1 = document.createElement("div");
@@ -190,7 +199,7 @@ function createHoleBaixo(id){
 
     for (let j = 0; j < board[id]; j++) {
 
-        console.log("id : " + id + " seeds :" +  board[id]);
+        //console.log("id : " + id + " seeds :" +  board[id]);
         var s2 = document.createElement("div");
         s2.setAttribute("class", "seed");
         seeds.appendChild(s2);
@@ -198,10 +207,16 @@ function createHoleBaixo(id){
 }
 
 function drawBoard() {
-    console.log("DENTRO DE DRAW BOARD");
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
-    document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
+   
+    if(document.getElementById("zonaTabuleiro")){
+        console.log("yey já havia zona do tabuleiro");
+        document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
+    }
+    else{
+        document.createElement("zonaTabuleiroo").appendChild(tabuleiro);
+    }
 
     var lateralEsquerda = document.createElement("div");
     lateralEsquerda.setAttribute("class", "lateral");
@@ -468,27 +483,25 @@ function viewBoard(b) {
 }
 
 function clearBoard(){
-    document.getElementById("zonaTabuleiro").innerHTML = "";
+    document.getElementById("playZone").innerHTML = "";
 }
 
 function showBoard(){
-    document.getElementById("zonaTabuleiro").style.display = "block"; 
+    //document.getElementById("playZone").style.display = "block"; 
 }
 
 function hidePlaySettings(playSettingsID){
   document.getElementById(playSettingsID).style.display = "none"; 
 }
   
-function startGame(playSettingsID){
-    console.log("OLÁ JOGO COMEÇOU");
+function startGame(zonaJogoID,playSettingsID){
+    //document.getElementById(zonaJogoID).style.display = "flex";
     if(singlePlayer){
-      console.log("single player");
       hidePlaySettings(playSettingsID);
       gameSetup();
       drawBoard(); 
     }
     else{
-      console.log("multi player");
       hidePlaySettings(playSettingsID);
       gameSetup();
       drawBoard(); 
