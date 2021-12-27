@@ -15,14 +15,14 @@ var isComputerStarting = false;
 var aiLevel = 1;
 
 /*variáveis auxiliares*/
-var board = [];
-var ui = [];
-var score = [0,0];
+var board;
+var ui;
+var score;
 var tabuleiro;
-var roundCounter = 0;
+var roundCounter;
 var isPlayer1Turn;
-var isPlayer1Starting = true;
-var pvp = false;
+var isPlayer1Starting;
+var pvp;
 
 
 /* --------------------------------------------------- */
@@ -161,9 +161,8 @@ function cancelGame() {
     //document.getElementById(idGame).style.display = "none";
     //document.getElementById('tabuleiro').remove();
     //document.getElementById(idOptions).style.display = "flex";
-
-    const myNode = document.getElementById('playZone');
-    myNode.textContent = '';
+    clearBoard();
+    document.getElementById('playZone').style.display = "none";
     document.getElementById('beforePlay').style.display = "flex";
 }
 
@@ -343,6 +342,12 @@ function gameSetup() {
     // TODO - AI later on
     // PvP vs PvE setup
     // If PvE, AI level setup
+    board = [];
+    ui = [];
+    score = [0,0];
+    roundCounter = 0;
+    isPlayer1Starting = true;
+    pvp = false;
 
     for (var i = 0; i < numHoles; i++) {
         board.push(numSeeds);
@@ -504,8 +509,7 @@ function hidePlaySettings(playSettingsID){
 }
   
 function startGame(playSettingsID){
-    //var x = document.createElement("div");
-    //x.setAttribute("id", "zonaTabuleiro");
+    document.getElementById('playZone').style.display = "flex";
     if(singlePlayer){
       hidePlaySettings(playSettingsID);
       gameSetup();
