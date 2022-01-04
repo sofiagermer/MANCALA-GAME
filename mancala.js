@@ -126,12 +126,13 @@ function whoStarts(isComputerStarting,idActive, idOther){
     document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
 }
 
-function chooseLevel(level, idActive, idNonActive1, idNonActive2 , idNonActive3){
+function chooseLevel(level, idActive, idNonActive1, idNonActive2 , idNonActive3,idNonActive4){
     aiLevel = level;
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive3).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idNonActive4).style.background = "rgb(103,155,155,0.5)";
 }
 
 function nextPlayOption() {
