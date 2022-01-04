@@ -154,9 +154,11 @@ input[type=email], input[type=password] {
     padding-top : 2%;
 }
 
-/* ------------------------------------ */
+/* ==================================== */
 /* PLAY */
 
+/*-----------------*/
+/*BUTTONS PLAY OPTIONS*/
 .playTitle{
     font-size: 20px;
 }
@@ -185,9 +187,10 @@ input[type=email], input[type=password] {
     border-radius: 3px;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     padding: 20px 30px;
-    width: 18%;
+    width: 600px;
+    height:350px;
     display: flex;
-	flex-flow: column nowrap;
+	flex-flow: row nowrap;
     justify-content: center;
     text-align: center;
     align-items: center;
@@ -211,8 +214,23 @@ input[type=email], input[type=password] {
     font-weight: 600;
 }
 
-#singlePlayerOptions{
+/*-----------------*/
+/*MULTI-STEP FORM PLAY OPTIONS*/
+
+.playOptions{
     display: none;
+    align-self: center;
+}
+
+#BoardOptions{
+    display: block;
+}
+
+#PlayOptionsContent{
+    display: flex;
+    flex-flow:column;
+    align-self: center;
+    justify-content: center;
 }
 /*-----------------*/
 /* GIVE UP BUTTON*/
@@ -220,6 +238,7 @@ input[type=email], input[type=password] {
 #playZone{
     display: flex;
     flex-flow: column;
+    height: 100%;
 }
 
 #giveUp{
@@ -242,7 +261,7 @@ input[type=email], input[type=password] {
 }
 
 .seedspace{
-    height: 100px;
+    height: 100%;
     width: 100px;
     display:flex;
     flex-flow: row wrap;
@@ -250,6 +269,8 @@ input[type=email], input[type=password] {
 
 #zonaTabuleiro{
     align-self: center;
+    width:auto;
+    height: 30%;
 }
 
 .lateral{
@@ -259,7 +280,7 @@ input[type=email], input[type=password] {
     align-self: center;
     flex-flow: row;
     border-radius: 40px;
-    padding: 20px;
+    margin:20px;
 }
 
 .quadrado {
@@ -279,8 +300,10 @@ input[type=email], input[type=password] {
     height: 40vh;
     border-radius: 30px;
     background-image: url(wood.png);
-    width: 80%;
+    width: auto;
     margin-top: 30px;
+    padding-left: 10%;
+    padding-right: 10%;
 }
 
 #sub-tabuleiro{
@@ -309,6 +332,7 @@ input[type=email], input[type=password] {
     width: 100%;
     height: 100%;
 }
+
 .rules{
     display: none;
     align-self: center;

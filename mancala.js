@@ -3,6 +3,8 @@
 
 var myIndex = 0;
 const RulesID = ["Rule1", "Rule2", "Rule3","Rule4","Rule5"];
+const PlayID = [ "BoardOptions", "SinglePlayerOptions", "StartPlaying"];
+var currentPlayOption = 0;
 var currentRule = 0;
 
 /*GAME LOCIC*/
@@ -22,12 +24,11 @@ var roundCounter;
 var isPlayer1Turn;
 var pvp;
 
-
-/* --------------------------------------------------- */
-carousel();
-
 /* --------------------------------------------------- */
 /*SLIDESHOW*/
+
+carousel();
+
 function carousel() {
   var i;
   var x = document.getElementsByClassName("mySlides");
@@ -43,7 +44,7 @@ function carousel() {
 /* --------------------------------------------------- */
 /*NAVBAR*/
 function openPage(pageName) {
-    console.log("mudar de pag");
+    //console.log("mudar de pag");
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -77,6 +78,8 @@ function getNumberHoles(numberHoles, idActive, idNonActive1, idNonActive2 , idNo
     document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive3).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive4).style.background = "rgb(103,155,155,0.5)";
+
+    document.getElementById("zonaTabuleiro").style.width = 30;
 }
 
 /* choose number of seeds*/
@@ -90,20 +93,20 @@ function getNumberSeeds(numberSeeds, idActive, idNonActive1, idNonActive2 , idNo
 }
 
 /* choose player mode*/
-function onePlayer(idActive, idOther,idOptions){
+function onePlayer(idActive, idOther){
     singlePlayer = true;
     console.log(singlePlayer);
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
-    document.getElementById(idOptions).style.display = "block";
+    //document.getElementById(idOptions).style.display = "block";
 }
 
-function multiPlayer(idActive, idOther, idOptions){
+function multiPlayer(idActive, idOther){
     singlePlayer = false;
     console.log(singlePlayer);
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
-    document.getElementById(idOptions).style.display = "none";
+    //document.getElementById(idOptions).style.display = "none";
 }
 
 /*choose who starts game*/
@@ -129,6 +132,37 @@ function chooseLevel(level, idActive, idNonActive1, idNonActive2 , idNonActive3)
     document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive3).style.background = "rgb(103,155,155,0.5)";
+}
+
+function nextPlayOption() {
+    document.getElementById(PlayID[currentPlayOption]).style.display = "none";
+
+    if(singlePlayer){
+        if(currentPlayOption == 0) currentPlayOption = 1;
+        else if (currentPlayOption == 1) currentPlayOption = 2;
+        else if (currentPlayOption == 2) currentPlayOption = 0;
+    }
+    else{
+        if(currentPlayOption == 0) currentPlayOption = 2;
+        else if (currentPlayOption == 2) currentPlayOption = 0;
+    }
+    document.getElementById(PlayID[currentPlayOption]).style.display = "block";
+}
+
+function previousPlayOption() {
+    document.getElementById(PlayID[currentPlayOption]).style.display = "none";
+
+    if(singlePlayer){
+        if(currentPlayOption == 0) currentPlayOption = 2;
+        else if (currentPlayOption == 1) currentPlayOption = 0;
+        else if (currentPlayOption == 2) currentPlayOption = 1;
+
+    }
+    else{
+        if(currentPlayOption == 0) currentPlayOption = 2;
+        else if (currentPlayOption == 2) currentPlayOption = 0;
+    }
+    document.getElementById(PlayID[currentPlayOption]).style.display = "block";
 }
 
 
@@ -163,11 +197,6 @@ function nextRule() {
 /*CANCEL GAME*/
 
 function cancelGame() {
-    console.log("carreguei aqui");
-    console.log("apaguei board");
-    //document.getElementById(idGame).style.display = "none";
-    //document.getElementById('tabuleiro').remove();
-    //document.getElementById(idOptions).style.display = "flex";
     clearBoard();
     document.getElementById('playZone').style.display = "none";
     document.getElementById('beforePlay').style.display = "flex";
@@ -220,13 +249,6 @@ function drawBoard() {
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
     document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
-    /*if(document.getElementById("zonaTabuleiro")){
-        console.log("yey já havia zona do tabuleiro");
-        document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
-    }
-    else{
-        document.createElement("zonaTabuleiroo").appendChild(tabuleiro);
-    }*/
 
     var lateralEsquerda = document.createElement("div");
     lateralEsquerda.setAttribute("class", "lateral");
