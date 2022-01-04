@@ -70,7 +70,7 @@
           </ul>
         -->
         <div id="caixaPlay">
-            <h2 class="forumTitle">Number of Holes</h2>
+            <h2 class="Title playTitle">Number of Holes</h2>
             <div class = "playingMode">
                 <div class= "playerModeButton" id="4holes" onclick = "getNumberHoles(4,'4holes','6holes','8holes','10holes','12holes')">4</div>
                 <div class= "playerModeButton" id="6holes" onclick = "getNumberHoles(6,'6holes','4holes','8holes','10holes','12holes')">6</div>
@@ -80,7 +80,7 @@
             </div>
             <p></p>
           
-            <h2 class="forumTitle">Number of Seeds</h2>
+            <h2 class="Title playTitle">Number of Seeds</h2>
 
             <div class = "playingMode">
                 <div class= "playerModeButton" id="1seed" onclick = "getNumberSeeds(1, '1seed', '2seed', '3seed','4seed')">1</div>
@@ -90,7 +90,7 @@
             </div>
             <p></p>
 
-            <h2 class="forumTitle">Number of Players</h2>
+            <h2 class="Title playTitle">Number of Players</h2>
             
             <div class = "playingMode">
                 <div class= "playerModeButton" id="sP" onclick = "onePlayer('sP', 'mP','singlePlayerOptions')">Single Player</div>
@@ -99,13 +99,13 @@
             <p></p>
             
             <div id = "singlePlayerOptions">
-                <h2 class="forumTitle">Who Starts?</h2>
+                <h2 class="Title playTitle">Who Starts?</h2>
                 <div class = "playingMode">
                     <div class= "playerModeButton" id="iStart" onclick = "whoStarts(false,'iStart','cpuStarts')">I Start</div>
                     <div class= "playerModeButton" id="cpuStarts" onclick = "whoStarts(true,'cpuStarts','iStart')">Computer Starts</div>
                 </div> 
 
-                <h2 class="forumTitle">Difficulty Level</h2>
+                <h2 class="Title playTitle">Difficulty Level</h2>
                 <div class = "playingMode">
                     <div class= "playerModeButton" id="1level" onclick = "chooseLevel(1, '1level', '2level', '3level', '4level', '5level')">1</div>
                     <div class= "playerModeButton" id="2level" onclick = "chooseLevel(2, '2level', '1level', '3level', '4level', '5level')">2</div>
@@ -140,47 +140,119 @@
 
                 <div class ="rules" id = "rulesContent">
                     <div id = "Rule1">
-                        <h2 class="forumTitle">Ínicio do jogo :</h2>
-                        <ul>
-                            <li>Os armazéns estão vazios (sem sementes)</li>
-                            <li>As restantes cavidades têm o mesmo número de sementes </li>          
-                        </ul>
+                        <h2 class="Title rulesTitle">Ínicio do jogo </h2>
+                        <div class = "ruleText">
+                            <div class = "bulletPoint">
+                                <i class="fas fa-play seta"></i>
+                                <div class = "textoCorrido">
+                                    Os armazéns estão vazios (sem sementes)
+                                </div>
+                            </div>
+                            <div class = "bulletPoint">
+                                <i class="fas fa-play seta"></i>
+                                <div class = "textoCorrido">
+                                    As restantes cavidades têm o mesmo número de sementes 
+                                </div>
+                            </div>        
+                        </div>
                     </div>
                     <div class ="rules" id = "Rule2">
-                        <h2 class="forumTitle">Começar a semear :</h2>    
-                            <ul>
-                            <li>Escolher uma cavidade do seu lado (que não o armazém)</li>
-                            <li>Recolher todas as N sementes dessa cavidade</li>
-                            <li>Colocar 1 semente nas N cavidade seguintes</li>           
-                            <li>A semeadura é feita no sentido anti-horário</li>
-                            </ul>     
+                        <h2 class="Title rulesTitle">Começar a semear </h2>    
+                            <div class = "ruleText">
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta "></i>
+                                    <div class = "textoCorrido">
+                                        Escolher uma cavidade do seu lado (que não o armazém) 
+                                    </div>
+                                </div>
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta"></i>
+                                    <div class = "textoCorrido">
+                                        Recolher todas as N sementes dessa cavidade
+                                    </div>
+                                </div> 
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta"></i>
+                                    <div class = "textoCorrido">
+                                        Colocar 1 semente nas N cavidade seguintes
+                                    </div>
+                                </div> 
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta"></i>
+                                    <div class = "textoCorrido">
+                                        A semeadura é feita no sentido anti-horário
+                                    </div>
+                                </div>        
+                            </div>
                     </div>
                     <div class ="rules" id = "Rule3">
-                        <h2 class="forumTitle">Última semente em armazém :</h2>   
-                            <ul>
-                            <li>Volta a jogar se a última semente for semeada for no seu próprio armazém</li>
-                            <li>Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar</li>
-                            </ul>
+                        <h2 class="Title rulesTitle">Última semente em armazém </h2>   
+                            <div class = "ruleText">
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta "></i>
+                                    <div class = "textoCorrido">
+                                        Volta a jogar se a última semente for semeada for no seu próprio armazém
+                                    </div>
+                                </div>
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta"></i>
+                                    <div class = "textoCorrido">
+                                        Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar
+                                    </div>
+                                </div>     
+                            </div>
                     </div>   
                     <div class ="rules" id = "Rule4">
-                        <h2 class="forumTitle"> Última semente em cavidade vazia : </h2>     
-                            <ul>
-                            <li>Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes</li>
-                            <ul>
-                                <li>na cavidade oposta, do adversário </li>
-                                <li>assim como essa última semente semeada</li>
-                            </ul>
-                            <li>Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém</li>
-                            </ul>
+                        <h2 class="Title rulesTitle"> Última semente em cavidade vazia  </h2>   
+                            <div class = "ruleText">
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta "></i>
+                                    <div class = "textoCorrido">
+                                        Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes:
+                                    </div>
+                                </div>
+                                <div class = "bulletPoint subBulletPoint">
+                                    <i class="fas fa-play sub-seta"></i>
+                                    <div class = "textoCorrido">
+                                        na cavidade oposta, do adversário
+                                    </div>
+                                </div>     
+                                <div class = "bulletPoint subBulletPoint">
+                                    <i class="fas fa-play sub-seta"></i>
+                                    <div class = "textoCorrido">
+                                        assim como essa última semente semeada
+                                    </div>
+                                </div>  
+                                <div class = "bulletPoint">
+                                    <i class="fas fa-play seta"></i>
+                                    <div class = "textoCorrido">
+                                        Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém
+                                    </div>
+                                </div> 
+                            </div> 
                     </div>
                     <div class ="rules" id = "Rule5">
-                        <h2 class="forumTitle"> Terminar :</h2>
-                            <ul>
-                            <li>Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias</li>
-                            <li>O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém</li>
-                            <li>Ganha jogador cujo armazém tem mais sementes</li>
-                            </ul>
-                        </ul>
+                        <h2 class="Title rulesTitle"> Terminar </h2>
+                        <div class = "ruleText">
+                            <div class = "bulletPoint">
+                                <i class="fas fa-play seta "></i>
+                                <div class = "textoCorrido">
+                                    Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias
+                                </div>
+                            </div>
+                            <div class = "bulletPoint">
+                                <i class="fas fa-play seta"></i>
+                                <div class = "textoCorrido">
+                                    O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém
+                                </div>
+                            </div>     
+                            <div class = "bulletPoint">
+                                <i class="fas fa-play seta"></i>
+                                <div class = "textoCorrido">
+                                    Ganha jogador cujo armazém tem mais sementes
+                                </div>
+                            </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="arrowDiv" onclick="nextRule()" >

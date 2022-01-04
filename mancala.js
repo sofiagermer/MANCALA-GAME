@@ -11,7 +11,6 @@ var currentRule = 0;
 var numHoles = 12;
 var numSeeds = 4;
 var singlePlayer = false;
-var isComputerStarting = false;
 var aiLevel = 1;
 
 /*variáveis auxiliares*/
@@ -21,7 +20,6 @@ var score;
 var tabuleiro;
 var roundCounter;
 var isPlayer1Turn;
-var isPlayer1Starting;
 var pvp;
 
 
@@ -109,8 +107,17 @@ function multiPlayer(idActive, idOther, idOptions){
 }
 
 /*choose who starts game*/
-function whoStarts(boolWhoStart,idActive, idOther){
-    isComputerStarting = boolWhoStart;
+function whoStarts(isComputerStarting,idActive, idOther){
+    if(isComputerStarting){
+        console.log("computador começa");
+        console.log("player 1 não começa");
+        isPlayer1Turn = false;
+    }
+    else{
+        console.log("pessoa começa");
+        console.log("player 1 começa");
+        isPlayer1Turn = true;
+    }
     console.log(isComputerStarting);
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
@@ -346,14 +353,11 @@ function gameSetup() {
     ui = [];
     score = [0,0];
     roundCounter = 0;
-    isPlayer1Starting = true;
     pvp = false;
 
     for (var i = 0; i < numHoles; i++) {
         board.push(numSeeds);
     }
-
-    isPlayer1Turn = isPlayer1Starting;
 }
 
 function verifyScoring(cavityIndex, b, s) {
@@ -387,18 +391,13 @@ function isCavityValid(index, b) {
 
 /**LÓGICA DO JOGO ESTÁ AQUI */
 async function selectCavity(idCavity, b, s) {
-    console.log("estou na select cavity");
     if (isCavityValid(idCavity, b)){
-        console.log("cavity válida");
         clearBoard();
-        console.log("após limpar board");
         executePlay(idCavity, b, s);
-        console.log("após jogar");
         drawBoard();
-        console.log("após desenhar board again");
         if(singlePlayer && !isPlayer1Turn){
             console.log("cpu joga");
-            await sleep(1000);
+            await sleep(300);
             selectCavity(getBestMove([],[],!isPlayer1Turn),b,s);
         }
     }
@@ -521,25 +520,3 @@ function startGame(playSettingsID){
       drawBoard(); 
     }
 }
-/*
-async function main(){
-    gameSetup();
-    drawBoard();
-
-    while(true) {
-        showBoard();
-        clearBoard();
-        if (isGameFinished(board, score)) {
-            finishGame(board, score);
-            break;
-        }
-        /*
-        console.log("Round number " + roundCounter + ". Player " + (isPlayer1Turn?1:2)+ " to move.")
-        a = getBestMove([], [], !isPlayer1Turn);
-        console.log("Best move is " + a);
-        selectCavity(a, board, score);
-        
-        roundCounter++;*/
-        
-   // }
-//}
