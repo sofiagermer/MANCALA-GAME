@@ -196,6 +196,10 @@ input[type=email], input[type=password] {
     align-items: center;
 }
 
+#playContent{ 
+    width: 400px;
+    height:350px;
+}
 .playingMode{
     display: flex;
     flex-flow: row nowrap;
@@ -347,6 +351,9 @@ input[type=email], input[type=password] {
     align-self: center;
     justify-content: center;
     color: black;
+    width: 500px;
+    height: 500px;
+
 }
 
 #caixaRules{   
