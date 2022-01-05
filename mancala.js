@@ -2,7 +2,7 @@
 /* GLOBAL VARIABLES*/
 
 var myIndex = 0;
-const RulesID = ["Rule1", "Rule2", "Rule3","Rule4","Rule5"];
+const RulesID = ["Rule1", "Rule2", "Rule3", "Rule4", "Rule5"];
 const PlayID = [ "BoardOptions", "SinglePlayerOptions", "StartPlaying"];
 var currentPlayOption = 0;
 var currentRule = 0;
@@ -126,7 +126,7 @@ function whoStarts(isComputerStarting,idActive, idOther){
     document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
 }
 
-function chooseLevel(level, idActive, idNonActive1, idNonActive2 , idNonActive3,idNonActive4){
+function chooseLevel(level, idActive, idNonActive1, idNonActive2, idNonActive3, idNonActive4) {
     aiLevel = level;
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
@@ -138,13 +138,12 @@ function chooseLevel(level, idActive, idNonActive1, idNonActive2 , idNonActive3,
 function nextPlayOption() {
     document.getElementById(PlayID[currentPlayOption]).style.display = "none";
 
-    if(singlePlayer){
-        if(currentPlayOption == 0) currentPlayOption = 1;
+    if (singlePlayer) {
+        if (currentPlayOption == 0) currentPlayOption = 1;
         else if (currentPlayOption == 1) currentPlayOption = 2;
         else if (currentPlayOption == 2) currentPlayOption = 0;
-    }
-    else{
-        if(currentPlayOption == 0) currentPlayOption = 2;
+    } else {
+        if (currentPlayOption == 0) currentPlayOption = 2;
         else if (currentPlayOption == 2) currentPlayOption = 0;
     }
     document.getElementById(PlayID[currentPlayOption]).style.display = "block";
@@ -153,14 +152,13 @@ function nextPlayOption() {
 function previousPlayOption() {
     document.getElementById(PlayID[currentPlayOption]).style.display = "none";
 
-    if(singlePlayer){
-        if(currentPlayOption == 0) currentPlayOption = 2;
+    if (singlePlayer) {
+        if (currentPlayOption == 0) currentPlayOption = 2;
         else if (currentPlayOption == 1) currentPlayOption = 0;
         else if (currentPlayOption == 2) currentPlayOption = 1;
 
-    }
-    else{
-        if(currentPlayOption == 0) currentPlayOption = 2;
+    } else {
+        if (currentPlayOption == 0) currentPlayOption = 2;
         else if (currentPlayOption == 2) currentPlayOption = 0;
     }
     document.getElementById(PlayID[currentPlayOption]).style.display = "block";
@@ -173,7 +171,7 @@ function previousPlayOption() {
 function nextRule() {
     let beforeRule = RulesID[currentRule];
     currentRule += 1;
-    if(currentRule == 5) currentRule =0;
+    if (currentRule == 5) currentRule = 0;
     let afterRule = RulesID[currentRule];
     document.getElementById(beforeRule).style.display = "none";
     document.getElementById(afterRule).style.display = "block";
@@ -183,7 +181,7 @@ function nextRule() {
   function previousRule() {
     let beforeRule = RulesID[currentRule];
     currentRule -= 1;
-    if(currentRule ==-1) currentRule =4;
+    if (currentRule == -1) currentRule = 4;
     let afterRule = RulesID[currentRule];
     document.getElementById(beforeRule).style.display = "none";
 
@@ -208,9 +206,9 @@ function cancelGame() {
 function createHoleCima(id){
     ui[id] = document.createElement("button");
     ui[id].setAttribute("class", "quadrado");
-    ui[id].setAttribute("id",id);
+    ui[id].setAttribute("id", id);
     document.getElementById("sub-sub-tabuleiro-2").appendChild(ui[id]);
-    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
+    ui[id].addEventListener("click", () => selectCavity(id, board, score));
 
     var seeds = document.createElement("div");
     seeds.setAttribute("class", "seedspace");
@@ -238,7 +236,6 @@ function createHoleBaixo(id){
     ui[id].appendChild(seeds);
 
     for (let j = 0; j < board[id]; j++) {
-
         //console.log("id : " + id + " seeds :" +  board[id]);
         var s2 = document.createElement("div");
         s2.setAttribute("class", "seed");
@@ -259,7 +256,7 @@ function drawBoard() {
     seedsE.setAttribute("class", "seedspace");
     lateralEsquerda.appendChild(seedsE);
 
-    for(var i = 0; i < score[1]; i++){
+    for (var i = 0; i < score[1]; i++) {
         var buracoEsquerda = document.createElement("div");
         buracoEsquerda.setAttribute("class", "seed");
         seedsE.appendChild(buracoEsquerda);
@@ -317,8 +314,9 @@ function getRandomMove() {
     return items[Math.floor(Math.random()*items.length)];
 }
 
-function getBestMove(boardMock, scoreMock, isMaximizing, depth = 0, maxDepth = 10) {
+function getBestMove(boardMock, scoreMock, isMaximizing, maxDepth = 10, depth = 0) {
     if (depth == 0) {
+        console.log("maxDepth = "+ maxDepth);
         boardMock = [...board];
         scoreMock = [...score];
     } 
@@ -345,7 +343,7 @@ function getBestMove(boardMock, scoreMock, isMaximizing, depth = 0, maxDepth = 1
         
         if (!isGameFinished(boardMock, scoreMock)) {
             executePlay(availablePlays[i], boardMock, scoreMock);        
-            value = getBestMove(boardMock, scoreMock, !isPlayer1Turn, depth + 1, 10);
+            value = getBestMove(boardMock, scoreMock, !isPlayer1Turn, maxDepth, depth + 1);
         } 
         else return scoreMock[1] - scoreMock[0];
 
@@ -421,7 +419,7 @@ async function selectCavity(idCavity, b, s) {
         if(singlePlayer && !isPlayer1Turn){
             console.log("cpu joga");
             await sleep(300);
-            selectCavity(getBestMove([],[],!isPlayer1Turn),b,s);
+            selectCavity(getBestMove([],[],!isPlayer1Turn, aiLevel*2),b,s);
         }
     }
     if (isGameFinished(board, score)) {
