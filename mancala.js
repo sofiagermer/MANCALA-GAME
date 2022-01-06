@@ -316,7 +316,6 @@ function getRandomMove() {
 
 function getBestMove(boardMock, scoreMock, isMaximizing, maxDepth = 10, depth = 0) {
     if (depth == 0) {
-        console.log("maxDepth = "+ maxDepth);
         boardMock = [...board];
         scoreMock = [...score];
     } 
@@ -367,9 +366,6 @@ function getBestMove(boardMock, scoreMock, isMaximizing, maxDepth = 10, depth = 
 }
 
 function gameSetup() {
-    // TODO - AI later on
-    // PvP vs PvE setup
-    // If PvE, AI level setup
     board = [];
     ui = [];
     score = [0,0];
@@ -541,3 +537,141 @@ function startGame(playSettingsID){
       drawBoard(); 
     }
 }
+
+
+// #######################
+// ##########################
+// ##############################
+// ##################################
+// ######################################
+// ##########################################
+// ##############################################
+// ##################################################
+// ######################################################
+// ##########################################################
+// ##############################################################
+// ##################################################################
+// ######################################################################
+// ###########################################################################
+// ################################################################################
+// ####################################################################################
+// ########################################################################################
+// #                                                                                      #
+// #                                    SEGUNDA ENTREGA                                   #
+// #                                 CLIENT SIDE FUNCTIONS                                #
+// #                                                                                      #
+// ########################################################################################
+// ####################################################################################
+// ################################################################################
+// ############################################################################
+// ########################################################################
+// ###################################################################
+// ###############################################################
+// ###########################################################
+// #######################################################
+// ###################################################
+// ###############################################
+// ###########################################
+// #######################################
+// ###################################
+// ###############################
+// ###########################
+// #######################
+
+
+const joinBtn = document.getElementById('join-btn');
+const leaveBtn = document.getElementById('leave-btn');
+const notifyBtn = document.getElementById('notify-btn');
+const rankingBtn = document.getElementById('ranking-btn');
+const registerBtn = document.getElementById('register-btn');
+const updateBtn = document.getElementById('update-btn');
+
+var token = 0; // Error token
+
+// User 1
+var nickInput = "player2725";
+var passwordInput = "4321";
+
+
+const sendHttpRequest = (request, url, data) => {
+    return fetch('http://twserver.alunos.dcc.fc.up.pt:8008/'+ url, {
+        method: request,
+        body: JSON.stringify(data),
+        headers: data ? {'Content-Type': 'application/json'} :  {}
+    }).then(response => {
+        if (response.status >= 400){
+            return response.json().then(errorResponseData => {
+                const error = new Error('Something went wrong.');
+                error.data = errorResponseData.error;
+                throw error;
+            })
+        }
+        else return response.json();
+    });
+}
+
+
+
+const sendJoin = () => {
+    sendHttpRequest('POST', 'join', {nick: nickInput, password: passwordInput, size: numHoles/2, initial: numSeeds, group: 2725})
+    .then( responseData => {
+        console.log("Success sending join request.");
+        token = responseData.game;
+        console.log("token = " + token);
+    })
+    .catch( error => console.log("Error at sendJoin: " + error.data));
+};
+
+
+
+const sendLeave = () => {
+    sendHttpRequest('POST', 'leave', {nick: nickInput, password: passwordInput, game: token})
+    .then(() => {
+        console.log("Success sending leave request");
+        token = 0;
+    })
+    .catch( error => console.log("Error at sendLeave: " + error.data));
+};
+
+
+
+const sendNotify = () => {
+    sendHttpRequest('POST', 'update', {nick: nickName, password: password, game: token, move: TODO})
+    .then(() => console.log("Sucess sending notify request"))
+    .catch( error => console.log("Error at sendNotify: " + error.data));
+};
+
+
+
+const sendRanking = () => {
+    sendHttpRequest('POST', 'ranking')
+    .then( responseData => {
+        console.log("Success sending ranking request");
+        showRanking(responseData.ranking);
+    })
+    .catch( error => console.log("Error at sendRanking: " + error.data));
+};
+
+
+
+const sendRegister = () => {
+    sendHttpRequest('POST', 'register', {nick: nickInput, password: passwordInput})
+    .then( () => console.log("Success sending register request."))
+    .catch( error => console.log("Error at sendRegister: " + error.data));
+};
+
+
+// Server-Sent Events com GET e dados urlencoded ??????
+const sendUpdate = () => {
+    sendHttpRequest('GET', 'update')
+    .then( () => console.log("Success sending update request"))
+    .catch( error => console.log("Error at sendUpdate: " + error.data));
+};
+
+
+joinBtn.addEventListener('click', sendJoin);
+leaveBtn.addEventListener('click', sendLeave);
+notifyBtn.addEventListener('click', sendNotify);
+rankingBtn.addEventListener('click', sendRanking);
+registerBtn.addEventListener('click', sendRegister);
+updateBtn.addEventListener('click', sendUpdate);
