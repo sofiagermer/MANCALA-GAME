@@ -589,9 +589,17 @@ const updateBtn = document.getElementById('update-btn');
 var token = 0; // Error token
 
 // User 1
-var nickInput = "player2725";
-var passwordInput = "4321";
+var nickInput = "teste2725";
+var passwordInput = "1234";
+var opponentNick;var turn;
+var myBoard;
+var myScore;
+var myTotalScore;
+var opponentBoard;
+var opponentScore;
+var opponentTotalScore;
 
+var move;
 
 const sendHttpRequest = (request, url, data) => {
     return fetch('http://twserver.alunos.dcc.fc.up.pt:8008/'+ url, {
@@ -611,9 +619,8 @@ const sendHttpRequest = (request, url, data) => {
 }
 
 
-
 const sendJoin = () => {
-    sendHttpRequest('POST', 'join', {nick: nickInput, password: passwordInput, size: numHoles/2, initial: numSeeds, group: 2725})
+    sendHttpRequest('POST', 'join', {nick: nickInput, password: passwordInput, size: numHoles/2, initial: numSeeds, group:2725})
     .then( responseData => {
         console.log("Success sending join request.");
         token = responseData.game;
@@ -636,7 +643,7 @@ const sendLeave = () => {
 
 
 const sendNotify = () => {
-    sendHttpRequest('POST', 'update', {nick: nickName, password: password, game: token, move: TODO})
+    sendHttpRequest('POST', 'notify', {nick: nickInput, password: passwordInput, game:token, move: 1})
     .then(() => console.log("Sucess sending notify request"))
     .catch( error => console.log("Error at sendNotify: " + error.data));
 };
@@ -661,17 +668,48 @@ const sendRegister = () => {
 };
 
 
-// Server-Sent Events com GET e dados urlencoded ??????
+var myTimeout;
+// Server-Sent Events com GET e dados urlencoded
 const sendUpdate = () => {
-    sendHttpRequest('GET', 'update')
-    .then( () => console.log("Success sending update request"))
-    .catch( error => console.log("Error at sendUpdate: " + error.data));
+    let sse = new EventSource('http://twserver.alunos.dcc.fc.up.pt:8008/update?nick='+nickInput+'&game='+token);
+    sse.onmessage = response => {
+        console.log("Received update from server");
+        var responseData = JSON.parse(response.data);
+
+        if ("winner" in responseData) {
+            if ("board" in responseData && responseData.winner == null)
+                console.log("Draw!");
+            else 
+                (responseData.winner == nickInput) ? console.log("You won!") : console.log("You lost!");
+            clearTimeout(myTimeout);
+            return;
+        }
+
+        
+        turn = (responseData.board.turn == nickInput);
+        myBoard = responseData.board.sides[nickInput].pits;
+        myScore = responseData.board.sides[nickInput].store;
+        myTotalScore = responseData.stores[nickInput];
+
+        for (var playerName in responseData.stores)
+            if (playerName != nickInput) 
+                opponentNick = playerName;
+
+        opponentBoard = responseData.board.sides[opponentNick].pits;
+        opponentScore = responseData.board.sides[opponentNick].store;
+        opponentTotalScore = responseData.stores[opponentNick];
+
+        myTimeout = setTimeout(sendUpdate, 5000);
+    };
+    sse.onerror = err => {
+        console.log("EventSource failed:", err);
+    };
 };
 
 
 joinBtn.addEventListener('click', sendJoin);
 leaveBtn.addEventListener('click', sendLeave);
-notifyBtn.addEventListener('click', sendNotify);
+notifyBtn.addEventListener('click', sendNotify.bind(move)); // N sei bem se isto passa um argumento pra funçao mas é suposto, qlqr cena posso mudar
 rankingBtn.addEventListener('click', sendRanking);
 registerBtn.addEventListener('click', sendRegister);
 updateBtn.addEventListener('click', sendUpdate);
