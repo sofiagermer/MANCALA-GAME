@@ -383,10 +383,10 @@ function getBestMove(boardMock, scoreMock, isMaximizing, maxDepth = 10, depth = 
 
 function gameSetup() {
     board = [];
-    ui = [];
+    //ui = [];
     score = [0,0];
     roundCounter = 0;
-    pvp = false;
+    //pvp = false;
 
     for (var i = 0; i < numHoles; i++) {
         board.push(numSeeds);
@@ -565,18 +565,17 @@ function clearBoard(){
 }
   
 function startGame(playSettingsID, waitingForPlayer, playZone){
+    gameSetup();
+
     if(singlePlayer){
         showFlex(playZone);
         hide(playSettingsID);
-        gameSetup();
         drawBoard(); 
     }
     else{
       hide(playSettingsID);
       showFlex(waitingForPlayer);
       sendJoin();
-      sendUpdate();
-      //gameSetup();
       //drawBoard(); 
     }
 }
@@ -655,6 +654,8 @@ const sendJoin = () => {
         console.log(passwordInput);
         token = responseData.game;
         console.log("token = " + token);
+        gameSetup();
+        sendUpdate();
     })
     .catch( error => console.log("Error at sendJoin: " + error.data));
 };
