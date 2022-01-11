@@ -260,7 +260,7 @@ function createHoleBaixo(id){
 }
 
 function drawBoard() {
-    console.log("estou dentro do draw board");
+    hide('waitingForPlayer');
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
     document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
@@ -414,9 +414,11 @@ function verifyScoring(cavityIndex, b, s) {
 
 function isCavityValid(index, b) {
     if (isPlayer1Turn) {
-        if (index >= 0 && index < (numHoles/2))
+        if (index >= 0 && index < (numHoles/2)){
             return b[index] != 0;
+        }
     }
+    if(!singlePlayer) return;
     else if (index >= (numHoles/2) && index < numHoles)
             return b[index] != 0;
 
@@ -426,6 +428,10 @@ function isCavityValid(index, b) {
 /**LÓGICA DO JOGO ESTÁ AQUI */
 async function selectCavity(idCavity, b, s) {
     if (isCavityValid(idCavity, b)){
+        if(!singlePlayer){
+            sendNotify(idCavity);
+            return;
+        }
         clearBoard();
         executePlay(idCavity, b, s);
         drawBoard();
@@ -578,8 +584,6 @@ function startGame(playSettingsID, waitingForPlayer, playZone){
       showFlex(waitingForPlayer);
       sendJoin();
       showFlex(playZone);
-      hide(waitingForPlayer);
-      drawBoard(); 
     }
 }
 // ########################################################################################
@@ -678,7 +682,10 @@ const sendLeave = () => {
 
 const sendNotify = () => {
     sendHttpRequest('POST', 'notify', {nick: nickInput, password: passwordInput, game:token, move: 1})
-    .then(() => console.log("Sucess sending notify request"))
+    .then(() => {
+        console.log("Sucess sending notify request");
+        sendUpdate();
+    })
     .catch( error => console.log("Error at sendNotify: " + error.data));
 };
 
@@ -723,30 +730,26 @@ const sendUpdate = () => {
             return;
         }
         
-        turn = (responseData.board.turn == nickInput);
+        isPlayer1Turn = (responseData.board.turn == nickInput);
         myBoard = responseData.board.sides[nickInput].pits;
         for (let i = 0; i < numHoles/2; i++) {
             board[i] = myBoard[i];
         }
         score[0] = responseData.board.sides[nickInput].store;
 
-        console.log("antes do !oponnent nick");
         if (!opponentNick)
             for (var playerName in responseData.stores)
                 if (playerName != nickInput) 
                     opponentNick = playerName;
 
-        console.log("antes do opponent board");
         opponentBoard = responseData.board.sides[opponentNick].pits;
         for (let i = 0; i < numHoles/2; i++) {
-            board[i+numHoles/2] = myBoard[i];
+            board[i+numHoles/2] = opponentBoard[i];
         }
         score[1] = responseData.board.sides[opponentNick].store;
 
-        console.log("antes do draw");
+        clearBoard();
         drawBoard();
-
-        myTimeout = setTimeout(sendUpdate, 5000);
     };
     sse.onerror = err => {
         console.log("EventSource failed:", err);
