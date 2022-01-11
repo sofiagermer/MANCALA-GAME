@@ -260,6 +260,7 @@ function createHoleBaixo(id){
 }
 
 function drawBoard() {
+    console.log("estou dentro do draw board");
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
     document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
@@ -383,7 +384,7 @@ function getBestMove(boardMock, scoreMock, isMaximizing, maxDepth = 10, depth = 
 
 function gameSetup() {
     board = [];
-    //ui = [];
+    ui = [];
     score = [0,0];
     roundCounter = 0;
     //pvp = false;
@@ -576,7 +577,9 @@ function startGame(playSettingsID, waitingForPlayer, playZone){
       hide(playSettingsID);
       showFlex(waitingForPlayer);
       sendJoin();
-      //drawBoard(); 
+      showFlex(playZone);
+      hide(waitingForPlayer);
+      drawBoard(); 
     }
 }
 // ########################################################################################
@@ -654,7 +657,7 @@ const sendJoin = () => {
         console.log(passwordInput);
         token = responseData.game;
         console.log("token = " + token);
-        gameSetup();
+        //gameSetup();
         sendUpdate();
     })
     .catch( error => console.log("Error at sendJoin: " + error.data));
@@ -727,17 +730,20 @@ const sendUpdate = () => {
         }
         score[0] = responseData.board.sides[nickInput].store;
 
+        console.log("antes do !oponnent nick");
         if (!opponentNick)
             for (var playerName in responseData.stores)
                 if (playerName != nickInput) 
                     opponentNick = playerName;
 
+        console.log("antes do opponent board");
         opponentBoard = responseData.board.sides[opponentNick].pits;
         for (let i = 0; i < numHoles/2; i++) {
             board[i+numHoles/2] = myBoard[i];
         }
         score[1] = responseData.board.sides[opponentNick].store;
 
+        console.log("antes do draw");
         drawBoard();
 
         myTimeout = setTimeout(sendUpdate, 5000);
