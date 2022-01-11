@@ -25,6 +25,20 @@ var isPlayer1Turn;
 var pvp;
 
 /* --------------------------------------------------- */
+/*Auxiliar Functions to show/hide HTML elements*/
+function showBLock(elementID){
+    document.getElementById(elementID).style.display = "block"; 
+}
+
+function showFlex(elementID){
+    document.getElementById(elementID).style.display = "flex"; 
+}
+
+function hide(elementID){
+  document.getElementById(elementID).style.display = "none"; 
+}
+
+/* --------------------------------------------------- */
 /*SLIDESHOW*/
 
 carousel();
@@ -136,7 +150,7 @@ function chooseLevel(level, idActive, idNonActive1, idNonActive2, idNonActive3, 
 }
 
 function nextPlayOption() {
-    document.getElementById(PlayID[currentPlayOption]).style.display = "none";
+    hide(PlayID[currentPlayOption]);
 
     if (singlePlayer) {
         if (currentPlayOption == 0) currentPlayOption = 1;
@@ -146,11 +160,12 @@ function nextPlayOption() {
         if (currentPlayOption == 0) currentPlayOption = 2;
         else if (currentPlayOption == 2) currentPlayOption = 0;
     }
-    document.getElementById(PlayID[currentPlayOption]).style.display = "block";
+
+    showBLock(PlayID[currentPlayOption]);
 }
 
 function previousPlayOption() {
-    document.getElementById(PlayID[currentPlayOption]).style.display = "none";
+    hide(PlayID[currentPlayOption]);
 
     if (singlePlayer) {
         if (currentPlayOption == 0) currentPlayOption = 2;
@@ -161,7 +176,8 @@ function previousPlayOption() {
         if (currentPlayOption == 0) currentPlayOption = 2;
         else if (currentPlayOption == 2) currentPlayOption = 0;
     }
-    document.getElementById(PlayID[currentPlayOption]).style.display = "block";
+
+    showBLock(PlayID[currentPlayOption]);
 }
 
 
@@ -173,8 +189,9 @@ function nextRule() {
     currentRule += 1;
     if (currentRule == 5) currentRule = 0;
     let afterRule = RulesID[currentRule];
-    document.getElementById(beforeRule).style.display = "none";
-    document.getElementById(afterRule).style.display = "block";
+
+    hide(beforeRule);
+    showBLock(afterRule);
   
 }
 
@@ -183,11 +200,10 @@ function nextRule() {
     currentRule -= 1;
     if (currentRule == -1) currentRule = 4;
     let afterRule = RulesID[currentRule];
-    document.getElementById(beforeRule).style.display = "none";
 
-    document.getElementById(beforeRule).style.display = "none";
-    document.getElementById(afterRule).style.display = "block";
-  
+    hide(beforeRule);
+    showBLock(afterRule);
+
   }
 
 /* --------------------------------------------------- */
@@ -195,10 +211,10 @@ function nextRule() {
 
 /*CANCEL GAME*/
 
-function cancelGame() {
+function cancelGame(hideID, showID) {
     clearBoard();
-    document.getElementById('playZone').style.display = "none";
-    document.getElementById('beforePlay').style.display = "flex";
+    hide(hideID);
+    showFlex(showID);
 }
 
 /*------------*/
@@ -515,68 +531,32 @@ function viewBoard(b) {
 function clearBoard(){
     document.getElementById("zonaTabuleiro").innerHTML = "";
 }
-
-function showBoard(){
-    //document.getElementById("playZone").style.display = "block"; 
-}
-
-function hidePlaySettings(playSettingsID){
-  document.getElementById(playSettingsID).style.display = "none"; 
-}
   
-function startGame(playSettingsID){
-    document.getElementById('playZone').style.display = "flex";
+function startGame(playSettingsID, waitingForPlayer, playZone){
     if(singlePlayer){
-      hidePlaySettings(playSettingsID);
-      gameSetup();
-      drawBoard(); 
+        showFlex(playZone);
+        hide(playSettingsID);
+        gameSetup();
+        drawBoard(); 
     }
     else{
-      hidePlaySettings(playSettingsID);
-      gameSetup();
-      drawBoard(); 
+      hide(playSettingsID);
+      showFlex(waitingForPlayer);
+      sendJoin();
+      sendUpdate();
+      //gameSetup();
+      //drawBoard(); 
     }
 }
-
-
-// #######################
-// ##########################
-// ##############################
-// ##################################
-// ######################################
-// ##########################################
-// ##############################################
-// ##################################################
-// ######################################################
-// ##########################################################
-// ##############################################################
-// ##################################################################
-// ######################################################################
-// ###########################################################################
-// ################################################################################
-// ####################################################################################
 // ########################################################################################
 // #                                                                                      #
 // #                                    SEGUNDA ENTREGA                                   #
 // #                                 CLIENT SIDE FUNCTIONS                                #
 // #                                                                                      #
 // ########################################################################################
-// ####################################################################################
-// ################################################################################
-// ############################################################################
-// ########################################################################
-// ###################################################################
-// ###############################################################
-// ###########################################################
-// #######################################################
-// ###################################################
-// ###############################################
-// ###########################################
-// #######################################
-// ###################################
-// ###############################
-// ###########################
-// #######################
+
+// ########################################################################################
+// #                                      VARIABLES                                       #
 
 
 const joinBtn = document.getElementById('join-btn');
@@ -589,8 +569,8 @@ const updateBtn = document.getElementById('update-btn');
 var token = 0; // Error token
 
 // User 1
-var nickInput = "teste2725";
-var passwordInput = "1234";
+var nickInput;
+var passwordInput;
 var opponentNick;var turn;
 var myBoard;
 var myScore;
@@ -600,6 +580,21 @@ var opponentScore;
 var opponentTotalScore;
 
 var move;
+
+// ########################################################################################
+// #                               ASK USER REGIST INFO                                   #
+
+function register(nickname,pass, hideID, showID){
+    nickInput = document.getElementById(nickname).value;
+    passwordInput = document.getElementById(pass).value;
+    sendRegister();
+    hide(hideID);
+    showFlex(showID);
+}
+
+
+// ########################################################################################
+
 
 const sendHttpRequest = (request, url, data) => {
     return fetch('http://twserver.alunos.dcc.fc.up.pt:8008/'+ url, {
@@ -623,6 +618,8 @@ const sendJoin = () => {
     sendHttpRequest('POST', 'join', {nick: nickInput, password: passwordInput, size: numHoles/2, initial: numSeeds, group:2725})
     .then( responseData => {
         console.log("Success sending join request.");
+        console.log(nickInput);
+        console.log(passwordInput);
         token = responseData.game;
         console.log("token = " + token);
     })
@@ -662,6 +659,10 @@ const sendRanking = () => {
 
 
 const sendRegister = () => {
+    console.log(nickInput);
+    console.log(typeof(nickInput));
+    console.log(passwordInput);
+    console.log(typeof(passwordInput));
     sendHttpRequest('POST', 'register', {nick: nickInput, password: passwordInput})
     .then( () => console.log("Success sending register request."))
     .catch( error => console.log("Error at sendRegister: " + error.data));
@@ -685,6 +686,23 @@ const sendUpdate = () => {
             return;
         }
 
+
+    /*GAME LOCIC*/
+
+    /*variáveis escolhidas pelo utilizador*/
+    var numHoles = 12;
+    var numSeeds = 4;
+    var singlePlayer = false;
+    var aiLevel = 1;
+
+    /*variáveis auxiliares*/
+    var board;
+    var ui;
+    var score;
+    var tabuleiro;
+    var roundCounter;
+    var isPlayer1Turn;
+    var pvp;
         
         turn = (responseData.board.turn == nickInput);
         myBoard = responseData.board.sides[nickInput].pits;
@@ -699,6 +717,8 @@ const sendUpdate = () => {
         opponentScore = responseData.board.sides[opponentNick].store;
         opponentTotalScore = responseData.stores[opponentNick];
 
+        drawBoard();
+
         myTimeout = setTimeout(sendUpdate, 5000);
     };
     sse.onerror = err => {
@@ -707,9 +727,9 @@ const sendUpdate = () => {
 };
 
 
-joinBtn.addEventListener('click', sendJoin);
+//joinBtn.addEventListener('click', sendJoin);
 leaveBtn.addEventListener('click', sendLeave);
 notifyBtn.addEventListener('click', sendNotify.bind(move)); // N sei bem se isto passa um argumento pra funçao mas é suposto, qlqr cena posso mudar
 rankingBtn.addEventListener('click', sendRanking);
-registerBtn.addEventListener('click', sendRegister);
+//registerBtn.addEventListener('click', sendRegister);
 updateBtn.addEventListener('click', sendUpdate);
