@@ -18,11 +18,19 @@
 
 <body>
     <div id= "navbar">
-        <button class="tablink" onclick="openPage('SlideShow', this)" id="defaultOpen"> </button>
-        <button class="tablink" onclick="openPage('Login', this)" >Login</button>
+        <button class="tablink" onclick="openPage('SlideShow', this)" id="defaultOpen"> Home </button>
+       <!-- <button class="tablink" onclick="openPage('Login', this)" >Login</button> -->
         <button class="tablink" onclick="openPage('Play', this)">Play</button>
         <button class="tablink" onclick="openPage('Rules', this)">Rules</button>
     </div>
+
+    <!-- 
+   ########################################################################################
+   #                                                                                      #
+   #                               Initial Page                                           #
+   #                                                                                      #
+   ########################################################################################
+    -->
 
     <div id= "SlideShow" class="tabcontent">
         <img class="mySlides" src="people.jpg">
@@ -32,43 +40,51 @@
         <button id="leave-btn">LEAVE Button</button>
         <button id="notify-btn">NOTIFY Button</button>
         <button id="ranking-btn">RANKING Button</button>
-        <button id="register-btn">REGISTER Button</button>
         <button id="update-btn">UPDATE Button</button>
     </div>
 
-    <!-- Login -->
-    <div id= "Login"  class="tabcontent">
-            <div class = "active">
-                <div id = "caixaLogin">
-                    <div id = "logo">
-                       <img src = "logo.png" id = "imgLogo"> 
-                   </div>
-
-                   <form>
-                        <div class= "field">
-                            <label for="email"><b>Email Adress</b></label>
-                            <div class = "inputPlaceHolder">
-                                <i class="fas fa-envelope icon"></i>
-                                <input type="email" placeholder="username@gmail" name="email" required> 
-                            </div>
-                        </div>
-                        <div class = "field">
-                            <label for="psw"><b>Password</b></label>
-                            <div class = "inputPlaceHolder">
-                                <i class="login__icon fas fa-lock icon"></i>
-                                <input type="password" placeholder="············" name="psw" required> 
-                            </div>
-                        </div>
-                        <button type="submit" class= "button">Log In</button>
-                        If you don't have an account yet sign up here
-                        <button type="submit" class= "button">Sign Up</button>
-                </form>
-                </div>
-        </div>
-    </div>
-
-    <!-- Play -->
+    <!-- 
+   ########################################################################################
+   #                                                                                      #
+   #                                      Play                                            #
+   #                                                                                      #
+   ########################################################################################
+    -->
     <div id="Play" class="tabcontent">
+            <!-- 
+            ########################################################################################
+            #                                      Login                                           #
+            ########################################################################################-->
+        <div class = "active" id= "registerZone">
+            <div id = "caixaLogin">
+                <div id = "logo">
+                    <img src = "logo.png" id = "imgLogo"> 
+                </div>
+
+                <div>
+                    <div class= "field">
+                        <label for="nickname"><b>Nickname</b></label>
+                        <div class = "inputPlaceHolder">
+                            <i class="fas fa-envelope icon"></i>
+                            <input id="nameInput" type="text" placeholder="your nickname"></input>
+                        </div>
+                    </div>
+                    <div class = "field">
+                        <label for="psw"><b>Password</b></label>
+                        <div class = "inputPlaceHolder">
+                            <i class="login__icon fas fa-lock icon"></i>
+                            <input id="passwordInput" type="password" placeholder="············"></input>
+                        </div>
+                    </div>
+                    <button class= "button" id="register-btn" onclick= "register('nameInput','passwordInput','registerZone','beforePlay')">Register</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 
+            ########################################################################################
+            #                                Game Options                                           #
+            ########################################################################################-->
         <form id= beforePlay>
             <div id="caixaPlay">
                 <div class="arrowDiv" onclick="previousPlayOption()">
@@ -133,7 +149,7 @@
     
                     <div class = "playOptions" div id = "StartPlaying">
                         <div>
-                            <div class= "button"  onclick = "startGame('beforePlay')">Criar tabuleiro</div>
+                            <div class= "button"  onclick = "startGame('beforePlay', 'waitingForPlayer', 'playZone')">Start Playing</div>
                         </div>
                     </div>
                 </div>
@@ -142,16 +158,42 @@
                 </div>
             </div>
         </form>
-        <div id = "playZone">
-            <div id = "giveUp">
-                <i class="far fa-window-close icon"  onclick = "cancelGame()"></i> 
+
+        <!-- 
+        ########################################################################################
+        #                             Waiting For Player 2                                     #
+        ########################################################################################-->
+
+        <div class = "active" id= "waitingForPlayer">
+            <div id = "caixaWaitingPlayer">
+                Waiting For Player
             </div>
+        </div>
+
+        <div id = "playZone">
+            <!-- 
+            ########################################################################################
+            #                                Give up Game                                          #
+            ########################################################################################-->
+            <div id = "giveUp">
+                <i class="far fa-window-close icon"  onclick = "cancelGame('playZone', 'beforePlay')"></i> 
+            </div>
+
+            <!-- 
+            ########################################################################################
+            #                                      Board                                          #
+            ########################################################################################-->
             <div id="zonaTabuleiro"> 
             </div>
         </div>
     </div>
-
-    <!-- Rules -->
+    <!-- 
+   ########################################################################################
+   #                                                                                      #
+   #                                      Rules                                           #
+   #                                                                                      #
+   ########################################################################################
+    -->
     <div id= "Rules" class="tabcontent">
         <div class = "active" id = "activeRules">
             <div id="caixaRules">
