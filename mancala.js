@@ -27,7 +27,7 @@ var pvp;
 /* --------------------------------------------------- */
 /*SLIDESHOW*/
 
-carousel();
+//carousel();
 
 function carousel() {
   var i;
@@ -493,13 +493,45 @@ function finishGame (b, s) {
         return;
     }
 
-    if (s[1] > (numHoles/2) * numSeeds) {
+    else if (s[1] > (numHoles/2) * numSeeds) {
         // Anounce player 2 victory
         console.log('Player 2 wins!');
         return;
     }
 
     else console.log('Draw!')
+
+    return updateClassifications(s);
+}
+
+/*
+<table id="highscores">
+    <tr><td>Name</td><td>Score</td></tr>
+</table>
+
+var highScoreTable = document.getElementById("highscores");
+*/
+
+
+/*
+var highScores = [
+    {name: "Maximillian", rating: 1000, playerScore: 48, opponentScore: 0},
+    {name: "The second guy", rating: 700, playerScore: 36, opponentScore: 12},
+    {name: "The newbie", rating: 50, playerScore: 30, opponentScore: 18}
+];
+*/
+
+function setHighscores(highScores) {
+    localStorage.setItem("highscores", JSON.stringify(highScores));
+}
+
+function updateClassifications(s) {
+    
+    var retrievedScores = JSON.parse(localStorage.getItem("highscores"));
+    for (var i = 0; i < retrievedScores.length; i++) {
+        // highScoreTable.innerHTML += "<tr><td>" + retrievedScores[i].name + "</td><td>" + retrievedScores[i].score + "</td></tr>";
+    }
+    
 }
 
 function viewScore(s) {
@@ -591,7 +623,8 @@ var token = 0; // Error token
 // User 1
 var nickInput = "teste2725";
 var passwordInput = "1234";
-var opponentNick;var turn;
+var opponentNick;
+var turn;
 var myBoard;
 var myScore;
 var myTotalScore;
@@ -689,7 +722,7 @@ const sendUpdate = () => {
         turn = (responseData.board.turn == nickInput);
         myBoard = responseData.board.sides[nickInput].pits;
         myScore = responseData.board.sides[nickInput].store;
-        myTotalScore = responseData.stores[nickInput];
+        //myTotalScore = responseData.stores[nickInput];
 
         for (var playerName in responseData.stores)
             if (playerName != nickInput) 
@@ -697,7 +730,7 @@ const sendUpdate = () => {
 
         opponentBoard = responseData.board.sides[opponentNick].pits;
         opponentScore = responseData.board.sides[opponentNick].store;
-        opponentTotalScore = responseData.stores[opponentNick];
+        //opponentTotalScore = responseData.stores[opponentNick];
 
         myTimeout = setTimeout(sendUpdate, 5000);
     };
