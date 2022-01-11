@@ -718,37 +718,24 @@ const sendUpdate = () => {
             clearTimeout(myTimeout);
             return;
         }
-
-
-    /*GAME LOCIC*/
-
-    /*variáveis escolhidas pelo utilizador*/
-    var numHoles = 12;
-    var numSeeds = 4;
-    var singlePlayer = false;
-    var aiLevel = 1;
-
-    /*variáveis auxiliares*/
-    var board;
-    var ui;
-    var score;
-    var tabuleiro;
-    var roundCounter;
-    var isPlayer1Turn;
-    var pvp;
         
         turn = (responseData.board.turn == nickInput);
         myBoard = responseData.board.sides[nickInput].pits;
-        myScore = responseData.board.sides[nickInput].store;
-        //myTotalScore = responseData.stores[nickInput];
+        for (let i = 0; i < numHoles/2; i++) {
+            board[i] = myBoard[i];
+        }
+        score[0] = responseData.board.sides[nickInput].store;
 
-        for (var playerName in responseData.stores)
-            if (playerName != nickInput) 
-                opponentNick = playerName;
+        if (!opponentNick)
+            for (var playerName in responseData.stores)
+                if (playerName != nickInput) 
+                    opponentNick = playerName;
 
         opponentBoard = responseData.board.sides[opponentNick].pits;
-        opponentScore = responseData.board.sides[opponentNick].store;
-        //opponentTotalScore = responseData.stores[opponentNick];
+        for (let i = 0; i < numHoles/2; i++) {
+            board[i+numHoles/2] = myBoard[i];
+        }
+        score[1] = responseData.board.sides[opponentNick].store;
 
         drawBoard();
 
