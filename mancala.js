@@ -19,10 +19,8 @@ var aiLevel = 1;
 var board;
 var ui;
 var score;
-var tabuleiro;
-var roundCounter;
-var isPlayer1Turn;
-var pvp;
+var roundCounter; //TODO usar isto
+var isPlayerTurn;
 
 /* --------------------------------------------------- */
 /*Auxiliar Functions to show/hide HTML elements*/
@@ -128,12 +126,12 @@ function whoStarts(isComputerStarting,idActive, idOther){
     if(isComputerStarting){
         console.log("computador começa");
         console.log("player 1 não começa");
-        isPlayer1Turn = false;
+        isPlayerTurn = false;
     }
     else{
         console.log("pessoa começa");
         console.log("player 1 começa");
-        isPlayer1Turn = true;
+        isPlayerTurn = true;
     }
     console.log(isComputerStarting);
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
@@ -256,11 +254,11 @@ function createHoleBaixo(id){
         var s2 = document.createElement("div");
         s2.setAttribute("class", "seed");
         seeds.appendChild(s2);
-}
+    }
 }
 
 function drawBoard() {
-    console.log("estou dentro do draw board");
+    hide('waitingForPlayer');
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
     document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
@@ -323,7 +321,7 @@ function sleep(ms) {
 
 function getRandomMove() {
     var items = [];
-    var i = (isPlayer1Turn? 0 : numHoles/2);
+    var i = (isPlayerTurn? 0 : numHoles/2);
     for (var j = 0; j < numHoles/2; j++)
         if (board[i+j] != 0) 
             items.push(i+j);
@@ -331,55 +329,45 @@ function getRandomMove() {
     return items[Math.floor(Math.random()*items.length)];
 }
 
-function getBestMove(boardMock, scoreMock, isMaximizing, maxDepth = 10, depth = 0) {
-    if (depth == 0) {
-        boardMock = [...board];
-        scoreMock = [...score];
-    } 
-
+function getBestMove(maxDepth, boardMock = [], scoreMock = [], depth = 0) {
     if (depth == maxDepth) return scoreMock[1] - scoreMock[0];
 
     var availablePlays = [];
-    var i = (isPlayer1Turn? 0 : numHoles/2);
+    var i = (isPlayerTurn? 0 : numHoles/2);
     for (var j = 0; j < numHoles/2; j++)
         if (boardMock[i+j] != 0) 
             availablePlays.push(i+j);
     
-
     if (availablePlays.length == 0) return scoreMock[1] - scoreMock[0];
     
-    var index = -1;
-    var bestValue = isMaximizing ? -numHoles*numSeeds : numHoles*numSeeds;
-    var value = bestValue;
+    var currentBestIndex = -1;
+    var currentBestValue = isPlayerTurn ? numHoles*numSeeds : -numHoles*numSeeds;
     var boardMockCopy = [...boardMock];
     var scoreMockCopy = [...scoreMock];
-    var playerTurnCopy = isPlayer1Turn;
+    var isPlayerTurnCopy = isPlayerTurn;
     
+    var currentValue; //BUG: ÀS VEZES ELE DÁ RETURN -1 FOR SOME REASON? TO DO
     for (var i = 0; i < availablePlays.length; i++) {
         
-        if (!isGameFinished(boardMock, scoreMock)) {
-            executePlay(availablePlays[i], boardMock, scoreMock);        
-            value = getBestMove(boardMock, scoreMock, !isPlayer1Turn, maxDepth, depth + 1);
-        } 
-        else return scoreMock[1] - scoreMock[0];
-
-        if (isMaximizing) {
-            if (value > bestValue) {
-                value = bestValue;
-                index = availablePlays[i];
-            }
+        if (depth == 0) {
+            console.log("Debug");
         }
-        else if (value < bestValue) {
-            value = bestValue;
-            index = availablePlays[i];
-        } 
+
+        executePlay(availablePlays[i], boardMock, scoreMock);        
+        currentValue = getBestMove(maxDepth, boardMock, scoreMock, depth + 1);
+
+        if ((isPlayerTurnCopy && currentBestValue > currentValue) || (!isPlayerTurnCopy && currentBestValue < currentValue)) {
+            currentBestValue = currentValue;
+            currentBestIndex = availablePlays[i];
+        }
 
         boardMock = [...boardMockCopy];
         scoreMock = [...scoreMockCopy];
-        isPlayer1Turn = playerTurnCopy;
+        isPlayerTurn = isPlayerTurnCopy;
     }
 
-    return index;   
+    if (depth == 0) return currentBestIndex;
+    return currentBestValue;
 }
 
 function gameSetup() {
@@ -387,7 +375,6 @@ function gameSetup() {
     ui = [];
     score = [0,0];
     roundCounter = 0;
-    //pvp = false;
 
     for (var i = 0; i < numHoles; i++) {
         board.push(numSeeds);
@@ -395,16 +382,11 @@ function gameSetup() {
 }
 
 function verifyScoring(cavityIndex, b, s) {
-    if ((isPlayer1Turn && cavityIndex < (numHoles/2)) || (!isPlayer1Turn && cavityIndex >= (numHoles/2))) {
+    if ((isPlayerTurn && cavityIndex < (numHoles/2)) || (!isPlayerTurn && cavityIndex >= (numHoles/2))) {
         if (b[cavityIndex] == 1) {
-            var oppositeCavity = numHoles - cavityIndex - 1
+            var oppositeCavity = numHoles - cavityIndex - 1;
 
-            s[isPlayer1Turn ? 0 : 1] += b[oppositeCavity] + 1;
-
-            if (isNaN(s[0]) || isNaN(s[1])) {
-                console.log("NaN found, exiting...");
-                process.exit(1);
-            }
+            s[isPlayerTurn ? 0 : 1] += b[oppositeCavity] + 1;
 
             b[oppositeCavity] = 0;
             b[cavityIndex] = 0;
@@ -413,26 +395,32 @@ function verifyScoring(cavityIndex, b, s) {
 }
 
 function isCavityValid(index, b) {
-    if (isPlayer1Turn) {
-        if (index >= 0 && index < (numHoles/2))
-            return b[index] != 0;
-    }
+    if (isPlayerTurn && index >= 0 && index < (numHoles/2))
+        return b[index] != 0;
+
+    if (!singlePlayer) return false; // Singleplayer always plays on the bottom side (first board half)
+
     else if (index >= (numHoles/2) && index < numHoles)
-            return b[index] != 0;
+        return b[index] != 0;
 
     return false;
 } 
 
 /**LÓGICA DO JOGO ESTÁ AQUI */
 async function selectCavity(idCavity, b, s) {
-    if (isCavityValid(idCavity, b)){
+    if (isCavityValid(idCavity, b) && !isGameFinished(b,s)) {
+        if (!singlePlayer) {
+            sendNotify(idCavity);
+            return;
+        }
         clearBoard();
         executePlay(idCavity, b, s);
         drawBoard();
-        if(singlePlayer && !isPlayer1Turn){
-            console.log("cpu joga");
+        if (singlePlayer && !isPlayerTurn) {
             await sleep(300);
-            selectCavity(getBestMove([],[],!isPlayer1Turn, aiLevel*2),b,s);
+            var bestMove = getBestMove(aiLevel*2, [...board], [...score]);
+            selectCavity(bestMove,b,s);
+            return;
         }
     }
     if (isGameFinished(board, score)) {
@@ -449,9 +437,9 @@ function executePlay (cavityIndex, b, s) {
     for (var seeds = initialSeeds; seeds != 0; seeds--) {
         cavityIndex = (cavityIndex + 1) % numHoles;
 
-        var isPlayerStorage = (cavityIndex == (isPlayer1Turn? (numHoles/2) : 0));
+        var isPlayerStorage = (cavityIndex == (isPlayerTurn? (numHoles/2) : 0));
         if (isPlayerStorage && !lastCavityWasStorage) {
-            s[isPlayer1Turn? 0 : 1]++;
+            s[isPlayerTurn? 0 : 1]++;
             cavityIndex--;
 
             lastCavityWasStorage = true;
@@ -468,7 +456,7 @@ function executePlay (cavityIndex, b, s) {
 
 function switchTurn(lastSeedOnStorage) {
     if (!lastSeedOnStorage) 
-        isPlayer1Turn = !isPlayer1Turn; // switch turn
+        isPlayerTurn = !isPlayerTurn; // switch turn
 }
 
 function isGameFinished(b, s) {
@@ -477,23 +465,10 @@ function isGameFinished(b, s) {
     if (s[0] > minScoreToWin || s[1] > minScoreToWin)
         return true;
 
-    var canPlayer1Play = false;
-    var canPlayer2Play = false;
-
-    for (var i = 0; i < (numHoles/2); i++)
-        if (b[i] != 0) {
-            canPlayer1Play = true;
-            break;
-        }
-
-    for (var i = (numHoles/2); i < numHoles;i++)
-        if (b[i] != 0) {
-            canPlayer2Play = true;
-            break;
-        }
-
-    if (isPlayer1Turn && canPlayer1Play || !isPlayer1Turn && canPlayer2Play)
-        return false;
+    var i = (isPlayerTurn ? 0 : numHoles/2);
+    for (var j = 0; j < numHoles/2; j++)
+        if (b[i+j] != 0)
+            return false;
 
     return true;
 }
@@ -568,18 +543,15 @@ function clearBoard(){
 function startGame(playSettingsID, waitingForPlayer, playZone){
     gameSetup();
 
-    if(singlePlayer){
+    if (singlePlayer) {
         showFlex(playZone);
         hide(playSettingsID);
         drawBoard(); 
-    }
-    else{
+    } else {
       hide(playSettingsID);
       showFlex(waitingForPlayer);
       sendJoin();
       showFlex(playZone);
-      hide(waitingForPlayer);
-      drawBoard(); 
     }
 }
 // ########################################################################################
@@ -619,7 +591,7 @@ var move;
 // ########################################################################################
 // #                               ASK USER REGIST INFO                                   #
 
-function register(nickname,pass, hideID, showID){
+function register(nickname,pass, hideID, showID) {
     nickInput = document.getElementById(nickname).value;
     passwordInput = document.getElementById(pass).value;
     sendRegister();
@@ -657,7 +629,6 @@ const sendJoin = () => {
         console.log(passwordInput);
         token = responseData.game;
         console.log("token = " + token);
-        //gameSetup();
         sendUpdate();
     })
     .catch( error => console.log("Error at sendJoin: " + error.data));
@@ -676,8 +647,8 @@ const sendLeave = () => {
 
 
 
-const sendNotify = () => {
-    sendHttpRequest('POST', 'notify', {nick: nickInput, password: passwordInput, game:token, move: 1})
+const sendNotify = (currentBestMoveIndex) => {
+    sendHttpRequest('POST', 'notify', {nick: nickInput, password: passwordInput, game:token, move: currentBestMoveIndex})
     .then(() => console.log("Sucess sending notify request"))
     .catch( error => console.log("Error at sendNotify: " + error.data));
 };
@@ -705,8 +676,16 @@ const sendRegister = () => {
     .catch( error => console.log("Error at sendRegister: " + error.data));
 };
 
+const endGame = (responseData) => {
+    var gameEndedMessage;
+    if ("board" in responseData && responseData.winner == null)
+        gameEndedMessage = "Draw!";
+    else 
+        gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
 
-var myTimeout;
+    showGameEndedMessage(gameEndedMessage);
+};
+
 // Server-Sent Events com GET e dados urlencoded
 const sendUpdate = () => {
     let sse = new EventSource('http://twserver.alunos.dcc.fc.up.pt:8008/update?nick='+nickInput+'&game='+token);
@@ -715,38 +694,31 @@ const sendUpdate = () => {
         var responseData = JSON.parse(response.data);
 
         if ("winner" in responseData) {
-            if ("board" in responseData && responseData.winner == null)
-                console.log("Draw!");
-            else 
-                (responseData.winner == nickInput) ? console.log("You won!") : console.log("You lost!");
-            clearTimeout(myTimeout);
+            endGame(responseData);
             return;
         }
         
-        turn = (responseData.board.turn == nickInput);
+        isPlayerTurn = (responseData.board.turn == nickInput);
         myBoard = responseData.board.sides[nickInput].pits;
         for (let i = 0; i < numHoles/2; i++) {
             board[i] = myBoard[i];
         }
         score[0] = responseData.board.sides[nickInput].store;
 
-        console.log("antes do !oponnent nick");
         if (!opponentNick)
             for (var playerName in responseData.stores)
                 if (playerName != nickInput) 
                     opponentNick = playerName;
 
-        console.log("antes do opponent board");
         opponentBoard = responseData.board.sides[opponentNick].pits;
         for (let i = 0; i < numHoles/2; i++) {
-            board[i+numHoles/2] = myBoard[i];
+            board[i+numHoles/2] = opponentBoard[i];
         }
         score[1] = responseData.board.sides[opponentNick].store;
 
-        console.log("antes do draw");
+        clearBoard();
         drawBoard();
 
-        myTimeout = setTimeout(sendUpdate, 5000);
     };
     sse.onerror = err => {
         console.log("EventSource failed:", err);
