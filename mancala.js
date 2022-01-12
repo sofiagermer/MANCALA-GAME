@@ -718,7 +718,6 @@ const sendUpdate = () => {
 
         clearBoard();
         drawBoard();
-
     };
     sse.onerror = err => {
         console.log("EventSource failed:", err);
