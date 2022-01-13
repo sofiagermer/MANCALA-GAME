@@ -26,9 +26,7 @@
 
     <!-- 
    ########################################################################################
-   #                                                                                      #
    #                               Initial Page                                           #
-   #                                                                                      #
    ########################################################################################
     -->
 
@@ -36,18 +34,12 @@
         <img class="mySlides" src="people.jpg">
         <img class="mySlides" src="people2.jpg">
         <img class="mySlides" src="people3.jpg">
-        <button id="join-btn">JOIN Button</button>
-        <button id="leave-btn">LEAVE Button</button>
-        <button id="notify-btn">NOTIFY Button</button>
         <button id="ranking-btn">RANKING Button</button>
-        <button id="update-btn">UPDATE Button</button>
     </div>
 
     <!-- 
    ########################################################################################
-   #                                                                                      #
    #                                      Play                                            #
-   #                                                                                      #
    ########################################################################################
     -->
     <div id="Play" class="tabcontent">
@@ -76,7 +68,7 @@
                             <input id="passwordInput" type="password" placeholder="············"></input>
                         </div>
                     </div>
-                    <button class= "button" id="register-btn" onclick= "register('nameInput','passwordInput','registerZone','beforePlay')">Register</button>
+                    <button class= "button" id="register-btn" onclick= "register()">Register</button>
                 </div>
             </div>
         </div>
@@ -118,8 +110,8 @@
                         <h2 class="Title playTitle">Number of Players</h2>
                     
                         <div class = "playingMode">
-                            <div class= "playerModeButton" id="sP" onclick = "onePlayer('sP', 'mP','singlePlayerOptions')">Single Player</div>
-                            <div class= "playerModeButton" id="mP" onclick = "multiPlayer('mP', 'sP' ,'singlePlayerOptions')">Two Players</div>
+                            <div class= "playerModeButton" id="sP" onclick = "onePlayer()">Single Player</div>
+                            <div class= "playerModeButton" id="mP" onclick = "multiPlayer()">Two Players</div>
                         </div>
                         <p></p>
                 
@@ -149,7 +141,7 @@
     
                     <div class = "playOptions" div id = "StartPlaying">
                         <div>
-                            <div class= "button"  onclick = "startGame('beforePlay', 'waitingForPlayer', 'playZone')">Start Playing</div>
+                            <div class= "button"  onclick = "startGame()">Start Playing</div>
                         </div>
                     </div>
                 </div>
@@ -168,6 +160,9 @@
             <div id = "caixaWaitingPlayer">
                 Waiting For Player
             </div>
+            <button id = "leaveQueue" onclick= "sendLeave()">
+                Leave Queue
+            </div>
         </div>
 
         <div id = "playZone">
@@ -176,8 +171,11 @@
             #                                Give up Game                                          #
             ########################################################################################-->
             <div id = "giveUp">
-                <i class="far fa-window-close icon"  onclick = "cancelGame('playZone', 'beforePlay')"></i> 
+                <i class="far fa-window-close icon"  onclick = "sendLeave()"></i> 
             </div>
+            <!--<button id = "leaveQueue" onclick= "sendLeave()">
+                Leave Queue
+            </div>-->
 
             <!-- 
             ########################################################################################

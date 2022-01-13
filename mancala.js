@@ -24,7 +24,7 @@ var isPlayerTurn;
 
 /* --------------------------------------------------- */
 /*Auxiliar Functions to show/hide HTML elements*/
-function showBLock(elementID){
+function showBlock(elementID){
     document.getElementById(elementID).style.display = "block"; 
 }
 
@@ -84,7 +84,6 @@ function openPage(pageName) {
 /* choose number of holes*/
 function getNumberHoles(numberHoles, idActive, idNonActive1, idNonActive2 , idNonActive3, idNonActive4) {
     numHoles = numberHoles;
-    console.log(numberHoles);
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
@@ -97,7 +96,6 @@ function getNumberHoles(numberHoles, idActive, idNonActive1, idNonActive2 , idNo
 /* choose number of seeds*/
 function getNumberSeeds(numberSeeds, idActive, idNonActive1, idNonActive2 , idNonActive3){
     numSeeds = numberSeeds;
-    console.log(numberSeeds);
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idNonActive1).style.background = "rgb(103,155,155,0.5)";
     document.getElementById(idNonActive2).style.background = "rgb(103,155,155,0.5)";
@@ -105,34 +103,23 @@ function getNumberSeeds(numberSeeds, idActive, idNonActive1, idNonActive2 , idNo
 }
 
 /* choose player mode*/
-function onePlayer(idActive, idOther){
+function onePlayer(){
     singlePlayer = true;
-    console.log(singlePlayer);
-    document.getElementById(idActive).style.background = "rgb(103,155,155)";
-    document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
-    //document.getElementById(idOptions).style.display = "block";
+    document.getElementById('sP').style.background = "rgb(103,155,155)";
+    document.getElementById('mP').style.background = "rgb(103,155,155,0.5)";
+    //document.getElementById('singlePlayerOptions').style.display = "block";
 }
 
 function multiPlayer(idActive, idOther){
     singlePlayer = false;
-    console.log(singlePlayer);
-    document.getElementById(idActive).style.background = "rgb(103,155,155)";
-    document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
-    //document.getElementById(idOptions).style.display = "none";
+    document.getElementById('mP').style.background = "rgb(103,155,155)";
+    document.getElementById('sP').style.background = "rgb(103,155,155,0.5)";
+    //document.getElementById('singlePlayerOptions').style.display = "none";
 }
 
 /*choose who starts game*/
 function whoStarts(isComputerStarting,idActive, idOther){
-    if(isComputerStarting){
-        console.log("computador começa");
-        console.log("player 1 não começa");
-        isPlayerTurn = false;
-    }
-    else{
-        console.log("pessoa começa");
-        console.log("player 1 começa");
-        isPlayerTurn = true;
-    }
+    isPlayerTurn = !isComputerStarting;
     console.log(isComputerStarting);
     document.getElementById(idActive).style.background = "rgb(103,155,155)";
     document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
@@ -159,7 +146,7 @@ function nextPlayOption() {
         else if (currentPlayOption == 2) currentPlayOption = 0;
     }
 
-    showBLock(PlayID[currentPlayOption]);
+    showBlock(PlayID[currentPlayOption]);
 }
 
 function previousPlayOption() {
@@ -175,7 +162,7 @@ function previousPlayOption() {
         else if (currentPlayOption == 2) currentPlayOption = 0;
     }
 
-    showBLock(PlayID[currentPlayOption]);
+    showBlock(PlayID[currentPlayOption]);
 }
 
 
@@ -189,30 +176,17 @@ function nextRule() {
     let afterRule = RulesID[currentRule];
 
     hide(beforeRule);
-    showBLock(afterRule);
-  
+    showBlock(afterRule);  
 }
 
-  function previousRule() {
+function previousRule() {
     let beforeRule = RulesID[currentRule];
     currentRule -= 1;
     if (currentRule == -1) currentRule = 4;
     let afterRule = RulesID[currentRule];
 
     hide(beforeRule);
-    showBLock(afterRule);
-
-  }
-
-/* --------------------------------------------------- */
-/*GAME LOGIC*/
-
-/*CANCEL GAME*/
-
-function cancelGame(hideID, showID) {
-    clearBoard();
-    hide(hideID);
-    showFlex(showID);
+    showBlock(afterRule);
 }
 
 /*------------*/
@@ -222,7 +196,7 @@ function createHoleCima(id){
     ui[id].setAttribute("class", "quadrado");
     ui[id].setAttribute("id", id);
     document.getElementById("sub-sub-tabuleiro-2").appendChild(ui[id]);
-    ui[id].addEventListener("click", () => selectCavity(id, board, score));
+    ui[id].addEventListener("click", () => selectCavity(id, board, score, true));
 
     var seeds = document.createElement("div");
     seeds.setAttribute("class", "seedspace");
@@ -242,7 +216,7 @@ function createHoleBaixo(id){
     ui[id].setAttribute("class", "quadrado");
     ui[id].setAttribute("id", id);
     document.getElementById("sub-sub-tabuleiro-1").appendChild(ui[id]);
-    ui[id].addEventListener("click", ()=> selectCavity(id, board, score));
+    ui[id].addEventListener("click", () => selectCavity(id, board, score, true));
 
 
     var seeds = document.createElement("div");
@@ -319,7 +293,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function getRandomMove() {
+function getRandomMove() { //Unused
     var items = [];
     var i = (isPlayerTurn? 0 : numHoles/2);
     for (var j = 0; j < numHoles/2; j++)
@@ -346,13 +320,8 @@ function getBestMove(maxDepth, boardMock = [], scoreMock = [], depth = 0) {
     var scoreMockCopy = [...scoreMock];
     var isPlayerTurnCopy = isPlayerTurn;
     
-    var currentValue; //BUG: ÀS VEZES ELE DÁ RETURN -1 FOR SOME REASON? TO DO
+    var currentValue;
     for (var i = 0; i < availablePlays.length; i++) {
-        
-        if (depth == 0) {
-            console.log("Debug");
-        }
-
         executePlay(availablePlays[i], boardMock, scoreMock);        
         currentValue = getBestMove(maxDepth, boardMock, scoreMock, depth + 1);
 
@@ -366,7 +335,10 @@ function getBestMove(maxDepth, boardMock = [], scoreMock = [], depth = 0) {
         isPlayerTurn = isPlayerTurnCopy;
     }
 
-    if (depth == 0) return currentBestIndex;
+    if (depth == 0) {
+        console.log("Player 2 chose cavity " + currentBestIndex);
+        return currentBestIndex;
+    }
     return currentBestValue;
 }
 
@@ -379,6 +351,17 @@ function gameSetup() {
     for (var i = 0; i < numHoles; i++) {
         board.push(numSeeds);
     }
+    
+    hide('beforePlay');
+    //hide('Play');
+    
+    if (singlePlayer) {
+        drawBoard(); 
+    } else {
+        showFlex('waitingForPlayer');
+        sendJoin();
+    }
+    showFlex('playZone');
 }
 
 function verifyScoring(cavityIndex, b, s) {
@@ -393,38 +376,63 @@ function verifyScoring(cavityIndex, b, s) {
         }
     }
 }
+// invalid start position: 8
+// invalid empty pit: 3
+function isCavityValid(index, b, calledByPlayer) {
+    console.log("isCavityValid called!");
 
-function isCavityValid(index, b) {
+    if (!calledByPlayer) return true; // Without this line, it was impossible to distinguish if user played outside his turn or if AI played in his turn
+
+    if (!isPlayerTurn) {
+        alert("Not your turn to play");
+        return false;
+    }
+
+    if (index > numHoles/2) {
+        alert("Invalid start position: " + index);
+        return false;
+    }
+
+    if (b[index] == 0) {
+        alert("Invalid empty pit: " + index);
+        return false;
+    }
+
+    return true;
+
     if (isPlayerTurn && index >= 0 && index < (numHoles/2))
         return b[index] != 0;
 
     if (!singlePlayer) return false; // Singleplayer always plays on the bottom side (first board half)
 
-    else if (index >= (numHoles/2) && index < numHoles)
+    else if (!isPlayerTurn && index >= (numHoles/2) && index < numHoles)
         return b[index] != 0;
 
     return false;
 } 
 
 /**LÓGICA DO JOGO ESTÁ AQUI */
-async function selectCavity(idCavity, b, s) {
-    if (isCavityValid(idCavity, b) && !isGameFinished(b,s)) {
-        if (!singlePlayer) {
-            sendNotify(idCavity);
-            return;
-        }
+async function selectCavity(idCavity, b, s, calledByPlayer) {
+    if (!singlePlayer) {
+        sendNotify(idCavity); // Pode ser jogada cavidade errada. Dar display ao erro com mensagem quando isso acontecer. TODO na sendNotify.
+        return;
+    }
+
+    if (isCavityValid(idCavity, b, calledByPlayer) && !isGameFinished(b,s)) {
+
         clearBoard();
+        console.log("Player " + (isPlayerTurn ? 1 : 2) + " chose cavity " + idCavity);
         executePlay(idCavity, b, s);
         drawBoard();
         if (singlePlayer && !isPlayerTurn) {
-            await sleep(300);
-            var bestMove = getBestMove(aiLevel*2, [...board], [...score]);
-            selectCavity(bestMove,b,s);
+            await sleep(500);
+            selectCavity(getBestMove(aiLevel*2, [...board], [...score]), b, s, false);
             return;
         }
-    }
-    if (isGameFinished(board, score)) {
-        finishGame(board, score);
+
+        if (isGameFinished(board, score)) {
+            finishGame(board, score);
+        }
     }
 }
 
@@ -462,7 +470,7 @@ function switchTurn(lastSeedOnStorage) {
 function isGameFinished(b, s) {
 
     var minScoreToWin = numHoles * numSeeds / 2;
-    if (s[0] > minScoreToWin || s[1] > minScoreToWin)
+    if (Math.max(s[0], s[1]) > minScoreToWin)
         return true;
 
     var i = (isPlayerTurn ? 0 : numHoles/2);
@@ -517,8 +525,14 @@ function setHighscores(highScores) {
     localStorage.setItem("highscores", JSON.stringify(highScores));
 }
 
+function showRanking(ranking) {
+    for (var i = 0; i < ranking.length; i++) {
+
+    }
+}
+
 function updateClassifications(s) {
-    
+    // TODO
     var retrievedScores = JSON.parse(localStorage.getItem("highscores"));
     for (var i = 0; i < retrievedScores.length; i++) {
         // highScoreTable.innerHTML += "<tr><td>" + retrievedScores[i].name + "</td><td>" + retrievedScores[i].score + "</td></tr>";
@@ -540,18 +554,12 @@ function clearBoard(){
     document.getElementById("zonaTabuleiro").innerHTML = "";
 }
   
-function startGame(playSettingsID, waitingForPlayer, playZone){
+async function startGame() {
     gameSetup();
 
-    if (singlePlayer) {
-        showFlex(playZone);
-        hide(playSettingsID);
-        drawBoard(); 
-    } else {
-      hide(playSettingsID);
-      showFlex(waitingForPlayer);
-      sendJoin();
-      showFlex(playZone);
+    if (singlePlayer && !isPlayerTurn) {
+        await sleep(1000);
+        selectCavity(getBestMove(aiLevel*2, [...board], [...score]), board, score, false);
     }
 }
 // ########################################################################################
@@ -564,13 +572,7 @@ function startGame(playSettingsID, waitingForPlayer, playZone){
 // ########################################################################################
 // #                                      VARIABLES                                       #
 
-
-const joinBtn = document.getElementById('join-btn');
-const leaveBtn = document.getElementById('leave-btn');
-const notifyBtn = document.getElementById('notify-btn');
 const rankingBtn = document.getElementById('ranking-btn');
-const registerBtn = document.getElementById('register-btn');
-const updateBtn = document.getElementById('update-btn');
 
 var token = 0; // Error token
 
@@ -591,12 +593,10 @@ var move;
 // ########################################################################################
 // #                               ASK USER REGIST INFO                                   #
 
-function register(nickname,pass, hideID, showID) {
-    nickInput = document.getElementById(nickname).value;
-    passwordInput = document.getElementById(pass).value;
+function register() {
+    nickInput = document.getElementById('nameInput').value;
+    passwordInput = document.getElementById('passwordInput').value;
     sendRegister();
-    hide(hideID);
-    showFlex(showID);
 }
 
 
@@ -625,13 +625,10 @@ const sendJoin = () => {
     sendHttpRequest('POST', 'join', {nick: nickInput, password: passwordInput, size: numHoles/2, initial: numSeeds, group:2725})
     .then( responseData => {
         console.log("Success sending join request.");
-        console.log(nickInput);
-        console.log(passwordInput);
         token = responseData.game;
-        console.log("token = " + token);
         sendUpdate();
     })
-    .catch( error => console.log("Error at sendJoin: " + error.data));
+    .catch( error => alert("Error when joining game queue : "+error.data));
 };
 
 
@@ -642,7 +639,7 @@ const sendLeave = () => {
         console.log("Success sending leave request");
         token = 0;
     })
-    .catch( error => console.log("Error at sendLeave: " + error.data));
+    .catch( error => alert("Error when leaving game : "+error.data));
 };
 
 
@@ -650,40 +647,47 @@ const sendLeave = () => {
 const sendNotify = (currentBestMoveIndex) => {
     sendHttpRequest('POST', 'notify', {nick: nickInput, password: passwordInput, game:token, move: currentBestMoveIndex})
     .then(() => console.log("Sucess sending notify request"))
-    .catch( error => console.log("Error at sendNotify: " + error.data));
+    .catch( error => alert("Error when playing cavity : "+error.data));
 };
 
 
 
 const sendRanking = () => {
-    sendHttpRequest('POST', 'ranking')
+    sendHttpRequest('POST', 'ranking', {})
     .then( responseData => {
         console.log("Success sending ranking request");
         showRanking(responseData.ranking);
     })
-    .catch( error => console.log("Error at sendRanking: " + error.data));
+    .catch( error => alert("Error when retrieving rankings : "+error.data));
 };
 
 
 
 const sendRegister = () => {
-    console.log(nickInput);
-    console.log(typeof(nickInput));
-    console.log(passwordInput);
-    console.log(typeof(passwordInput));
     sendHttpRequest('POST', 'register', {nick: nickInput, password: passwordInput})
-    .then( () => console.log("Success sending register request."))
-    .catch( error => console.log("Error at sendRegister: " + error.data));
+    .then( () => {
+        console.log("Success sending register request.");
+        hide('registerZone');
+        showFlex('beforePlay');
+    })
+    .catch( error => alert("Error when registering : "+error.data));
 };
 
 const endGame = (responseData) => {
     var gameEndedMessage;
     if ("board" in responseData && responseData.winner == null)
         gameEndedMessage = "Draw!";
-    else 
+    else if ("board" in responseData)
         gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
 
-    showGameEndedMessage(gameEndedMessage);
+    if (gameEndedMessage) {
+        alert(gameEndedMessage);
+        showPostGameMenu();
+    }
+    
+    clearBoard();
+    hide('playZone');
+    showFlex('beforePlay');
 };
 
 // Server-Sent Events com GET e dados urlencoded
@@ -719,15 +723,7 @@ const sendUpdate = () => {
         clearBoard();
         drawBoard();
     };
-    sse.onerror = err => {
-        console.log("EventSource failed:", err);
-    };
+    sse.onerror = error => sendErrorMessage(error, "receiving server update"); 
 };
 
-
-//joinBtn.addEventListener('click', sendJoin);
-leaveBtn.addEventListener('click', sendLeave);
-notifyBtn.addEventListener('click', sendNotify.bind(move)); // N sei bem se isto passa um argumento pra funçao mas é suposto, qlqr cena posso mudar
 rankingBtn.addEventListener('click', sendRanking);
-//registerBtn.addEventListener('click', sendRegister);
-updateBtn.addEventListener('click', sendUpdate);
