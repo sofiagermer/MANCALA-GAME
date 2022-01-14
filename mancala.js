@@ -399,22 +399,12 @@ function isCavityValid(index, b, calledByPlayer) {
     }
 
     return true;
-
-    if (isPlayerTurn && index >= 0 && index < (numHoles/2))
-        return b[index] != 0;
-
-    if (!singlePlayer) return false; // Singleplayer always plays on the bottom side (first board half)
-
-    else if (!isPlayerTurn && index >= (numHoles/2) && index < numHoles)
-        return b[index] != 0;
-
-    return false;
 } 
 
 /**LÓGICA DO JOGO ESTÁ AQUI */
 async function selectCavity(idCavity, b, s, calledByPlayer) {
     if (!singlePlayer) {
-        sendNotify(idCavity); // Pode ser jogada cavidade errada. Dar display ao erro com mensagem quando isso acontecer. TODO na sendNotify.
+        sendNotify(idCavity);
         return;
     }
 
@@ -605,6 +595,7 @@ function register() {
 
 const sendHttpRequest = (request, url, data) => {
     return fetch('http://twserver.alunos.dcc.fc.up.pt:8008/'+ url, {
+    //return fetch('http://127.0.0.1:9028/'+ url, {
         method: request,
         body: JSON.stringify(data),
         headers: data ? {'Content-Type': 'application/json'} :  {}
