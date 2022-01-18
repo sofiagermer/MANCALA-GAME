@@ -343,15 +343,11 @@ function getBestMove(maxDepth, boardMock = [], scoreMock = [], depth = 0) {
 }
 
 function gameSetup() {
-    board = [];
+    board = Array(numHoles).fill(numSeeds);
     ui = [];
-    score = [0,0];
+    score = Array(2).fill(0);
     roundCounter = 0;
 
-    for (var i = 0; i < numHoles; i++) {
-        board.push(numSeeds);
-    }
-    
     hide('beforePlay');
     //hide('Play');
     
@@ -684,11 +680,13 @@ const endGame = (responseData) => {
 // Server-Sent Events com GET e dados urlencoded
 const sendUpdate = () => {
     let sse = new EventSource('http://twserver.alunos.dcc.fc.up.pt:8008/update?nick='+nickInput+'&game='+token);
+    //let sse = new EventSource('http://127.0.0.1:9028/update?nick='+nickInput+'&game='+token);
     sse.onmessage = response => {
         console.log("Received update from server");
         var responseData = JSON.parse(response.data);
 
         if ("winner" in responseData) {
+            sse.close(); //TODO saber se isto funciona
             endGame(responseData);
             return;
         }
@@ -714,7 +712,9 @@ const sendUpdate = () => {
         clearBoard();
         drawBoard();
     };
-    sse.onerror = error => sendErrorMessage(error, "receiving server update"); 
+    sse.onerror = error => {
+        sendErrorMessage(error, "receiving server update");
+    }; 
 };
 
 rankingBtn.addEventListener('click', sendRanking);
