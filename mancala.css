@@ -111,7 +111,7 @@ body{
     object-fit: contain;
 }
 
-input[type=email], input[type=password] {
+input[type=text], input[type=password] {
     outline: none;
     border: none;
 }
@@ -310,13 +310,18 @@ input[type=email], input[type=password] {
 }
 
 .quadrado {
-    background-color: rgb(136, 104, 61,0.5);
+    padding: 0px 0px;
+    margin: 0px;
+    color: rgba(104, 76, 40, 0.5);
+    
+    background-color: rgba(104, 76, 40, 0.5);
     height: 100px;
     width: 100px;
     border-radius : 15px;
     align-self: center;
     display: flex;
     margin: 10px 10px 10px 10px;
+    box-shadow: rgb(136, 104, 61) 3px 3px 6px 0px inset, rgba(136, 104, 61)-3px -3px 6px 1px inset;
 }
 
 #tabuleiro{
