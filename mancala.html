@@ -54,22 +54,28 @@
                     <img src = "logo.png" id = "imgLogo"> 
                 </div>
 
-                <div>
-                    <div class= "field">
-                        <label for="nickname"><b>Nickname</b></label>
-                        <div class = "inputPlaceHolder">
-                            <i class="fas fa-envelope icon"></i>
-                            <input id="nameInput" type="text" placeholder="your nickname"></input>
+                <div id = "loginInfo">
+                    <div id = "subLoginInfo">
+                        <div id = "signUp">
+                            SIGN UP TO PLAY MANCALA
+                            <hr>
                         </div>
-                    </div>
-                    <div class = "field">
-                        <label for="psw"><b>Password</b></label>
-                        <div class = "inputPlaceHolder">
-                            <i class="login__icon fas fa-lock icon"></i>
-                            <input id="passwordInput" type="password" placeholder="············"></input>
+                        <div class= "field">
+                            <label for="nickname"><b>Nickname</b></label>
+                            <div class = "inputPlaceHolder">
+                                <i class="fas fa-envelope icon"></i>
+                                <input id="nameInput" type="text" placeholder="your nickname"></input>
+                            </div>
                         </div>
+                        <div class = "field">
+                            <label for="psw"><b>Password</b></label>
+                            <div class = "inputPlaceHolder">
+                                <i class="login__icon fas fa-lock icon"></i>
+                                <input id="passwordInput" type="password" placeholder="············"></input>
+                            </div>
+                        </div>
+                        <button class= "button" id="register-btn" onclick= "register()">REGISTER</button>
                     </div>
-                    <button class= "button" id="register-btn" onclick= "register()">Register</button>
                 </div>
             </div>
         </div>
