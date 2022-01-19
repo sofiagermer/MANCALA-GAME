@@ -18,11 +18,11 @@
 
 <body>
     <div id= "navbar">
-        <button class="tablink" onclick="openPage('SlideShow', this)" id="defaultOpen"> Home </button>
+        <!-- <button class="tablink" onclick="openPage('SlideShow', this)" id="defaultOpen"> Home </button> --> 
        <!-- <button class="tablink" onclick="openPage('Login', this)" >Login</button> -->
-        <button class="tablink" onclick="openPage('Play', this)">Play</button>
-        <button class="tablink" onclick="openPage('Rules', this)">Rules</button>
-        <button class="tablink" onclick="openPage('Ranking', this)">Ranking</button>
+        <button id = "navbarPlayButton" class="tablink" onclick="openPage('Play', 'navbarPlayButton', 'navbarRulesButton', 'navbarRankingButton', this)">Play</button>
+        <button id = "navbarRulesButton" class="tablink" onclick="openPage('Rules', 'navbarRulesButton' , 'navbarPlayButton', 'navbarRankingButton', this)">Rules</button>
+        <button id = "navbarRankingButton" class="tablink" onclick="openPage('Ranking', 'navbarRankingButton' ,'navbarRulesButton', 'navbarPlayButton',  this)">Ranking</button>
     </div>
 
     <!-- 

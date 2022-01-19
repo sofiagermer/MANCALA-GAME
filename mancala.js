@@ -55,7 +55,7 @@ function carousel() {
 
 /* --------------------------------------------------- */
 /*NAVBAR*/
-function openPage(pageName) {
+function openPage(pageName, showID, hideID1, hideID2) {
     //console.log("mudar de pag");
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
@@ -72,11 +72,15 @@ function openPage(pageName) {
   
     // Show the specific tab content
     document.getElementById(pageName).style.display = "block";
+
+    document.getElementById(showID).style.color = "#000000";
+    document.getElementById(hideID1).style.color = "#8f8f8f";
+    document.getElementById(hideID2).style.color = "#8f8f8f";
   
   }
   
   // Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click(); 
+  document.getElementById("navbarPlayButton").click(); 
 
 /* --------------------------------------------------- */
 /*PLAY CONFIGURATIONS*/
