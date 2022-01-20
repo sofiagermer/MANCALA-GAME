@@ -55,7 +55,7 @@ function carousel() {
 
 /* --------------------------------------------------- */
 /*NAVBAR*/
-function openPage(pageName) {
+function openPage(pageName, showID, hideID1, hideID2) {
     //console.log("mudar de pag");
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
@@ -72,11 +72,15 @@ function openPage(pageName) {
   
     // Show the specific tab content
     document.getElementById(pageName).style.display = "block";
+
+    document.getElementById(showID).style.color = "#000000";
+    document.getElementById(hideID1).style.color = "#8f8f8f";
+    document.getElementById(hideID2).style.color = "#8f8f8f";
   
   }
   
   // Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click(); 
+  document.getElementById("navbarPlayButton").click(); 
 
 /* --------------------------------------------------- */
 /*PLAY CONFIGURATIONS*/
@@ -227,6 +231,7 @@ function createHoleBaixo(id){
         //console.log("id : " + id + " seeds :" +  board[id]);
         var s2 = document.createElement("div");
         s2.setAttribute("class", "seed");
+        var randomRotation = Math.floor(Math.random() * 360);
         seeds.appendChild(s2);
     }
 }
@@ -342,14 +347,17 @@ function getBestMove(maxDepth, boardMock = [], scoreMock = [], depth = 0) {
     return currentBestValue;
 }
 
-function gameSetup() {
-    board = Array(numHoles).fill(numSeeds);
+function gameSetup(hideID, showID) {
+    board = [];
     ui = [];
-    score = Array(2).fill(0);
+    score = [0,0];
     roundCounter = 0;
 
-    hide('beforePlay');
-    //hide('Play');
+    for (var i = 0; i < numHoles; i++) {
+        board.push(numSeeds);
+    }
+    
+    hide(hideID);
     
     if (singlePlayer) {
         drawBoard(); 
@@ -357,9 +365,8 @@ function gameSetup() {
         showFlex('waitingForPlayer');
         sendJoin();
     }
-    showFlex('playZone');
+    showFlex(showID);
 }
-
 function verifyScoring(cavityIndex, b, s) {
     if ((isPlayerTurn && cavityIndex < (numHoles/2)) || (!isPlayerTurn && cavityIndex >= (numHoles/2))) {
         if (b[cavityIndex] == 1) {
@@ -540,8 +547,8 @@ function clearBoard(){
     document.getElementById("zonaTabuleiro").innerHTML = "";
 }
   
-async function startGame() {
-    gameSetup();
+async function startGame(hideID, showID) {
+    gameSetup(hideID, showID);
 
     if (singlePlayer && !isPlayerTurn) {
         await sleep(1000);
