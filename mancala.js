@@ -231,6 +231,7 @@ function createHoleBaixo(id){
         //console.log("id : " + id + " seeds :" +  board[id]);
         var s2 = document.createElement("div");
         s2.setAttribute("class", "seed");
+        var randomRotation = Math.floor(Math.random() * 360);
         seeds.appendChild(s2);
     }
 }
