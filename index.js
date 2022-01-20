@@ -93,7 +93,7 @@ const server = http.createServer(async function (request, response) {
                     }
                     break;
                 case "join":
-                    let game = processJoinRequest(body);
+                    let game = processJoinRequest(body, response);
                     if (game.indexOf(' ') == -1) 
                         responseBody = {game}; // All ok
                     else {
@@ -150,73 +150,105 @@ const server = http.createServer(async function (request, response) {
             response.end();
             return;
         case "GET":
-            response.writeHead(200, { 'Access-Control-Allow-Origin': '*',
-                'Cache-Control': 'no-cache',
-                'Connection': 'keep-alive',
-                'Content-Type': 'text/event-stream', // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                'Keep-Alive': 'timeout=5',
-                'Transfer-Encoding': 'chunked'
-            });
-
-
-            let gameIndex, player1, player2;
+            let currentGameIndex, waitingQueueIndex, player1, player2;
             let parsedUrl = parseUrl(url);
 
             if (parsedUrl == null) {
-                response.writeHead(400);
-                response.setHeader('Content-Type', 'application/javascript');
+                response.writeHead(400, {'Content-Type': 'application/javascript'});
                 error = "Url incorrectly parsed";
                 responseBody = {error};
+                response.write(JSON.stringify(responseBody));
                 break;
-            } else { 
-                [nick, game] = parseUrl;
-                player1 = nick;
-                player2 = nick;
-                
-                // currentGames, waitingQueue;
-                gameIndex = Math.max(getIndex({player1, game}, currentGames), getIndex({player2, game}, currentGames));
-            }
+            }  
 
-            if (gameIndex != -1) {
-                response.writeHead(400);
-                response.setHeader('Content-Type', 'application/javascript');
+            [nick, game] = parsedUrl;
+            player1 = nick;
+            player2 = nick;
+                        
+            currentGameIndex = Math.max(getIndex({player1, game}, currentGames), getIndex({player2, game}, currentGames));
+            waitingQueueIndex = getIndex({nick, game}, waitingQueue);
+
+            if (currentGameIndex == -1 && waitingQueueIndex == -1) { // If not found in neither
+                response.setHeader({'Content-Type': 'application/javascript'});
                 error = "Game not found";
                 responseBody = {error};
+                response.write(JSON.stringify(responseBody));    
                 break;
-            } else { // All ok
-                console.log("Client opened connection");
-
-                const timer = setInterval(() => {
-                    if (successfulNotifyRequest) {
-                        successfulNotifyRequest = false;
-
-                        if (gameEndedByLeave) {
-                            responseBody = {winner};
-                            clearInterval(timer);
-                            gameEndedByLeave = false;
-                        } 
-                        else if (gameEndedByPlay) {
-                            responseBody = {winner, board};
-                            clearInterval(timer);
-                            gameEndedByPlay = false;
-                        } 
-                        else 
-                            responseBody = {board, score, turn}; //TODO mudar estrutura disto para como eles fizeram
-                        
-                        res.write(JSON.stringify(responseBody)); //TODO mudar responseBody para data? porque sse.onmessage(response) lê response.data
-                    }
-                  }, 1000);
-
-                request.on('close', () => {
-                    console.log("Client closed connection");
-                    res.end(); 
-                });
             }
+            else if (currentGameIndex != -1) { // If found in current games
+                // 2 players were linked, update both
+                let {p1Resp, board, score, turn, player1, player2} = currentGames[currentGameIndex];
+                //currentGames[currentGameIndex].p2Resp = response;
+
+                let stores = {};
+                stores[player1] = score[0];
+                stores[player2] = score[1];
+
+                let pit; // TODO URGENTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+                let sides = {};
+                sides[player1] = {store: score[0], pits: board.slice(0, board.length/2)};
+                sides[player2] = {store: score[1], pits: board.slice(-board.length/2)};
+
+                board = {turn: turn, sides: sides};
 
 
-            response.write(JSON.stringify(responseBody));
-            response.end();
-            return;
+                let data = {board, stores, pit};
+                // {"board":{"turn":"edgar","sides":{"edgar":{"store":0,"pits":[4,4,4,4,4,4]},"sofia":{"store":0,"pits":[4,4,4,4,4,4]}}},"stores":{"edgar":0,"sofia":0}}
+                
+                console.log(JSON.stringify(data));
+                
+                p1Resp.writeHead(200, { 'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                    'Content-Type': 'text/event-stream',
+                    'Transfer-Encoding': 'chunked'
+                });
+                p1Resp.write(`data: ${JSON.stringify(data)}\n\n`);
+                //p1Resp.end();
+
+                response.writeHead(200, { 'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                    'Content-Type': 'text/event-stream',
+                    'Transfer-Encoding': 'chunked'
+                });
+                response.write(`data: ${JSON.stringify(data)}\n\n`);
+                //response.end();
+            } else { // If found in waiting queue
+                // Player is waiting for partner, return?
+                waitingQueue[waitingQueueIndex].p1Resp = response;
+            }
+            break;
+            /*
+            console.log("Client opened connection");
+
+            const timer = setInterval(() => {
+                if (successfulNotifyRequest) {
+                    successfulNotifyRequest = false;
+
+                    if (gameEndedByLeave) {
+                        responseBody = {winner};
+                        clearInterval(timer);
+                        gameEndedByLeave = false;
+                    } 
+                    else if (gameEndedByPlay) {
+                        responseBody = {winner, board};
+                        clearInterval(timer);
+                        gameEndedByPlay = false;
+                    } 
+                    else 
+                        responseBody = {board, score, turn}; //TODO mudar estrutura disto para como eles fizeram
+                    
+                    response.write(JSON.stringify(responseBody)); //TODO mudar responseBody para data? porque sse.onmessage(response) lê response.data
+                }
+                }, 1000);
+
+            request.on('close', () => {
+                console.log("Client closed connection");
+                response.end(); 
+            });
+            */
         default:
             console.log("Wrong method called");
             response.writeHead(400);
@@ -252,7 +284,7 @@ function processRegisterRequest(body) {
     return true;
 }
 
-function processJoinRequest(body) {
+function processJoinRequest(body, response) {
     const {size, initial, group, nick} = body;
 
     if (!processRegisterRequest(body)) return "Invalid nick and password combination";  
@@ -262,28 +294,45 @@ function processJoinRequest(body) {
     if (initial < 1 || initial > 4) return "Invalid initial input";
     if (!Number.isInteger(group)) return "Invalid group input";
 
-    let game = "";
-    for (let i = 0; i < 32; i++) {
-        let randomByte = Math.floor(Math.random()*16);
-        game += randomByte.toString(16);
-    }
-
+    let game;
     let queueIndex = getIndex( {size, initial, group} , waitingQueue);
-    if (queueIndex != -1) {
-        game = waitingQueue[queueIndex].game;
-        let player1 = waitingQueue[queueIndex].nick;
-        let player2 = nick;
+    if (queueIndex != -1) { // Match found
+        let gameInfo = waitingQueue[queueIndex];
+
+        game = gameInfo.game;
+
+        let player1 = gameInfo.nick;
+        let p1Resp = gameInfo.p1Resp;
         
-        let board = Array(size).fill(initial);
+        let player2 = nick;
+        let player2Resp = response;
+        
+        let board = Array(size*2).fill(initial);
         let score = Array(2).fill(0);
         let turn = player1;
 
         // TODO, send SSE
 
         waitingQueue.splice(queueIndex, 1);
-        currentGames.push( {game, player1, player2, board, score, turn} );
+        currentGames.push({game, board, score, turn, player1, player2, p1Resp});
+
+        /*
+        player1Resp.write(JSON.stringify(responseBody));
+        player1Resp.end();
+
+        player2Resp.write(JSON.stringify(responseBody));
+        player2Resp.end();
+        */
     }
-    else waitingQueue.push( {size, initial, group, nick, game} );
+    else {
+        game = "";
+        for (let i = 0; i < 32; i++) {
+            let randomByte = Math.floor(Math.random()*16);
+            game += randomByte.toString(16);
+        }
+
+        waitingQueue.push({size, initial, group, nick, game});
+    }
 
     return game;
 
@@ -311,8 +360,8 @@ function processNotifyRequest(body) {
 
     let currentGame = currentGames[gameIndex];
     let {board, score, turn} = currentGame;
-    player1 = currentGame.player1;
-    player2 = currentGame.player2;
+    player1 = currentGame.player1; // TODO usar . ou [] ??
+    player2 = currentGame.player2; // TODO usar . ou [] ??
 
     if (turn != nick) return -4; // Not your turn
     if (!(move in board)) return -5; // Pit index out of bound
@@ -326,15 +375,21 @@ function processNotifyRequest(body) {
         if (turn < board.length/2) return -7; // Pit not on player side
     }
 
-    // TODO continuar aqui
     [board, score, isPlayer1] = executePlay(move, board, score, isPlayer1);
-    currentGames[gameIndex][board] = board; // TODO usar . ou [] ??
-    currentGames[gameIndex][score] = score; // TODO usar . ou [] ??
-    currentGames[gameIndex][turn] = isPlayer1 ? player1 : player2; // TODO usar . ou [] ??
+    currentGame.board = board; // TODO usar . ou [] ??
+    currentGame.score = score; // TODO usar . ou [] ??
+    currentGame.turn = isPlayer1 ? player1 : player2; // TODO usar . ou [] ??
 
     //TODO, send SSE
     successfulNotifyRequest = true;
-    /*
+
+    if (isGameFinished(board, score, isPlayer1)) {
+        currentGame.score[0] += b.splice(0, board.length/2).reduce((res, value) => res+value);
+        currentGame.score[1] += b.reduce((res, value) => res+value);
+        gameEndedByPlay = true;
+    }
+
+    /* //  TODO ver se é pra apagar isto
     eventEmitter.emit('updateGame', currentGame, nick, move);
 
     if (isGameFinished(board, score, isPlayer1)) {
@@ -354,6 +409,7 @@ function processLeaveRequest(body) {
     if (gameIndex != -1) {
         // TODO, send SSE
         currentGames.splice(gameIndex, 1);
+        gameEndedByLeave = true;
         return 0;
     }
     return -2;
@@ -387,7 +443,7 @@ function parseUrl(url) {
 
     if (url.substring(0, 6) != "&game=") return;
 
-    return [nick, url.slice(6)];
+    return [name, url.slice(6)];
 }
 
 function executePlay(cavityIndex, b, s, isPlayer1) {
@@ -452,8 +508,8 @@ function isGameFinished(b, s, isPlayer1) {
     return true;
 }
 
-
-let eventEmitter = new events.EventEmitter();
+// TODO VER SE É PARA APAGAR TUDO ISTO OU NAO
+// let eventEmitter = new events.EventEmitter();
 
 /*
 TODO: descobrir onde por estes headers
@@ -463,7 +519,7 @@ Connection: keep-alive
 Content-Type: text/event-stream
 */
 
-//TODO VER SE É PARA APAGAR ISTO OU NAO
+/*
 eventEmitter.on('updateGame', function (currentGame, nick, move) {
     console.log('updateBoard event emitter called');
     let {player1, player2, board, score, turn} = currentGame;
@@ -490,7 +546,7 @@ eventEmitter.on('finishGame', function (currentGame) {
         //TODO add to leaderboard if good score
     }
 })
-
+*/
 
 server.listen(port, function(error) {
     if (error) 
