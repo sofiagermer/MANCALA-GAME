@@ -669,16 +669,13 @@ const sendRegister = () => {
 
 const endGame = (responseData) => {
     var gameEndedMessage;
-    if ("board" in responseData && responseData.winner == null)
-        gameEndedMessage = "Draw!";
-    else if ("board" in responseData)
-        gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
 
-    if (gameEndedMessage) {
-        alert(gameEndedMessage);
-        showPostGameMenu();
-    }
-    
+    if (responseData.winner != null)
+        gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
+    else if ("board" in responseData)
+        gameEndedMessage = "Draw!";
+
+    if (gameEndedMessage) alert(gameEndedMessage);
     clearBoard();
     hide('playZone');
     showFlex('beforePlay');
@@ -686,7 +683,6 @@ const endGame = (responseData) => {
 
 // Server-Sent Events com GET e dados urlencoded
 const sendUpdate = () => {
-    console.log("SEND UPDATE CHAMADO");
     //let sse = new EventSource('http://twserver.alunos.dcc.fc.up.pt:8008/update?nick='+nickInput+'&game='+token);
     let sse = new EventSource('http://127.0.0.1:9028/update?nick='+nickInput+'&game='+token);
     sse.onmessage = response => {

@@ -2,14 +2,11 @@ const http = require('http');
 const events = require('events');
 const fs = require('fs'); // TODO Sending html file as response
 const crypto = require('crypto'); // TODO Create cryptos
-const { eventNames } = require('process');
+const { eventNames, send } = require('process');
 const port = 9028; 
 
 let error;
 let responseBody;
-let gameEndedByPlay = false;
-let gameEndedByLeave = false;
-let successfulNotifyRequest = false;
 
 let rank1 = {nick:"abcdefghidasdas", victories: 404, games: 576};
 let rank2 = {nick:"123", victories: 318, games: 741};
@@ -78,10 +75,10 @@ const server = http.createServer(async function (request, response) {
             });
 
             switch (url.substring(1)) {
-                case "ranking":
+                case "ranking": //TODO: actually criar um ranking
                     responseBody = {ranking};
                     break;
-                case "register":
+                case "register": //TODO: encriptar passwords na base de dados
                     if (processRegisterRequest(body)) {
                         responseBody = {};
                     }
@@ -92,7 +89,7 @@ const server = http.createServer(async function (request, response) {
                         responseBody = {error};
                     }
                     break;
-                case "join":
+                case "join": //TODO: encriptar game tokens
                     let game = processJoinRequest(body, response);
                     if (game.indexOf(' ') == -1) 
                         responseBody = {game}; // All ok
@@ -104,7 +101,7 @@ const server = http.createServer(async function (request, response) {
                     break;
                 case "notify":
                     let move = processNotifyRequest(body);
-                    if (move > 0) {
+                    if (move >= 0) {
                         responseBody = {};
                     }
                     else {
@@ -120,7 +117,7 @@ const server = http.createServer(async function (request, response) {
                     break;
                 case "leave":
                     let returnCode = processLeaveRequest(body);
-                    if (returnCode > 0) {
+                    if (returnCode >= 0) {
                         responseBody = {};
                     }
                     else {
@@ -150,7 +147,7 @@ const server = http.createServer(async function (request, response) {
             response.end();
             return;
         case "GET":
-            let currentGameIndex, waitingQueueIndex, player1, player2;
+            let currentGameIndex, waitingQueueIndex, player1, player2, nick, game;
             let parsedUrl = parseUrl(url);
 
             if (parsedUrl == null) {
@@ -169,55 +166,32 @@ const server = http.createServer(async function (request, response) {
             waitingQueueIndex = getIndex({nick, game}, waitingQueue);
 
             if (currentGameIndex == -1 && waitingQueueIndex == -1) { // If not found in neither
-                response.setHeader({'Content-Type': 'application/javascript'});
+                response.writeHead(400, { 'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                    'Content-Type': 'application/javascript',
+                    'Transfer-Encoding': 'chunked'
+                });
                 error = "Game not found";
                 responseBody = {error};
-                response.write(JSON.stringify(responseBody));    
-                break;
+                response.write(JSON.stringify(responseBody)); 
+                response.end();
+                return;   
             }
-            else if (currentGameIndex != -1) { // If found in current games
-                // 2 players were linked, update both
-                let {p1Resp, board, score, turn, player1, player2} = currentGames[currentGameIndex];
-                //currentGames[currentGameIndex].p2Resp = response;
 
-                let stores = {};
-                stores[player1] = score[0];
-                stores[player2] = score[1];
+            response.writeHead(200, { 'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+                'Content-Type': 'text/event-stream',
+                'Transfer-Encoding': 'chunked'
+            });
 
-                let pit; // TODO URGENTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-
-                let sides = {};
-                sides[player1] = {store: score[0], pits: board.slice(0, board.length/2)};
-                sides[player2] = {store: score[1], pits: board.slice(-board.length/2)};
-
-                board = {turn: turn, sides: sides};
-
-
-                let data = {board, stores, pit};
-                // {"board":{"turn":"edgar","sides":{"edgar":{"store":0,"pits":[4,4,4,4,4,4]},"sofia":{"store":0,"pits":[4,4,4,4,4,4]}}},"stores":{"edgar":0,"sofia":0}}
-                
-                console.log(JSON.stringify(data));
-                
-                p1Resp.writeHead(200, { 'Access-Control-Allow-Origin': '*',
-                    'Cache-Control': 'no-cache',
-                    'Connection': 'keep-alive',
-                    'Content-Type': 'text/event-stream',
-                    'Transfer-Encoding': 'chunked'
-                });
-                p1Resp.write(`data: ${JSON.stringify(data)}\n\n`);
-                //p1Resp.end();
-
-                response.writeHead(200, { 'Access-Control-Allow-Origin': '*',
-                    'Cache-Control': 'no-cache',
-                    'Connection': 'keep-alive',
-                    'Content-Type': 'text/event-stream',
-                    'Transfer-Encoding': 'chunked'
-                });
-                response.write(`data: ${JSON.stringify(data)}\n\n`);
-                //response.end();
-            } else { // If found in waiting queue
-                // Player is waiting for partner, return?
+            if (currentGameIndex == -1) { // If found in waiting queue
                 waitingQueue[waitingQueueIndex].p1Resp = response;
+            }
+            else { // If found in current games
+                currentGames[currentGameIndex].p2Resp = response;
+                sendUpdateResponse(currentGameIndex);
             }
             break;
             /*
@@ -284,7 +258,7 @@ function processRegisterRequest(body) {
     return true;
 }
 
-function processJoinRequest(body, response) {
+function processJoinRequest(body) {
     const {size, initial, group, nick} = body;
 
     if (!processRegisterRequest(body)) return "Invalid nick and password combination";  
@@ -296,35 +270,23 @@ function processJoinRequest(body, response) {
 
     let game;
     let queueIndex = getIndex( {size, initial, group} , waitingQueue);
-    if (queueIndex != -1) { // Match found
+    if (queueIndex != -1) { // If match was found
         let gameInfo = waitingQueue[queueIndex];
 
         game = gameInfo.game;
-
-        let player1 = gameInfo.nick;
-        let p1Resp = gameInfo.p1Resp;
-        
-        let player2 = nick;
-        let player2Resp = response;
-        
         let board = Array(size*2).fill(initial);
         let score = Array(2).fill(0);
+        let player1 = gameInfo.nick;
+        let player2 = nick;
+        let p1Resp = gameInfo.p1Resp;
         let turn = player1;
-
-        // TODO, send SSE
 
         waitingQueue.splice(queueIndex, 1);
         currentGames.push({game, board, score, turn, player1, player2, p1Resp});
 
-        /*
-        player1Resp.write(JSON.stringify(responseBody));
-        player1Resp.end();
-
-        player2Resp.write(JSON.stringify(responseBody));
-        player2Resp.end();
-        */
     }
     else {
+        // const hash = crypto.createHash('md5').update(password).digest('hex'); TODO
         game = "";
         for (let i = 0; i < 32; i++) {
             let randomByte = Math.floor(Math.random()*16);
@@ -339,13 +301,7 @@ function processJoinRequest(body, response) {
 }
 
 function processNotifyRequest(body) {
-
-    // {x, y} = foo;
-    // Is the equivalent to:
-    // x = foo.x;
-    // y = foo.y;
-
-    const {nick, game, move} = body;
+    let {nick, game, move} = body;
     let player1 = nick, player2 = nick;
 
     //TODO, mudar o sistema de returns 
@@ -360,34 +316,31 @@ function processNotifyRequest(body) {
 
     let currentGame = currentGames[gameIndex];
     let {board, score, turn} = currentGame;
-    player1 = currentGame.player1; // TODO usar . ou [] ??
-    player2 = currentGame.player2; // TODO usar . ou [] ??
+    player1 = currentGame.player1;
+    player2 = currentGame.player2;
+
+    let isPlayer1 = (nick == player1);
+    if (!isPlayer1) move += board.length/2;  
 
     if (turn != nick) return -4; // Not your turn
     if (!(move in board)) return -5; // Pit index out of bound
     if (board[move] == 0) return -6; // Empty pit
 
-    let isPlayer1 = (nick == player1);
 
-    if (isPlayer1) {
-        if (turn >= board.length/2) return -7; // Pit not on player side
-    } else {
-        if (turn < board.length/2) return -7; // Pit not on player side
+    if (isPlayer1) { // 0..5
+        if (0 > move || move >= board.length/2) return -7; // Pit not on player side
+    } else { // 6..11
+        if (board.length/2 > move || move > board.length) return -7; // Pit not on player side
     }
 
-    [board, score, isPlayer1] = executePlay(move, board, score, isPlayer1);
-    currentGame.board = board; // TODO usar . ou [] ??
-    currentGame.score = score; // TODO usar . ou [] ??
-    currentGame.turn = isPlayer1 ? player1 : player2; // TODO usar . ou [] ??
+    // {game, board, score, turn, player1, player2, p1Resp, p2Resp}
 
-    //TODO, send SSE
-    successfulNotifyRequest = true;
+    [currentGame.board, currentGame.score, isPlayer1] = executePlay(move, board, score, isPlayer1);
+    currentGame.turn = isPlayer1 ? player1 : player2;
 
-    if (isGameFinished(board, score, isPlayer1)) {
-        currentGame.score[0] += b.splice(0, board.length/2).reduce((res, value) => res+value);
-        currentGame.score[1] += b.reduce((res, value) => res+value);
-        gameEndedByPlay = true;
-    }
+    sendUpdateResponse(gameIndex, move);
+    return 0;
+
 
     /* //  TODO ver se é pra apagar isto
     eventEmitter.emit('updateGame', currentGame, nick, move);
@@ -400,19 +353,30 @@ function processNotifyRequest(body) {
 }
 
 function processLeaveRequest(body) {
-    const {game} = body;
+    const {nick, game} = body;
 
     //TODO, mudar o sistema de returns 
-    if (!processRegisterRequest(body)) return -1;
+    if (!processRegisterRequest(body)) return -1; // Invalid username/password combination
 
-    let gameIndex = getIndex( {game} , currentGames);
-    if (gameIndex != -1) {
-        // TODO, send SSE
-        currentGames.splice(gameIndex, 1);
-        gameEndedByLeave = true;
+    let queueIndex = getIndex( {game} , waitingQueue);
+    if (queueIndex != -1) {
+        waitingQueue[queueIndex].p1Resp.write(`data: ${JSON.stringify({winner: null})}\n\n`);
+        waitingQueue.splice(queueIndex, 1);
         return 0;
     }
-    return -2;
+
+    let gameIndex = getIndex( {game}, currentGames);
+    if (gameIndex != -1) {
+        let {player1, player2, p1Resp, p2Resp} = currentGames[gameIndex];
+        let winner = (nick == player1 ? {winner: player2} : {winner: player1});
+
+        p1Resp.write(`data: ${JSON.stringify(winner)}\n\n`);
+        p2Resp.write(`data: ${JSON.stringify(winner)}\n\n`);
+
+        currentGames.splice(gameIndex, 1);
+        return 0;
+    }
+    return -2; // Game not found
 }
 
 function getIndex(object, array) {
@@ -503,9 +467,43 @@ function isGameFinished(b, s, isPlayer1) {
         if (b[i+j] != 0)
             return false;
 
-    //TODO somo o board aqui?
-
     return true;
+}
+
+function sendUpdateResponse(currentGameIndex, cavityIndex) {
+    let {p1Resp, p2Resp, board, score, turn, player1, player2} = currentGames[currentGameIndex];
+
+    let boardCopy = board;
+
+    let stores = {};
+    stores[player1] = score[0];
+    stores[player2] = score[1];
+
+    let sides = {};
+    sides[player1] = {store: score[0], pits: board.slice(0, board.length/2)};
+    sides[player2] = {store: score[1], pits: board.slice(-board.length/2)};
+
+    board = {turn: turn, sides: sides};
+
+
+    //let data = (arguments.length > 1 ? {board, stores, pit: cavityIndex} : {board, stores});
+    let data = {board, stores};
+    if (arguments.length > 1) data.pit = cavityIndex;
+    if (isGameFinished(boardCopy, score, (turn == player1))){
+        if (score[0] > score [1]) {
+            data.winner = player1;
+        }
+        else if (score[1] > score[0]) {
+            data.winner = player2;
+        }
+        else data.winner = null;
+    }
+    // currentGame.score[0] += board.splice(0, board.length/2).reduce((res, value) => res+value);
+    // currentGame.score[1] += board.reduce((res, value) => res+value);
+    // {"board":{"turn":"edgar","sides":{"edgar":{"store":0,"pits":[4,4,4,4,4,4]},"sofia":{"store":0,"pits":[4,4,4,4,4,4]}}},"stores":{"edgar":0,"sofia":0}}
+    
+    p1Resp.write(`data: ${JSON.stringify(data)}\n\n`);
+    p2Resp.write(`data: ${JSON.stringify(data)}\n\n`);
 }
 
 // TODO VER SE É PARA APAGAR TUDO ISTO OU NAO
