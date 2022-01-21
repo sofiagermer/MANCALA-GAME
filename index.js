@@ -28,23 +28,6 @@ const server = http.createServer(async function (request, response) {
     
     const { method, url, headers } = request;
     // Example: at login, method = "POST", url = "/login", headers = array { lowercase request headers: value}
-    
-    //console.log(JSON.parse(data).todo); // 'Buy the milk'
-    /*
-    let body = [];
-    request.on('error', (err) => {
-        console.error(err);
-    }).on('data', (chunk) => {
-        body.push(chunk); 
-        console.log("on data");
-    }).on('end', () => {
-        body = Buffer.concat(body).toString(); 
-        console.log("on end");
-        bodyTransferFinished = true;
-        // Example: at login, body = {"nick":"sofia","password":"1234"}
-    });
-    */
-    
     switch (method) {
         case "OPTIONS":
             response.writeHead(204, {
@@ -79,14 +62,17 @@ const server = http.createServer(async function (request, response) {
                     responseBody = {ranking};
                     break;
                 case "register": //TODO: encriptar passwords na base de dados
-                    if (processRegisterRequest(body)) {
-                        responseBody = {};
-                    }
+                    if (processRegisterRequest(body)) responseBody = {};
                     else {
-                        response.writeHead(400);
-                        error = "Invalid nick and password combination";
-                        //TODO fix error handling to response
-                        responseBody = {error};
+                        response.writeHead(400, {
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
+                        responseBody = {error: "User registered with a different password"};
                     }
                     break;
                 case "join": //TODO: encriptar game tokens
@@ -94,9 +80,15 @@ const server = http.createServer(async function (request, response) {
                     if (game.indexOf(' ') == -1) 
                         responseBody = {game}; // All ok
                     else {
-                        response.writeHead(400);
-                        error = game;
-                        responseBody = {error};                        
+                        response.writeHead(game == "User registered with a different password" ? 401 : 400, {
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
+                        responseBody = {error: game};                        
                     }
                     break;
                 case "notify":
@@ -147,13 +139,23 @@ const server = http.createServer(async function (request, response) {
             response.end();
             return;
         case "GET":
+            if (url.substring(0, 8) != "/update") {
+                response.writeHead(404, {'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/javascript'
+                });
+                responseBody = {error: "Invalid GET request URL"};
+                response.write(JSON.stringify('error: Invalid GET request URL'));
+                response.end();
+            }
+
             let currentGameIndex, waitingQueueIndex, player1, player2, nick, game;
             let parsedUrl = parseUrl(url);
 
             if (parsedUrl == null) {
-                response.writeHead(400, {'Content-Type': 'application/javascript'});
-                error = "Url incorrectly parsed";
-                responseBody = {error};
+                response.writeHead(400, {'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/javascript'
+                });
+                responseBody = {error: "Url incorrectly parsed"};
                 response.write(JSON.stringify(responseBody));
                 break;
             }  
@@ -172,9 +174,7 @@ const server = http.createServer(async function (request, response) {
                     'Content-Type': 'application/javascript',
                     'Transfer-Encoding': 'chunked'
                 });
-                error = "Game not found";
-                responseBody = {error};
-                response.write(JSON.stringify(responseBody)); 
+                response.write(JSON.stringify({error: "Game not found"})); 
                 response.end();
                 return;   
             }
@@ -194,40 +194,9 @@ const server = http.createServer(async function (request, response) {
                 sendUpdateResponse(currentGameIndex);
             }
             break;
-            /*
-            console.log("Client opened connection");
-
-            const timer = setInterval(() => {
-                if (successfulNotifyRequest) {
-                    successfulNotifyRequest = false;
-
-                    if (gameEndedByLeave) {
-                        responseBody = {winner};
-                        clearInterval(timer);
-                        gameEndedByLeave = false;
-                    } 
-                    else if (gameEndedByPlay) {
-                        responseBody = {winner, board};
-                        clearInterval(timer);
-                        gameEndedByPlay = false;
-                    } 
-                    else 
-                        responseBody = {board, score, turn}; //TODO mudar estrutura disto para como eles fizeram
-                    
-                    response.write(JSON.stringify(responseBody)); //TODO mudar responseBody para data? porque sse.onmessage(response) lê response.data
-                }
-                }, 1000);
-
-            request.on('close', () => {
-                console.log("Client closed connection");
-                response.end(); 
-            });
-            */
         default:
-            console.log("Wrong method called");
-            response.writeHead(400);
-            // TODO, deal with this
-            responseBody = {error};
+            response.writeHead(404);
+            responseBody = {error: "Unknown request"};
             return;
     }
 
@@ -261,7 +230,7 @@ function processRegisterRequest(body) {
 function processJoinRequest(body) {
     const {size, initial, group, nick} = body;
 
-    if (!processRegisterRequest(body)) return "Invalid nick and password combination";  
+    if (!processRegisterRequest(body)) return "User registered with a different password";  
     if (!Number.isInteger(size)) return "Invalid size input";
     if (size < 2 || size > 6) return "Invalid size input";
     if (!Number.isInteger(initial)) return "Invalid initial input";
