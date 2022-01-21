@@ -75,12 +75,12 @@ const server = http.createServer(async function (request, response) {
                         responseBody = {error: "User registered with a different password"};
                     }
                     break;
-                case "join": //TODO: encriptar game tokens
+                case "join": //TODO: encriptar game tokens na processJoinRequest
                     let game = processJoinRequest(body, response);
                     if (game.indexOf(' ') == -1) 
                         responseBody = {game}; // All ok
                     else {
-                        response.writeHead(game == "User registered with a different password" ? 401 : 400, {
+                        response.writeHead((game == "User registered with a different password" ? 401 : 400), {
                             'Access-Control-Allow-Origin': '*',
                             'Cache-Control': 'no-cache',
                             'Connection': 'keep-alive',
@@ -93,13 +93,37 @@ const server = http.createServer(async function (request, response) {
                     break;
                 case "notify":
                     let move = processNotifyRequest(body);
-                    if (move >= 0) {
+                    if (move >= 0)
                         responseBody = {};
-                    }
                     else {
-                        response.writeHead(400);
+                        response.writeHead((move == -1 ? 401 : 400), {
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
                         // TODO, mudar o sistema de returns
                         switch (move) {
+                            case -2: 
+                                error = "Invalid input";
+                                break;
+                            case -3:
+                                error = "Player not in game";
+                                break;
+                            case -4:
+                                error = "Not your turn";
+                                break;
+                            case -5:
+                                error = "Pit index out of bound";
+                                break;
+                            case -6:
+                                error = "Pit not on player side";
+                                break;
+                            case -7:
+                                error = "Empty pit";
+                                break;
                             default:
                                 error = "Erro!"
                                 break;
@@ -113,7 +137,14 @@ const server = http.createServer(async function (request, response) {
                         responseBody = {};
                     }
                     else {
-                        response.writeHead(400);
+                        response.writeHead((returnCode == -1 ? 401 : 400),{
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
                         // TODO, mudar o sistema de returns
                         switch (returnCode) {
                             case -1:
@@ -139,13 +170,13 @@ const server = http.createServer(async function (request, response) {
             response.end();
             return;
         case "GET":
-            if (url.substring(0, 8) != "/update") {
+            if (url.substring(0, 7) != "/update") {
                 response.writeHead(404, {'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/javascript'
                 });
-                responseBody = {error: "Invalid GET request URL"};
-                response.write(JSON.stringify('error: Invalid GET request URL'));
+                response.write(JSON.stringify({error: 'Invalid GET request URL'}));
                 response.end();
+                break;
             }
 
             let currentGameIndex, waitingQueueIndex, player1, player2, nick, game;
@@ -155,8 +186,7 @@ const server = http.createServer(async function (request, response) {
                 response.writeHead(400, {'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/javascript'
                 });
-                responseBody = {error: "Url incorrectly parsed"};
-                response.write(JSON.stringify(responseBody));
+                response.write(JSON.stringify({error: "Url incorrectly parsed"}));
                 break;
             }  
 
@@ -174,7 +204,7 @@ const server = http.createServer(async function (request, response) {
                     'Content-Type': 'application/javascript',
                     'Transfer-Encoding': 'chunked'
                 });
-                response.write(JSON.stringify({error: "Game not found"})); 
+                if (!response.writableEnded) response.write(JSON.stringify({error: "Game not found"})); 
                 response.end();
                 return;   
             }
@@ -196,24 +226,11 @@ const server = http.createServer(async function (request, response) {
             break;
         default:
             response.writeHead(404);
-            responseBody = {error: "Unknown request"};
+            response.write(JSON.stringify({error: "Unknown request"})); 
+            response.end();
             return;
     }
 
-    // Sending html file as response
-    /*
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    fs.readFile('index.html', function(error, data) {
-        if (error) {
-            res.writeHead(404);
-            res.write('Error: File Not Found');
-        }
-        else {
-            res.write(data);
-        }
-        res.end();
-    });
-    */
 });
 
 function processRegisterRequest(body) {
@@ -255,14 +272,8 @@ function processJoinRequest(body) {
 
     }
     else {
-        // const hash = crypto.createHash('md5').update(password).digest('hex'); TODO
-        game = "";
-        for (let i = 0; i < 32; i++) {
-            let randomByte = Math.floor(Math.random()*16);
-            game += randomByte.toString(16);
-        }
-
-        waitingQueue.push({size, initial, group, nick, game});
+        game = crypto.createHash('md5').update(Date.now().toString()).digest('hex');
+        waitingQueue.push({size, initial, group, nick, game: hash});
     }
 
     return game;
@@ -288,21 +299,19 @@ function processNotifyRequest(body) {
     player1 = currentGame.player1;
     player2 = currentGame.player2;
 
-    let isPlayer1 = (nick == player1);
-    if (!isPlayer1) move += board.length/2;  
 
     if (turn != nick) return -4; // Not your turn
     if (!(move in board)) return -5; // Pit index out of bound
-    if (board[move] == 0) return -6; // Empty pit
 
+    let isPlayer1 = (nick == player1);
+    if (!isPlayer1) move += board.length/2;
 
     if (isPlayer1) { // 0..5
-        if (0 > move || move >= board.length/2) return -7; // Pit not on player side
+        if (0 > move || move >= board.length/2) return -6; // Pit not on player side
     } else { // 6..11
-        if (board.length/2 > move || move > board.length) return -7; // Pit not on player side
+        if (board.length/2 > move || move > board.length) return -6; // Pit not on player side
     }
-
-    // {game, board, score, turn, player1, player2, p1Resp, p2Resp}
+    if (board[move] == 0) return -7; // Empty pit
 
     [currentGame.board, currentGame.score, isPlayer1] = executePlay(move, board, score, isPlayer1);
     currentGame.turn = isPlayer1 ? player1 : player2;
@@ -455,10 +464,11 @@ function sendUpdateResponse(currentGameIndex, cavityIndex) {
     board = {turn: turn, sides: sides};
 
 
-    //let data = (arguments.length > 1 ? {board, stores, pit: cavityIndex} : {board, stores});
     let data = {board, stores};
     if (arguments.length > 1) data.pit = cavityIndex;
-    if (isGameFinished(boardCopy, score, (turn == player1))){
+
+    var gameEnded = isGameFinished(boardCopy, score, (turn == player1));
+    if (gameEnded){
         if (score[0] > score [1]) {
             data.winner = player1;
         }
@@ -467,53 +477,18 @@ function sendUpdateResponse(currentGameIndex, cavityIndex) {
         }
         else data.winner = null;
     }
-    // currentGame.score[0] += board.splice(0, board.length/2).reduce((res, value) => res+value);
-    // currentGame.score[1] += board.reduce((res, value) => res+value);
     // {"board":{"turn":"edgar","sides":{"edgar":{"store":0,"pits":[4,4,4,4,4,4]},"sofia":{"store":0,"pits":[4,4,4,4,4,4]}}},"stores":{"edgar":0,"sofia":0}}
     
     p1Resp.write(`data: ${JSON.stringify(data)}\n\n`);
     p2Resp.write(`data: ${JSON.stringify(data)}\n\n`);
+
+    if (gameEnded) {
+        p1Resp.end();
+        p2Resp.end();
+        currentGames.splice(currentGameIndex, 1);
+    }
 }
 
-// TODO VER SE É PARA APAGAR TUDO ISTO OU NAO
-// let eventEmitter = new events.EventEmitter();
-
-/*
-TODO: descobrir onde por estes headers
-Access-Control-Allow-Origin: *
-Cache-Control: no-cache
-Connection: keep-alive
-Content-Type: text/event-stream
-*/
-
-/*
-eventEmitter.on('updateGame', function (currentGame, nick, move) {
-    console.log('updateBoard event emitter called');
-    let {player1, player2, board, score, turn} = currentGame;
-    let isPlayer1 = (nick == player1);
-
-    [board, score, isPlayer1] = executePlay(move, board, score, isPlayer1);
-    currentGame[board] = board; //TODO usar . ou [] ??
-    currentGame[score] = score; //TODO usar . ou [] ??
-    currentGame[turn] = isPlayer1 ? player1 : player2; //TODO usar . ou [] ??
-
-    //TODO como mandar para os listeners a mensagem e os headers
-});
-
-eventEmitter.on('finishGame', function (currentGame) {
-    console.log('finishGame event emitter called');
-    let {player1, player2, board, score} = currentGame;
-    let winner;
-
-    if (score[0] > score[1]) winner = player1;
-    else if (score[1] > score[0]) winner = player2;
-    else winner = null;
-
-    if (winner) {
-        //TODO add to leaderboard if good score
-    }
-})
-*/
 
 server.listen(port, function(error) {
     if (error) 
