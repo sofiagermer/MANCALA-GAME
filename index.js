@@ -1,8 +1,7 @@
 const http = require('http');
 const events = require('events');
 const fs = require('fs'); // TODO Sending html file as response
-const crypto = require('crypto'); // TODO Create cryptos
-const { eventNames, send } = require('process');
+const crypto = require('crypto');
 const port = 9028; 
 
 let error;
@@ -20,14 +19,13 @@ let rank9 = {nick:"ola", victories: 89, games: 186};
 let rank10 = {nick:"owo", victories: 88, games: 163};
 const ranking = [rank1, rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9, rank10];
 
-const loginCredentials = [];
+const loginCredentials = JSON.parse(fs.readFileSync('loginCredentials.txt', 'utf-8'));
 const currentGames = [];
 const waitingQueue = [];
 
 const server = http.createServer(async function (request, response) {
-    
+
     const { method, url, headers } = request;
-    // Example: at login, method = "POST", url = "/login", headers = array { lowercase request headers: value}
     switch (method) {
         case "OPTIONS":
             response.writeHead(204, {
@@ -318,16 +316,6 @@ function processNotifyRequest(body) {
 
     sendUpdateResponse(gameIndex, move);
     return 0;
-
-
-    /* //  TODO ver se é pra apagar isto
-    eventEmitter.emit('updateGame', currentGame, nick, move);
-
-    if (isGameFinished(board, score, isPlayer1)) {
-        eventEmitter.emit('finishGame', currentGame);
-        //TODO, Remover listeners dos eventEmitter
-    }
-    */
 }
 
 function processLeaveRequest(body) {
@@ -496,3 +484,23 @@ server.listen(port, function(error) {
     else 
         console.log("Listening on port " + port);
 });
+
+function arrayToFile(file, array, flag) {
+    let stream = fs.createWriteStream(file, {flags: flag});
+    stream.write('[');
+    array.forEach(item => stream.write(JSON.stringify(item)+'\n'));
+    stream.write(']');
+    stream.end();
+}
+
+server.on('close', () => {
+    // Erases file content when called
+    arrayToFile('loginCredentials.txt', loginCredentials, 'w'); // Erases file content when called
+    arrayToFile('waitingQueueLog.txt', waitingQueue, 'ax'); // Appends to file, fails if file doesnt exist
+    arrayToFile('gameLog.txt', currentGames, 'ax'); // Appends to file, fails if file doesnt exist
+});
+
+// Ensures data is written to files before exiting
+process.on('exit', exitHandler.bind(null, {cleanup:true}));
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
