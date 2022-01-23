@@ -6,6 +6,7 @@ const port = 9028;
 let error;
 let responseBody;
 
+// Creates array from file. ']' not in file to be able to add rows to array
 const loginCredentials = JSON.parse(fs.readFileSync('./logs/loginCredentials.txt', 'utf-8') +']');
 const currentGames = [];
 const waitingQueue = [];
@@ -308,7 +309,6 @@ function processJoinRequest(body) {
     else {
         game = crypto.createHash('md5').update(Date.now().toString()).digest('hex');
         waitingQueue.push({size, initial, group, nick, game});
-        //fs.writeFileSync('waitingQueueLog.txt', ',\n'+JSON.stringify({size, initial, group, nick, game}), {flag: 'a'});
     }
 
     return game;
@@ -501,7 +501,6 @@ function sendUpdateResponse(currentGameIndex, cavityIndex) {
         }
         else data.winner = null;
     }
-    // {"board":{"turn":"edgar","sides":{"edgar":{"store":0,"pits":[4,4,4,4,4,4]},"sofia":{"store":0,"pits":[4,4,4,4,4,4]}}},"stores":{"edgar":0,"sofia":0}}
     
     p1Resp.write(`data: ${JSON.stringify(data)}\n\n`);
     p2Resp.write(`data: ${JSON.stringify(data)}\n\n`);
@@ -523,24 +522,3 @@ server.listen(port, function(error) {
     else 
         console.log("Listening on port " + port);
 });
-/*
-function arrayToFile(file, array, flag) {
-    let stream = fs.createWriteStream(file, {flags: flag});
-    stream.write('[');
-    array.forEach(item => stream.write(JSON.stringify(item)+'\n'));
-    stream.write(']');
-    stream.end();
-}
-
-server.on('close', () => {
-    // Erases file content when called
-    arrayToFile('loginCredentials.txt', loginCredentials, 'w'); // Erases file content when called
-    arrayToFile('waitingQueueLog.txt', waitingQueue, 'ax'); // Appends to file, fails if file doesnt exist
-    arrayToFile('gameLog.txt', currentGames, 'ax'); // Appends to file, fails if file doesnt exist
-});
-
-// Ensures data is written to files before exiting
-process.on('exit', exitHandler.bind(null, {cleanup:true}));
-process.on('SIGINT', exitHandler.bind(null, {exit:true}));
-process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
-*/
