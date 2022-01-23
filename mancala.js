@@ -746,7 +746,7 @@ const sendRanking = () => {
     sendHttpRequest('POST', 'ranking', {})
     .then( responseData => {
         console.log("Success sending ranking request");
-        updateRanking(responseData.ranking);
+        showRanking(responseData.ranking);
     })
     .catch( error => alert("Error when retrieving rankings : "+error.data));
 };
