@@ -14,7 +14,7 @@ var currentRule = 0;
 /*variáveis escolhidas pelo utilizador*/
 var numHoles = 12;
 var numSeeds = 4;
-var singlePlayer = false;
+var singlePlayer = false; // AQUI
 var aiLevel = 1;
 
 /*variáveis auxiliares*/
@@ -504,7 +504,7 @@ async function selectCavity(idCavity, b, s, calledByPlayer) {
         console.log("Player " + (isPlayerTurn ? 1 : 2) + " chose cavity " + idCavity);
         executePlay(idCavity, b, s);
         drawBoard();
-        if (singlePlayer && !isPlayerTurn) {
+        if (!isPlayerTurn) {
             await sleep(500);
             selectCavity(getBestMove(aiLevel*2, [...board], [...score]), b, s, false);
             return;
@@ -559,68 +559,100 @@ function isGameFinished(b, s) {
 }
 
 function finishGame (b, s) {
+    hide("playZone");
+    hide("beforePlay");
+    
     for (var i = 0; i < numHoles; i++) {
         var seeds = b[i];
         i < (numHoles/2) ? s[0] += seeds : s[1] += seeds;
     }
 
-    if (s[0] > (numHoles/2) * numSeeds) {
-        // Anounce player 1 victory
-        console.log('Player 1 wins!');
-        return;
-    }
+    if (s[0] > s[1]) showFlex("WinnerPage");
+    else if (s[0] < s[1]) showFlex("LoserPage");
+    else showFlex("DrawPage");
 
-    else if (s[1] > (numHoles/2) * numSeeds) {
-        // Anounce player 2 victory
-        console.log('Player 2 wins!');
-        return;
-    }
-
-    else console.log('Draw!')
-
-    return updateClassifications(s);
+    if (singlePlayer) updateRanking();
 }
 
-/*
-<table id="highscores">
-    <tr><td>Name</td><td>Score</td></tr>
-</table>
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
-var highScoreTable = document.getElementById("highscores");
-*/
-
-
-/*
-var highScores = [
-    {name: "Maximillian", rating: 1000, playerScore: 48, opponentScore: 0},
-    {name: "The second guy", rating: 700, playerScore: 36, opponentScore: 12},
-    {name: "The newbie", rating: 50, playerScore: 30, opponentScore: 18}
-];
-*/
-
-function setHighscores(highScores) {
-    localStorage.setItem("highscores", JSON.stringify(highScores));
+function getRanking() {
+    if (singlePlayer) showRanking(JSON.parse(localStorage.getItem('ranking')));
+    else sendRanking();
 }
 
 function showRanking(ranking) {
-    for (var i = 0; i < ranking.length; i++) {
+    if (ranking == null) 
+        document.getElementById("MancalaRanking").innerHTML = "No ranking entries yet! Play some games and come back to flex your skill.";
+    for (var i = 0; i < 5; i++) {
         var row = document.createElement("div");
-        //row.className = "row"; // Isto tá aqui para dar style com css, TODO
+        row.className = "myRanking"; 
+
+        var icon = document.createElement("div");
+        icon.className = "rankingIcon";
+        icon.innerHTML =  (i + 1);
+
+        row.appendChild(icon);
+
         var info = document.createElement("div");
-        //info.className = "name"; // Isto tá aqui para dar style com css, TODO
-        info.innerHTML = (i + 1)+"º place => Nickname: "+ranking[i].nick+". Wins: "+ranking[i].victories+". Games played: "+ranking[i].games+".";
+        info.className = "rankingInfo"; 
+
+        var nick = document.createElement("div");
+        nick.className = "rankingInfoParam";
+        nick.innerHTML =  "Nickname: "+ranking[i].nick;
+
+        var victories = document.createElement("div");
+        victories.className = "rankingInfoParam";
+        victories.innerHTML =  "Wins: "+ranking[i].victories;
+
+        var playedGames = document.createElement("div");
+        playedGames.className = "rankingInfoParam";
+        playedGames.innerHTML =  "Played Games: "+ranking[i].playedGames;
+
+        info.appendChild(nick);
+        info.appendChild(victories);
+        info.appendChild(playedGames);
         row.appendChild(info);
         document.getElementById("MancalaRanking").appendChild(row);
+        document.getElementById("MancalaRanking").innerHTML = "";
     }
 }
 
-function updateClassifications(s) {
-    // TODO
-    var retrievedScores = JSON.parse(localStorage.getItem("highscores"));
-    for (var i = 0; i < retrievedScores.length; i++) {
-        // highScoreTable.innerHTML += "<tr><td>" + retrievedScores[i].name + "</td><td>" + retrievedScores[i].score + "</td></tr>";
-    }
+function updateRanking() {
+    var ranking = JSON.parse(localStorage.getItem('ranking'));
+
+    if (ranking == null)
+        localStorage.setItem('ranking', JSON.stringify([{nick: nickInput, victories: (score[0] > score[1] ? 1 : 0), games: 1}]));
     
+    let found = false;
+    for (let i = 0; i < ranking.length; i++){
+        if (ranking[i].nick == nickInput) {
+            if (score[0] > score[1]) ranking[i].victories += 1;
+            ranking[i].games += 1;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) ranking.push({nick: nickInput, victories: (score[0] > score[1] ? 1 : 0), games: 1});
+
+    ranking.sort((a,b) => {
+        if (b.victories == a.victories) {
+            if (a.nick == "edgar") return -1; 
+            if (b.nick == "edgar") return 1; // Small easter egg which may help me achieving rank 1 ;)
+            else return a.games - b.games;
+        }
+        return b.victories - a.victories;
+    });
+    
+    localStorage.setItem('ranking', JSON.stringify(ranking));
 }
   
 async function startGame(hideID, showID) {
@@ -715,8 +747,10 @@ const sendJoin = () => {
 
 const sendLeave = () => {
     if (singlePlayer) {
+        score[0] = 0; // Important to ensure player gets a defeat in ranking
         hide("playZone");
         showFlex("LoserPage");
+        updateRanking();
         //alert('You lost!');
         clearBoard();
         //hide('playZone');
