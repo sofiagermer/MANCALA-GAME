@@ -91,6 +91,7 @@ function openPage(pageName, showID, hideID1, hideID2,hideID3) {
     document.getElementById(hideID2).style.color = "#8f8f8f";
     document.getElementById(hideID3).style.color = "#8f8f8f";
   
+    if (pageName == 'Ranking') getRanking();
   }
   
   // Get the element with id="defaultOpen" and click on it
@@ -574,24 +575,20 @@ function finishGame (b, s) {
     if (singlePlayer) updateRanking();
 }
 
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//RANKING AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
 function getRanking() {
     if (singlePlayer) showRanking(JSON.parse(localStorage.getItem('ranking')));
     else sendRanking();
 }
 
 function showRanking(ranking) {
-    if (ranking == null) 
-        document.getElementById("MancalaRanking").innerHTML = "No ranking entries yet! Play some games and come back to flex your skill.";
+    if (ranking == null){
+        document.getElementById("MancalaRanking").innerHTML = "No ranking entries yet! Play some games and come back to flex your skill. ;)";
+        return;
+    }
+    
     for (var i = 0; i < 5; i++) {
+        if (ranking.length <= i) break;
+
         var row = document.createElement("div");
         row.className = "myRanking"; 
 
@@ -602,7 +599,7 @@ function showRanking(ranking) {
         row.appendChild(icon);
 
         var info = document.createElement("div");
-        info.className = "rankingInfo"; 
+        info.className = "rankingInfo";
 
         var nick = document.createElement("div");
         nick.className = "rankingInfoParam";
@@ -614,14 +611,13 @@ function showRanking(ranking) {
 
         var playedGames = document.createElement("div");
         playedGames.className = "rankingInfoParam";
-        playedGames.innerHTML =  "Played Games: "+ranking[i].playedGames;
+        playedGames.innerHTML =  "Played Games: "+ranking[i].games;
         info.appendChild(nick);
         info.appendChild(victories);
         info.appendChild(playedGames);
         row.appendChild(info);
         
         document.getElementById("MancalaRanking").appendChild(row);
-        document.getElementById("MancalaRanking").innerHTML = "";
     }
 }
 
