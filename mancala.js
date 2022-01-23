@@ -603,13 +603,36 @@ function setHighscores(highScores) {
 }
 
 function showRanking(ranking) {
-    for (var i = 0; i < ranking.length; i++) {
+    //Para já vou fazer top 5
+    for (var i = 0; i < 5; i++) {
         var row = document.createElement("div");
-        //row.className = "row"; // Isto tá aqui para dar style com css, TODO
+        row.className = "myRanking"; 
+
+        var icon = document.createElement("div");
+        icon.className = "rankingIcon";
+        icon.innerHTML =  (i + 1);
+        row.appendChild(icon);
+
         var info = document.createElement("div");
-        //info.className = "name"; // Isto tá aqui para dar style com css, TODO
-        info.innerHTML = (i + 1)+"º place => Nickname: "+ranking[i].nick+". Wins: "+ranking[i].victories+". Games played: "+ranking[i].games+".";
+        info.className = "rankingInfo"; 
+
+        var nick = document.createElement("div");
+        nick.className = "rankingInfoParam";
+        nick.innerHTML =  "Nickname: "+ranking[i].nick;
+
+        var victories = document.createElement("div");
+        victories.className = "rankingInfoParam";
+        victories.innerHTML =  "Wins: "+ranking[i].victories;
+
+        var playedGames = document.createElement("div");
+        playedGames.className = "rankingInfoParam";
+        playedGames.innerHTML =  "Played Games: "+ranking[i].playedGames;
+    
+        info.appendChild(nick);
+        info.appendChild(victories);
+        info.appendChild(playedGames);
         row.appendChild(info);
+        
         document.getElementById("MancalaRanking").appendChild(row);
     }
 }
