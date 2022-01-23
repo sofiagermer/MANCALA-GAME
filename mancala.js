@@ -749,8 +749,8 @@ const sendRegister = (hideID, showID) => {
         hide(hideID);
         showFlex(showID);
     })
-    .catch( error => alert("Error when registering : "+error.data));
-    //.catch(  error => document.getElementById("loginError").innerHTML = error.data );
+    //.catch( error => alert("Error when registering : "+error.data));
+    .catch(  error => document.getElementById("loginError").innerHTML = error.data );
 };
 
 const endGame = (responseData) => {
