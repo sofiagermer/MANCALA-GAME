@@ -774,26 +774,28 @@ const sendRegister = (hideID, showID) => {
 };
 
 const endGame = (responseData) => {
-    var gameEndedMessage;
+    //var gameEndedMessage;
 
     if (responseData.winner != null){
         //gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
         //alert(gameEndedMessage);
         if(responseData.winner == nickInput){
+            console.log("estou aqui");
+            hide("playZone");
+            hide("beforePlay");
             showFlex("WinnerPage");
         }
         else{
-            console.log("ESTOU AQUI ESTOU AQUI ESTOU AQUI");
+            console.log("estou aqui");
+            hide("playZone");
+            hide("beforePlay");
             showFlex("LoserPage");
         }
     }
     else if ("board" in responseData)
         gameEndedMessage = "Draw!";
 
-    //if (gameEndedMessage) alert(gameEndedMessage);
     clearBoard();
-    hide('playZone');
-    showFlex('beforePlay');
 };
 
 // Server-Sent Events com GET e dados urlencoded
