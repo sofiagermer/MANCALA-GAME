@@ -294,6 +294,10 @@ input[type=text], input[type=password],textarea {
     font-weight: 600;
 }
 
+.loginTitle{
+    color:rgb(80, 80, 80)
+}
+
 /*-----------------*/
 /*MULTI-STEP FORM PLAY OPTIONS*/
 
@@ -811,5 +815,21 @@ footer {
     box-shadow: 0px 5px 20px 3px rgba(138, 138, 138, 0.05);
     border: 1px solid rgba(190, 190, 190, 0.418); 
     width:40%;
+    display: none;
+}
+
+/* ==================================== */
+        /* GAME OVER PAGES */
+/* ==================================== */
+
+/* WINNER PAGE */
+
+#WinnerPage{
+    display: none;
+}
+
+/* LOSER PAGE */
+
+#LoserPage{
     display: none;
 }

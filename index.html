@@ -64,7 +64,7 @@
                         </div>
                         <div class= "field" class = "noselect">
                             <label for="nickname">
-                                <b class = "noselect" >Nickname
+                                <b class = "noselect loginTitle" >Nickname
                                 </b>
                             </label>
                             <div class = "inputPlaceHolder">
@@ -74,7 +74,7 @@
                         </div>
                         <div class = "field" class = "noselect">
                             <label for="psw">
-                                <b  class = "noselect">
+                                <b  class = "noselect loginTitle">
                                     Password
                                 </b>
                             </label>
@@ -230,6 +230,37 @@
                     Not your turn to play
                 </div>
             </div>
+
+                <!-- 
+                ########################################################################################
+                #                                 Winner Page                                          #
+                ########################################################################################
+                -->
+                <div class = "MancalaBox" id = "WinnerPage">
+                    <div class = "MancalaTitle">
+                        You Won
+                    </div>
+                    <hr class = "AboutUsHR">
+                        Congratuations :)
+                </div>
+
+                            <!-- 
+                ########################################################################################
+                #                                 Loser Page                                          #
+                ########################################################################################
+                -->
+                <div class = "MancalaBox" id = "LoserPage">
+                    <div class = "MancalaTitle">
+                        You Lost
+                    </div>
+                    <hr class = "AboutUsHR">
+                        Nex Time you'll win ;) 
+                    <div class = "AboutUsDivButton">
+                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','LoserPage')">
+                            Play Again
+                        </div>
+                    </div>
+                </div>
          </div>
     </div>
 

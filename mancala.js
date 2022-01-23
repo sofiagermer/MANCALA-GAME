@@ -640,6 +640,16 @@ async function startGame(hideID, showID) {
         selectCavity(getBestMove(aiLevel*2, [...board], [...score]), board, score, false);
     }
 }
+
+// ########################################################################################
+// #                         RESEND USER TO REGISTER PAGE                                 #
+
+function goToRegister(showID,hideID){
+    showFlex(showID);
+    hide(hideID);
+}
+
+
 // ########################################################################################
 // #                                                                                      #
 // #                                    SEGUNDA ENTREGA                                   #
@@ -714,10 +724,12 @@ const sendJoin = () => {
 
 const sendLeave = () => {
     if (singlePlayer) {
-        alert('You lost!');
+        hide("playZone");
+        showFlex("LoserPage");
+        //alert('You lost!');
         clearBoard();
-        hide('playZone');
-        showFlex('beforePlay');
+        //hide('playZone');
+        //showFlex('beforePlay');
     }
     else {
         sendHttpRequest('POST', 'leave', {nick: nickInput, password: passwordInput, game: token})
@@ -764,12 +776,21 @@ const sendRegister = (hideID, showID) => {
 const endGame = (responseData) => {
     var gameEndedMessage;
 
-    if (responseData.winner != null)
-        gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
+    if (responseData.winner != null){
+        //gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
+        //alert(gameEndedMessage);
+        if(responseData.winner == nickInput){
+            showFlex("WinnerPage");
+        }
+        else{
+            console.log("ESTOU AQUI ESTOU AQUI ESTOU AQUI");
+            showFlex("LoserPage");
+        }
+    }
     else if ("board" in responseData)
         gameEndedMessage = "Draw!";
 
-    if (gameEndedMessage) alert(gameEndedMessage);
+    //if (gameEndedMessage) alert(gameEndedMessage);
     clearBoard();
     hide('playZone');
     showFlex('beforePlay');
