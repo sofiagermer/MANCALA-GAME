@@ -19,16 +19,20 @@
 <body>
     <div id= "navbar" class = "noselect">
         
-        <div id = "navBarLogoDiv">
-          <img src = "logo.png" class = "imgLogo" id = "navbarLogo">  
+        <div class = "navBarLogoDiv">
+          <img src = "logo.png" class = "imgLogo" id = "navbarLogo" onclick="openPage('Play', 'navbarPlayButton', 'navbarRulesButton', 'navbarRankingButton', 'navbarAboutUsButton', this)">  
         </div> 
 
         <!-- <button class="tablink" onclick="openPage('SlideShow', this)" id="defaultOpen"> Home </button> --> 
        <!-- <button class="tablink" onclick="openPage('Login', this)" >Login</button> -->
         <div id = "navBarButtons">
-            <button id = "navbarPlayButton" class="tablink" onclick="openPage('Play', 'navbarPlayButton', 'navbarRulesButton', 'navbarRankingButton', this)">Play</button>
-            <button id = "navbarRulesButton" class="tablink" onclick="openPage('Rules', 'navbarRulesButton' , 'navbarPlayButton', 'navbarRankingButton', this)">Rules</button>
-            <button id = "navbarRankingButton" class="tablink" onclick="openPage('Ranking', 'navbarRankingButton' ,'navbarRulesButton', 'navbarPlayButton',  this)">Ranking</button>
+            <button id = "navbarPlayButton" class="tablink" onclick="openPage('Play', 'navbarPlayButton', 'navbarRulesButton', 'navbarRankingButton', 'navbarAboutUsButton', this)">Play</button>
+            <button id = "navbarRulesButton" class="tablink" onclick="openPage('Rules', 'navbarRulesButton' , 'navbarPlayButton', 'navbarRankingButton', 'navbarAboutUsButton', this)">Rules</button>
+            <button id = "navbarRankingButton" class="tablink" onclick="openPage('Ranking', 'navbarRankingButton' ,'navbarRulesButton', 'navbarPlayButton', 'navbarAboutUsButton', this)">Ranking</button>
+            <button id = "navbarAboutUsButton" class="tablink" onclick="openPage('AboutUs', 'navbarAboutUsButton' ,'navbarRulesButton', 'navbarRankingButton', 'navbarPlayButton', this)">About Us</button>
+        </div>
+
+        <div class = "navBarLogoDiv">
         </div>
     </div>
 
@@ -51,21 +55,18 @@
    ########################################################################################
     -->
     <div id="Play" class="tabcontent">
-            <!-- 
-            ########################################################################################
-            #                                      Login                                           #
-            ########################################################################################-->
-        <div class = "active" id= "registerZone">
-            <div id = "caixaLogin" class = "noselect">
-                <div id = "logo">
-                    
+        <!-- 
+        ########################################################################################
+        #                                      Login                                           #
+        ########################################################################################-->
+        <div class = "MancalaPage" id = "LoginPage">
+            <div id = "caixaLogin" class = "MancalaBox noselect">
+                <div id = "logo">   
                     <img src = "logoBranco.png" class = "imgLogo"> 
-                    
                 </div>
-
                 <div id = "loginInfo">
                     <div id = "subLoginInfo">
-                        <div id = "signUp" class = "noselect">
+                        <div id = "signUp" class = "noselect MancalaTitle">
                             SIGN UP TO PLAY MANCALA
                             <hr>
                         </div>
@@ -83,126 +84,149 @@
                                 <input id="passwordInput" type="password" placeholder="············"></input>
                             </div>
                         </div>
-                        <button class= "button" id="register-btn" onclick= "register()">REGISTER</button>
+                        <button class= "button" id="register-btn" onclick= "register('LoginPage', 'beforePlay')">REGISTER</button>
+                        <!-- <button id="ranking-btn">RANKING Button</button> -->
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- 
-            ########################################################################################
-            #                                Game Options                                           #
-            ########################################################################################-->
-        <form id= beforePlay>
-            <div id="caixaPlay">
-                <div class="arrowDiv" onclick="previousPlayOption()">
-                    <div class = "arrow-left">
-                    </div>
-                </div>
-                
-                <div id = "playContent">
-                    <div class = "playOptions" id = "BoardOptions">
-                        <h2 class="Title playTitle noselect">Number of Holes</h2>
-    
-                        <div class = "playingMode">
-                            <div class= "playerModeButton noselect" id="4holes" onclick = "getNumberHoles(4,'4holes','6holes','8holes','10holes','12holes')">4</div>
-                            <div class= "playerModeButton noselect" id="6holes" onclick = "getNumberHoles(6,'6holes','4holes','8holes','10holes','12holes')">6</div>
-                            <div class= "playerModeButton noselect" id="8holes" onclick = "getNumberHoles(8,'8holes','4holes','6holes','10holes','12holes')">8</div>
-                            <div class= "playerModeButton noselect" id="10holes" onclick = "getNumberHoles(10,'10holes','4holes','6holes','8holes','12holes')">10</div>
-                            <div class= "playerModeButton noselect" id="12holes" onclick = "getNumberHoles(12,'12holes','4holes','6holes','8holes','10holes')">12</div>
-                        </div>
-                        <p></p>
-    
-                        <h2 class="Title playTitle noselect">Number of Seeds</h2>
-    
-                        <div class = "playingMode">
-                            <div class= "playerModeButton noselect" id="1seed" onclick = "getNumberSeeds(1, '1seed', '2seed', '3seed','4seed')">1</div>
-                            <div class= "playerModeButton noselect" id="2seed" onclick = "getNumberSeeds(2, '2seed', '1seed', '3seed','4seed' )">2</div>
-                            <div class= "playerModeButton noselect" id="3seed" onclick = "getNumberSeeds(3, '3seed', '1seed', '2seed','4seed')">3</div>
-                            <div class= "playerModeButton noselect" id="4seed" onclick = "getNumberSeeds(4, '4seed', '1seed', '2seed','3seed')">4</div>
-                        </div>
-                        <p></p>
-    
-                        <h2 class="Title playTitle noselect">Number of Players</h2>
-                    
-                        <div class = "playingMode">
-                            <div class= "playerModeButton noselect" id="sP" onclick = "onePlayer()">Single Player</div>
-                            <div class= "playerModeButton noselect" id="mP" onclick = "multiPlayer()">Two Players</div>
-                        </div>
-                        <p></p>
-                
-                    </div>
-                    
-                    
-                   <div class = "playOptions" div id = "SinglePlayerOptions">
-    
-                        <h2 class="Title playTitle noselect">Who Starts?</h2>
-    
-                        <div class = "playingMode">
-                            <div class= "playerModeButton noselect" id="iStart" onclick = "whoStarts(false,'iStart','cpuStarts')">I Start</div>
-                            <div class= "playerModeButton noselect" id="cpuStarts" onclick = "whoStarts(true,'cpuStarts','iStart')">Computer Starts</div>
-                        </div> 
-    
-                        <h2 class="Title playTitle noselect">Difficulty Level</h2>
-    
-                        <div class = "playingMode">
-                            <div class= "playerModeButton noselect" id="1level" onclick = "chooseLevel(1, '1level', '2level', '3level', '4level', '5level')">1</div>
-                            <div class= "playerModeButton noselect" id="2level" onclick = "chooseLevel(2, '2level', '1level', '3level', '4level', '5level')">2</div>
-                            <div class= "playerModeButton noselect" id="3level" onclick = "chooseLevel(3, '3level', '1level', '2level', '4level', '5level')">3</div>
-                            <div class= "playerModeButton noselect" id="4level" onclick = "chooseLevel(4, '4level', '1level', '2level', '3level', '5level')">4</div>
-                            <div class= "playerModeButton noselect" id="5level" onclick = "chooseLevel(5, '5level', '1level', '2level', '3level', '4level')">5</div>
-                        </div> 
-                    
-                    </div>
-    
-                    <div class="playOptions" div id="StartPlaying">
-                        <div>
-                            <div class="button" onclick="startGame('beforePlay', 'playZone')">Start Playing</div>
+        ########################################################################################
+        #                               Board Options                                           #
+        ########################################################################################-->
+        <div class = "MancalaPage">
+            <div class = "MancalaBox" id= "beforePlay">
+                <div id="caixaPlay">
+                    <div class="arrowDiv" onclick="previousPlayOption()">
+                        <div class = "arrow-left">
                         </div>
                     </div>
-                </div>
-                <div class="arrowDiv" onclick="nextPlayOption()" >
-                    <div class = "arrow-right"></div>
+                    
+                    <div id = "playContent">
+                        <div class = "playOptions" id = "BoardOptions">
+                            <h2 class="Title playTitle noselect">Number of Holes</h2>
+        
+                            <div class = "playingMode">
+                                <div class= "playerModeButton noselect" id="4holes" onclick = "getNumberHoles(4,'4holes','6holes','8holes','10holes','12holes')">4</div>
+                                <div class= "playerModeButton noselect" id="6holes" onclick = "getNumberHoles(6,'6holes','4holes','8holes','10holes','12holes')">6</div>
+                                <div class= "playerModeButton noselect" id="8holes" onclick = "getNumberHoles(8,'8holes','4holes','6holes','10holes','12holes')">8</div>
+                                <div class= "playerModeButton noselect" id="10holes" onclick = "getNumberHoles(10,'10holes','4holes','6holes','8holes','12holes')">10</div>
+                                <div class= "playerModeButton noselect" id="12holes" onclick = "getNumberHoles(12,'12holes','4holes','6holes','8holes','10holes')">12</div>
+                            </div>
+                            <p></p>
+        
+                            <h2 class="Title playTitle noselect">Number of Seeds</h2>
+        
+                            <div class = "playingMode">
+                                <div class= "playerModeButton noselect" id="1seed" onclick = "getNumberSeeds(1, '1seed', '2seed', '3seed','4seed')">1</div>
+                                <div class= "playerModeButton noselect" id="2seed" onclick = "getNumberSeeds(2, '2seed', '1seed', '3seed','4seed' )">2</div>
+                                <div class= "playerModeButton noselect" id="3seed" onclick = "getNumberSeeds(3, '3seed', '1seed', '2seed','4seed')">3</div>
+                                <div class= "playerModeButton noselect" id="4seed" onclick = "getNumberSeeds(4, '4seed', '1seed', '2seed','3seed')">4</div>
+                            </div>
+                            <p></p>
+        
+                            <h2 class="Title playTitle noselect">Number of Players</h2>
+                        
+                            <div class = "playingMode">
+                                <div class= "playerModeButton noselect" id="sP" onclick = "onePlayer()">Single Player</div>
+                                <div class= "playerModeButton noselect" id="mP" onclick = "multiPlayer()">Two Players</div>
+                            </div>
+                            <p></p>
+                    
+                        </div>
+                        
+                        
+                    <div class = "playOptions" div id = "SinglePlayerOptions">
+        
+                            <h2 class="Title playTitle noselect">Who Starts?</h2>
+        
+                            <div class = "playingMode">
+                                <div class= "playerModeButton noselect" id="iStart" onclick = "whoStarts(false,'iStart','cpuStarts')">I Start</div>
+                                <div class= "playerModeButton noselect" id="cpuStarts" onclick = "whoStarts(true,'cpuStarts','iStart')">Computer Starts</div>
+                            </div> 
+        
+                            <h2 class="Title playTitle noselect">Difficulty Level</h2>
+        
+                            <div class = "playingMode">
+                                <div class= "playerModeButton noselect" id="1level" onclick = "chooseLevel(1, '1level', '2level', '3level', '4level', '5level')">1</div>
+                                <div class= "playerModeButton noselect" id="2level" onclick = "chooseLevel(2, '2level', '1level', '3level', '4level', '5level')">2</div>
+                                <div class= "playerModeButton noselect" id="3level" onclick = "chooseLevel(3, '3level', '1level', '2level', '4level', '5level')">3</div>
+                                <div class= "playerModeButton noselect" id="4level" onclick = "chooseLevel(4, '4level', '1level', '2level', '3level', '5level')">4</div>
+                                <div class= "playerModeButton noselect" id="5level" onclick = "chooseLevel(5, '5level', '1level', '2level', '3level', '4level')">5</div>
+                            </div> 
+                        
+                        </div>
+        
+                        <div class="playOptions" div id="StartPlaying">
+                            <div>
+                                <div class="button" onclick="startGame('beforePlay', 'playZone')">Start Playing</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrowDiv" onclick="nextPlayOption()" >
+                        <div class = "arrow-right"></div>
+                    </div>
                 </div>
             </div>
-        </form>
-        <!-- 
+         <!-- 
         ########################################################################################
         #                             Waiting For Player 2                                     #
         ########################################################################################-->
 
-        <div class = "active" id= "waitingForPlayer">
-            <div id = "caixaWaitingPlayer">
-                Waiting For Player
+        <div class = "MancalaBox" id= "waitingForPlayer">
+            <div class = "MancalaTitle">
+                Wating For Player
             </div>
-            <button id = "leaveQueue" onclick= "sendLeave()">
-                Leave Queue
-        </div>
-    
-        <div id = "playZone">
-                <!-- 
-                ########################################################################################
-                #                                Give up Game                                          #
-                ########################################################################################-->
-                <div id = "giveUpDiv">
-                    <div id = "giveUpContent"  onclick = "sendLeave()">
-                        <i class="fas fa-times noselect" id= "giveupIcon"></i>
-                        <div id = "giveupTitle" class ="noselect">
-                            QUIT GAME
-                        </div>
-                    </div>
+            <hr class = "AboutUsHR">
+            <div id = "waitingLogoDIv">
+                <div id = "waitinglogo">
+                    <img src = "logoBranco.png" class = "imgLogo"> 
                 </div>
-                <!--<button id = "leaveQueue" onclick= "sendLeave()">
-                    Leave Queue
-                </div>-->
-            <!-- 
-            ########################################################################################
-            #                                      Board                                          #
-            ########################################################################################-->
-            <div id="zonaTabuleiro" class="noselect"> 
             </div>
+        </div>
+        <div id = "playZone">
+        <!-- 
+        ########################################################################################
+        #                                Give up Game                                          #
+        ########################################################################################-->
+        <div id = "giveUpDiv">
+            <div id = "giveUpContent"  onclick = "sendLeave()">
+                <i class="fas fa-times noselect" id= "giveupIcon"></i>
+                <div id = "giveupTitle" class ="noselect">
+                    QUIT GAME
+                </div>
+            </div>
+        </div>
+            <!--<button id = "leaveQueue" onclick= "sendLeave()">
+                Leave Queue
+            </div>-->
+        <!-- 
+        ########################################################################################
+        #                                      Board                                          #
+        ########################################################################################-->
+        <div id="zonaTabuleiro" class="noselect"> 
+        </div>
+
+        <!-- 
+        ########################################################################################
+        #                                    Messages                                          #
+        ########################################################################################
+        -->
+        
+        <div id = "MessagesDiv1" class = "MessagesDiv noselect">
+            Not your turn to play
+        </div>
+
+        
+        <div id = "MessagesDiv2" class = "MessagesDiv noselect">
+            Invalid start position
+        </div>
+
+        <div id = "MessagesDiv3" class = "MessagesDiv noselect">
+            Not your turn to play
         </div>
     </div>
+
     <!-- 
    ########################################################################################
    #                                                                                      #
@@ -210,140 +234,207 @@
    #                                                                                      #
    ########################################################################################
     -->
-    <div id= "Rules" class="tabcontent">
-        <div class = "active" id = "activeRules">
-            <div id="caixaRules">
-                <div class="arrowDiv" onclick="previousRule()">
-                    <div class = "arrow-left">
-                    </div>
-                </div>
 
-                <div class ="rules" id = "rulesContent">
-                    <div id = "Rule1">
-                        <h2 class="Title rulesTitle">Ínicio do jogo </h2>
-                        <div class = "ruleText">
-                            <div class = "bulletPoint">
-                                <i class="fas fa-play seta"></i>
-                                <div class = "textoCorrido">
-                                    Os armazéns estão vazios (sem sementes)
-                                </div>
-                            </div>
-                            <div class = "bulletPoint">
-                                <i class="fas fa-play seta"></i>
-                                <div class = "textoCorrido">
-                                    As restantes cavidades têm o mesmo número de sementes 
-                                </div>
-                            </div>        
-                        </div>
-                    </div>
-                    <div class ="rules" id = "Rule2">
-                        <h2 class="Title rulesTitle">Começar a semear </h2>    
-                            <div class = "ruleText">
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta "></i>
-                                    <div class = "textoCorrido">
-                                        Escolher uma cavidade do seu lado (que não o armazém) 
-                                    </div>
-                                </div>
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta"></i>
-                                    <div class = "textoCorrido">
-                                        Recolher todas as N sementes dessa cavidade
-                                    </div>
-                                </div> 
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta"></i>
-                                    <div class = "textoCorrido">
-                                        Colocar 1 semente nas N cavidade seguintes
-                                    </div>
-                                </div> 
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta"></i>
-                                    <div class = "textoCorrido">
-                                        A semeadura é feita no sentido anti-horário
-                                    </div>
-                                </div>        
-                            </div>
-                    </div>
-                    <div class ="rules" id = "Rule3">
-                        <h2 class="Title rulesTitle">Última semente em armazém </h2>   
-                            <div class = "ruleText">
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta "></i>
-                                    <div class = "textoCorrido">
-                                        Volta a jogar se a última semente for semeada for no seu próprio armazém
-                                    </div>
-                                </div>
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta"></i>
-                                    <div class = "textoCorrido">
-                                        Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar
-                                    </div>
-                                </div>     
-                            </div>
-                    </div>   
-                    <div class ="rules" id = "Rule4">
-                        <h2 class="Title rulesTitle"> Última semente em cavidade vazia  </h2>   
-                            <div class = "ruleText">
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta "></i>
-                                    <div class = "textoCorrido">
-                                        Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes:
-                                    </div>
-                                </div>
-                                <div class = "bulletPoint subBulletPoint">
-                                    <i class="fas fa-play sub-seta"></i>
-                                    <div class = "textoCorrido">
-                                        na cavidade oposta, do adversário
-                                    </div>
-                                </div>     
-                                <div class = "bulletPoint subBulletPoint">
-                                    <i class="fas fa-play sub-seta"></i>
-                                    <div class = "textoCorrido">
-                                        assim como essa última semente semeada
-                                    </div>
-                                </div>  
-                                <div class = "bulletPoint">
-                                    <i class="fas fa-play seta"></i>
-                                    <div class = "textoCorrido">
-                                        Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém
-                                    </div>
-                                </div> 
-                            </div> 
-                    </div>
-                    <div class ="rules" id = "Rule5">
-                        <h2 class="Title rulesTitle"> Terminar </h2>
-                        <div class = "ruleText">
-                            <div class = "bulletPoint">
-                                <i class="fas fa-play seta "></i>
-                                <div class = "textoCorrido">
-                                    Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias
-                                </div>
-                            </div>
-                            <div class = "bulletPoint">
-                                <i class="fas fa-play seta"></i>
-                                <div class = "textoCorrido">
-                                    O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém
-                                </div>
-                            </div>     
-                            <div class = "bulletPoint">
-                                <i class="fas fa-play seta"></i>
-                                <div class = "textoCorrido">
-                                    Ganha jogador cujo armazém tem mais sementes
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
+    <div id= "Rules" class="tabcontent">
+        <div  class = "MancalaPage">
+            <!-- 
+            ############################
+            #         Rule 1           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule1">
+                <div class = "MancalaTitle">
+                    Ínicio do jogo
                 </div>
-                <div class="arrowDiv" onclick="nextRule()" >
-                    <div class = "arrow-right">
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Os armazéns estão vazios (sem sementes)
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                As restantes cavidades têm o mesmo número de sementes 
+                            </div>
+                        </div>        
+                    </div>
+
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <!-- 
+            ############################
+            #         Rule 2           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule2">
+                <div class = "MancalaTitle">
+                    Começar a semear     
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Os armazéns estão vazios (sem sementes)
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                As restantes cavidades têm o mesmo número de sementes 
+                            </div>
+                        </div>        
+                    </div>
 
-        <!-- 
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+            ############################
+            #         Rule 3           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule3">
+                <div class = "MancalaTitle">
+                    Última semente em armazém   
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta "></i>
+                            <div class = "textoCorrido">
+                                Volta a jogar se a última semente for semeada for no seu próprio armazém
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar
+                            </div>
+                        </div>     
+                    </div>
+
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+            ############################
+            #         Rule 4           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule4">
+                <div class = "MancalaTitle">
+                    Última semente em cavidade vazia  
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta "></i>
+                            <div class = "textoCorrido">
+                                Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes:
+                            </div>
+                        </div>
+                        <div class = "bulletPoint subBulletPoint">
+                            <i class="fas fa-play sub-seta"></i>
+                            <div class = "textoCorrido">
+                                na cavidade oposta, do adversário
+                            </div>
+                        </div>     
+                        <div class = "bulletPoint subBulletPoint">
+                            <i class="fas fa-play sub-seta"></i>
+                            <div class = "textoCorrido">
+                                assim como essa última semente semeada
+                            </div>
+                        </div>  
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém
+                            </div>
+                        </div> 
+                    </div> 
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+            ############################
+            #         Rule 5           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule5">
+                <div class = "MancalaTitle">
+                    Terminar  
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta "></i>
+                            <div class = "textoCorrido">
+                                Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém
+                            </div>
+                        </div>     
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Ganha jogador cujo armazém tem mais sementes
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>    
+
+    <!-- 
    ########################################################################################
    #                                                                                      #
    #                                      Ranking                                         #
@@ -351,9 +442,112 @@
    ########################################################################################
     -->
     <div id= "Ranking" class="tabcontent">
-        <div class = "active" >
-            Rankinggg
+        <div class = "MancalaPage">
+            <div class = "MancalaBox">
+                <div class = "MancalaTitle">
+                    Ranking
+                </div>
+                <hr class = "AboutUsHR">
+            </div>
         </div>
+    </div>
+
+        <!-- 
+   ########################################################################################
+   #                                    About US                                          #
+   ########################################################################################
+    -->
+
+    <div id= "AboutUs" class="tabcontent">
+        <div id="AboutUsPageInfo" class= "MancalaPage">
+            <div class = "MancalaBox">
+                <div class = "MancalaTitle">
+                    About Us
+                </div>
+                <hr class = "AboutUsHR">
+                <div id = "AboutUsInfo">
+                    <p>
+                        The mancala games are a family of two-player turn-based strategy board games played with small stones, beans, or seeds and rows of holes or pits in the earth, a board or other playing surface. The objective is usually to capture all or some set of the opponent's pieces.
+                    </p>
+                    <p>
+                        This online version of the Game was Developed as a project of the first Semester, last year form Computer Engineering at FEUP. 
+                        The Mancala Game was proposed by the curricular unit LTW (Languages and Web Technologies).
+                    </p>
+                </div>
+                <div class = "AboutUsDivButton">
+                    <div id = "AboutUsMembersButton" class = "AboutUsButton" onclick = "aboutUsButton('AboutUsPageMembers','AboutUsPageInfo')">
+                        More About Team
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            <div id = "AboutUsPageMembers" class ="MancalaPage">
+                <div class = "MancalaBox">
+                    <div class = "MancalaTitle">
+                        Our Developer's Team
+                    </div>
+                    <hr class = "AboutUsHR">
+                    <div id = "AboutUsTeamDiv">
+                        <div class = "AboutUsMemberSpace">
+                            <div class = "AboutUsMember">
+                                <div class = "AboutUsMemberName">
+                                    Sofia Germer
+                                    <div class = "AboutUsMembersInfo">
+                                        <div class = "AboutUsDivIcon">
+                                            <i class="fas fa-envelope AboutUsIcon"></i>
+                                            <div class="userEmail AboutUsEmail"> up201907461@up.pt </div>
+                                        </div>
+                                        <div class = "AboutUsDivIcon">
+                                            <i class="fas fa-briefcase AboutUsIcon"></i>
+                                            <div class="AboutUsEmail"> FEUP </div>
+                                        </div>
+                                        <div class = "AboutUsDivIcon">
+                                            <i class="fas fa-thumbtack AboutUsIcon"></i>
+                                            <div class="AboutUsEmail"> Braga </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "AboutUsMemberPhoto">
+                                <img src = "sofia.jpg" class = "AboutUsPhoto" id = "tempProfilePhoto">
+                            </div>
+                        </div>
+        
+                        <div class = "AboutUsMemberSpace">
+                            <div class = "AboutUsMemberPhoto">
+                                <img src = "edgar.jpg" class = "AboutUsPhoto" id = "tempProfilePhoto">
+                            </div>
+        
+                            <div class = "AboutUsMember">
+                                <div class = "AboutUsMemberName">
+                                    Edgar Torre
+                                    <div class = "AboutUsMembersInfo">
+                                        <div class = "AboutUsDivIcon">
+                                            <i class="fas fa-envelope AboutUsIcon"></i>
+                                            <div class="userEmail AboutUsEmail"> up201906573@up.pt </div>
+                                        </div>
+                                        <div class = "AboutUsDivIcon">
+                                            <i class="fas fa-briefcase AboutUsIcon"></i>
+                                            <div class="AboutUsEmail"> FEUP </div>
+                                        </div>
+                                        <div class = "AboutUsDivIcon">
+                                            <i class="fas fa-thumbtack AboutUsIcon"></i>
+                                            <div class="AboutUsEmail"> Póvoa de Varzim </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class = "AboutUsDivButton">
+                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "aboutUsButton('AboutUsPageInfo','AboutUsPageMembers')">
+                            Go Back To About Us Page
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
     <!-- Footer-->
     <footer>
@@ -363,6 +557,8 @@
       <a href="https://github.com/sofiagermer" class="white-text" target="_blank">Sofia Germer</a>,
       <a href="https://github.com/edgarftorre" class="white-text" target="_blank">Edgar Torre </a>
     </div>
+
+
   
     </footer>
 </body>

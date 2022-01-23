@@ -4,6 +4,8 @@
 var myIndex = 0;
 const RulesID = ["Rule1", "Rule2", "Rule3", "Rule4", "Rule5"];
 const PlayID = [ "BoardOptions", "SinglePlayerOptions", "StartPlaying"];
+const seedColors = ["url(padrao1.jpg)", "url(padrao2.jpg)", "url(padrao3.jpg)", "url(padrao4.jpg)", "url(padrao5.jpg)", "url(padrao6.jpg)",
+                    "url(padrao7.jpg)", "url(padrao8.jpg)", "url(padrao9.jpg)", "url(padrao10.jpg)", "url(padrao11.jpg)", "url(padrao12.jpg)" ];
 var currentPlayOption = 0;
 var currentRule = 0;
 
@@ -54,8 +56,17 @@ function carousel() {
 }
 
 /* --------------------------------------------------- */
+/*LOGIN*/
+//logo animation
+function rotateLogo() {
+    document.getElementById('waitinglogo').style.transform +='rotate('+0.5+'deg)';
+    setTimeout(rotateLogo, 50); // Change image every 2 seconds
+  }
+
+  rotateLogo();
+/* --------------------------------------------------- */
 /*NAVBAR*/
-function openPage(pageName, showID, hideID1, hideID2) {
+function openPage(pageName, showID, hideID1, hideID2,hideID3) {
     //console.log("mudar de pag");
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
@@ -76,12 +87,19 @@ function openPage(pageName, showID, hideID1, hideID2) {
     document.getElementById(showID).style.color = "#000000";
     document.getElementById(hideID1).style.color = "#8f8f8f";
     document.getElementById(hideID2).style.color = "#8f8f8f";
+    document.getElementById(hideID3).style.color = "#8f8f8f";
   
   }
   
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("navbarPlayButton").click(); 
 
+/* --------------------------------------------------- */
+/*ABOUT US*/
+  function aboutUsButton(activeID, hideID){
+      showFlex(activeID);
+      hide(hideID)
+  }
 /* --------------------------------------------------- */
 /*PLAY CONFIGURATIONS*/
 
@@ -114,7 +132,7 @@ function onePlayer(){
     //document.getElementById('singlePlayerOptions').style.display = "block";
 }
 
-function multiPlayer(idActive, idOther){
+function multiPlayer(){
     singlePlayer = false;
     document.getElementById('mP').style.background = "rgb(103,155,155)";
     document.getElementById('sP').style.background = "rgb(103,155,155,0.5)";
@@ -180,7 +198,7 @@ function nextRule() {
     let afterRule = RulesID[currentRule];
 
     hide(beforeRule);
-    showBlock(afterRule);  
+    showFlex(afterRule);  
 }
 
 function previousRule() {
@@ -190,7 +208,7 @@ function previousRule() {
     let afterRule = RulesID[currentRule];
 
     hide(beforeRule);
-    showBlock(afterRule);
+    showFlex(afterRule);
 }
 
 /*------------*/
@@ -211,7 +229,18 @@ function createHoleCima(id){
     for (let j = 0; j < board[id]; j++) {
         var s1 = document.createElement("div");
         s1.setAttribute("class", "seed");
+        var name = "seed";
+        var number = j.toString();
+        var seedID =  name.concat(number);
+        seedID = seedID.concat(id);
+        s1.setAttribute("id", seedID);
         seeds.appendChild(s1);
+        var randomRotation = Math.floor(Math.random() * 360);
+        document.getElementById(seedID).style.transform= 'rotate('+randomRotation+'deg)';
+        document.getElementById(seedID).style.left=  Math.floor(Math.random() * 20)+'px'; 
+        document.getElementById(seedID).style.top = Math.floor(Math.random() * 20)+'px';
+        //var random_color = seedColors[Math.floor(Math.random() * seedColors.length)];
+        //document.getElementById(seedID).style.backgroundImage = random_color;
     }
 }
 
@@ -231,8 +260,19 @@ function createHoleBaixo(id){
         //console.log("id : " + id + " seeds :" +  board[id]);
         var s2 = document.createElement("div");
         s2.setAttribute("class", "seed");
-        var randomRotation = Math.floor(Math.random() * 360);
+        var name = "seed";
+        var number = j.toString();
+        var seedID =  name.concat(number);
+        seedID = seedID.concat(id);
+        s2.setAttribute("id", seedID);
         seeds.appendChild(s2);
+        var randomRotation = Math.floor(Math.random() * 360);
+        document.getElementById(seedID).style.transform= 'rotate('+randomRotation+'deg)';
+        document.getElementById(seedID).style.left=  Math.floor(Math.random() * 20)+'px'; 
+        document.getElementById(seedID).style.top = Math.floor(Math.random() * 20)+'px';
+        //var random_color = seedColors[Math.floor(Math.random() * seedColors.length)];
+        //document.getElementById(seedID).style.backgroundImage = random_color;
+        //document.getElementById(seedID).css('transform','rotate(' + randomRotation + 'deg) ');
     }
 }
 
@@ -241,10 +281,24 @@ function drawBoard() {
     var tabuleiro = document.createElement("div");
     tabuleiro.setAttribute("id", "tabuleiro");
     document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
+    
+    var numberSeedRightDiv = document.createElement("div");
+    numberSeedRightDiv.setAttribute("id", "numberSeedRightDiv");
+    document.getElementById("tabuleiro").appendChild(numberSeedRightDiv);
+
+    var numberSeedRight = document.createElement("div");
+    numberSeedRight.setAttribute("id", "numberSeedRight");
+    numberSeedRight.setAttribute("class", "numberSeeds");
+    document.getElementById("numberSeedRightDiv").appendChild(numberSeedRight);
+
+    var middle = document.createElement("div");
+    middle.setAttribute("id", "middle");
+    document.getElementById("tabuleiro").appendChild(middle);
+
 
     var lateralEsquerda = document.createElement("div");
     lateralEsquerda.setAttribute("class", "lateral");
-    document.getElementById("tabuleiro").appendChild(lateralEsquerda);
+    document.getElementById("middle").appendChild(lateralEsquerda);
 
     var seedsE = document.createElement("div");
     seedsE.setAttribute("class", "seedspace");
@@ -253,12 +307,22 @@ function drawBoard() {
     for (var i = 0; i < score[1]; i++) {
         var buracoEsquerda = document.createElement("div");
         buracoEsquerda.setAttribute("class", "seed");
+        var name = "seedHoleLeft";
+        var number = i.toString();
+        var seedID =  name.concat(number);
+        buracoEsquerda.setAttribute("id", seedID);
+        console.log(buracoEsquerda.id);
+        console.log("seedID :", seedID);
         seedsE.appendChild(buracoEsquerda);
+        var randomRotation = Math.floor(Math.random() * 360);
+        document.getElementById(seedID).style.transform= 'rotate('+randomRotation+'deg)';
+        document.getElementById(seedID).style.left=  Math.floor(Math.random() * 20)+'px'; 
+        document.getElementById(seedID).style.top = Math.floor(Math.random() * 20)+'px';
     }
 
     var c = document.createElement("div");
     c.setAttribute("id", "sub-tabuleiro");
-    document.getElementById("tabuleiro").appendChild(c);
+    document.getElementById("middle").appendChild(c);
 
     var d = document.createElement("div");
     d.setAttribute("class", "sub-sub-tabuleiro");
@@ -280,7 +344,7 @@ function drawBoard() {
 
     var lateralDireita = document.createElement("div");
     lateralDireita.setAttribute("class", "lateral");
-    document.getElementById("tabuleiro").appendChild(lateralDireita);
+    document.getElementById("middle").appendChild(lateralDireita);
 
     var seedsD = document.createElement("div");
     seedsD.setAttribute("class", "seedspace");
@@ -291,6 +355,15 @@ function drawBoard() {
         buracoDireita.setAttribute("class", "seed");
         seedsD.appendChild(buracoDireita);
     }
+
+    var numberSeedLeftDiv = document.createElement("div");
+    numberSeedLeftDiv.setAttribute("id", "numberSeedLeftDiv");
+    document.getElementById("tabuleiro").appendChild(numberSeedLeftDiv);
+
+    var numberSeedLeft = document.createElement("div");
+    numberSeedLeft.setAttribute("id", "numberSeedLeft");
+    numberSeedLeft.setAttribute("class", "numberSeeds");
+    document.getElementById("numberSeedLeftDiv").appendChild(numberSeedLeft);
 }
 
 /*------------*/
@@ -387,17 +460,27 @@ function isCavityValid(index, b, calledByPlayer) {
     if (!calledByPlayer) return true; // Without this line, it was impossible to distinguish if user played outside his turn or if AI played in his turn
 
     if (!isPlayerTurn) {
-        alert("Not your turn to play");
+        //alert("Not your turn to play");
+        showFlex('MessagesDiv1');
+        hide('MessagesDiv2');
+        hide('MessagesDiv3');
+        console.log("estou aqui \n");
         return false;
     }
 
     if (index > numHoles/2) {
-        alert("Invalid start position: " + index);
+        showFlex('MessagesDiv2');
+        hide('MessagesDiv1');
+        hide('MessagesDiv3');
+        //alert("Invalid start position: " + index);
         return false;
     }
 
     if (b[index] == 0) {
-        alert("Invalid empty pit: " + index);
+        showFlex('MessagesDiv3');
+        hide('MessagesDiv1');
+        hide('MessagesDiv2');
+        //alert("Invalid empty pit: " + index);
         return false;
     }
 
@@ -586,10 +669,10 @@ var move;
 // ########################################################################################
 // #                               ASK USER REGIST INFO                                   #
 
-function register() {
+function register(hideID, showID) {
     nickInput = document.getElementById('nameInput').value;
     passwordInput = document.getElementById('passwordInput').value;
-    sendRegister();
+    sendRegister(hideID, showID);
 }
 
 
@@ -657,14 +740,15 @@ const sendRanking = () => {
 
 
 
-const sendRegister = () => {
+const sendRegister = (hideID, showID) => {
     sendHttpRequest('POST', 'register', {nick: nickInput, password: passwordInput})
     .then( () => {
         console.log("Success sending register request.");
-        hide('registerZone');
-        showFlex('beforePlay');
+        hide(hideID);
+        showFlex(showID);
     })
     .catch( error => alert("Error when registering : "+error.data));
+    //.catch(  error => document.getElementById("loginError").innerHTML = error.data );
 };
 
 const endGame = (responseData) => {
