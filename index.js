@@ -1,15 +1,11 @@
 const http = require('http');
 const events = require('events');
 const fs = require('fs'); // TODO Sending html file as response
-const crypto = require('crypto'); // TODO Create cryptos
-const { eventNames } = require('process');
+const crypto = require('crypto');
 const port = 9028; 
 
 let error;
 let responseBody;
-let gameEndedByPlay = false;
-let gameEndedByLeave = false;
-let successfulNotifyRequest = false;
 
 let rank1 = {nick:"abcdefghidasdas", victories: 404, games: 576};
 let rank2 = {nick:"123", victories: 318, games: 741};
@@ -23,31 +19,13 @@ let rank9 = {nick:"ola", victories: 89, games: 186};
 let rank10 = {nick:"owo", victories: 88, games: 163};
 const ranking = [rank1, rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9, rank10];
 
-const loginCredentials = [];
+const loginCredentials = JSON.parse(fs.readFileSync('loginCredentials.txt', 'utf-8'));
 const currentGames = [];
 const waitingQueue = [];
 
 const server = http.createServer(async function (request, response) {
-    
+
     const { method, url, headers } = request;
-    // Example: at login, method = "POST", url = "/login", headers = array { lowercase request headers: value}
-    
-    //console.log(JSON.parse(data).todo); // 'Buy the milk'
-    /*
-    let body = [];
-    request.on('error', (err) => {
-        console.error(err);
-    }).on('data', (chunk) => {
-        body.push(chunk); 
-        console.log("on data");
-    }).on('end', () => {
-        body = Buffer.concat(body).toString(); 
-        console.log("on end");
-        bodyTransferFinished = true;
-        // Example: at login, body = {"nick":"sofia","password":"1234"}
-    });
-    */
-    
     switch (method) {
         case "OPTIONS":
             response.writeHead(204, {
@@ -78,39 +56,72 @@ const server = http.createServer(async function (request, response) {
             });
 
             switch (url.substring(1)) {
-                case "ranking":
+                case "ranking": //TODO: actually criar um ranking
                     responseBody = {ranking};
                     break;
-                case "register":
-                    if (processRegisterRequest(body)) {
-                        responseBody = {};
-                    }
+                case "register": //TODO: encriptar passwords na base de dados
+                    if (processRegisterRequest(body)) responseBody = {};
                     else {
-                        response.writeHead(400);
-                        error = "Invalid nick and password combination";
-                        //TODO fix error handling to response
-                        responseBody = {error};
+                        response.writeHead(400, {
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
+                        responseBody = {error: "User registered with a different password"};
                     }
                     break;
-                case "join":
-                    let game = processJoinRequest(body);
+                case "join": //TODO: encriptar game tokens na processJoinRequest
+                    let game = processJoinRequest(body, response);
                     if (game.indexOf(' ') == -1) 
                         responseBody = {game}; // All ok
                     else {
-                        response.writeHead(400);
-                        error = game;
-                        responseBody = {error};                        
+                        response.writeHead((game == "User registered with a different password" ? 401 : 400), {
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
+                        responseBody = {error: game};                        
                     }
                     break;
                 case "notify":
                     let move = processNotifyRequest(body);
-                    if (move > 0) {
+                    if (move >= 0)
                         responseBody = {};
-                    }
                     else {
-                        response.writeHead(400);
+                        response.writeHead((move == -1 ? 401 : 400), {
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
                         // TODO, mudar o sistema de returns
                         switch (move) {
+                            case -2: 
+                                error = "Invalid input";
+                                break;
+                            case -3:
+                                error = "Player not in game";
+                                break;
+                            case -4:
+                                error = "Not your turn";
+                                break;
+                            case -5:
+                                error = "Pit index out of bound";
+                                break;
+                            case -6:
+                                error = "Pit not on player side";
+                                break;
+                            case -7:
+                                error = "Empty pit";
+                                break;
                             default:
                                 error = "Erro!"
                                 break;
@@ -120,11 +131,18 @@ const server = http.createServer(async function (request, response) {
                     break;
                 case "leave":
                     let returnCode = processLeaveRequest(body);
-                    if (returnCode > 0) {
+                    if (returnCode >= 0) {
                         responseBody = {};
                     }
                     else {
-                        response.writeHead(400);
+                        response.writeHead((returnCode == -1 ? 401 : 400),{
+                            'Access-Control-Allow-Origin': '*',
+                            'Cache-Control': 'no-cache',
+                            'Connection': 'keep-alive',
+                            'Content-Type': 'application/javascript',
+                            'Keep-Alive': 'timeout=5',
+                            'Transfer-Encoding': 'chunked'
+                        });
                         // TODO, mudar o sistema de returns
                         switch (returnCode) {
                             case -1:
@@ -150,95 +168,67 @@ const server = http.createServer(async function (request, response) {
             response.end();
             return;
         case "GET":
-            response.writeHead(200, { 'Access-Control-Allow-Origin': '*',
-                'Cache-Control': 'no-cache',
-                'Connection': 'keep-alive',
-                'Content-Type': 'text/event-stream', // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                'Keep-Alive': 'timeout=5',
-                'Transfer-Encoding': 'chunked'
-            });
+            if (url.substring(0, 7) != "/update") {
+                response.writeHead(404, {'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/javascript'
+                });
+                response.write(JSON.stringify({error: 'Invalid GET request URL'}));
+                response.end();
+                break;
+            }
 
-
-            let gameIndex, player1, player2;
+            let currentGameIndex, waitingQueueIndex, player1, player2, nick, game;
             let parsedUrl = parseUrl(url);
 
             if (parsedUrl == null) {
-                response.writeHead(400);
-                response.setHeader('Content-Type', 'application/javascript');
-                error = "Url incorrectly parsed";
-                responseBody = {error};
-                break;
-            } else { 
-                [nick, game] = parseUrl;
-                player1 = nick;
-                player2 = nick;
-                
-                // currentGames, waitingQueue;
-                gameIndex = Math.max(getIndex({player1, game}, currentGames), getIndex({player2, game}, currentGames));
-            }
-
-            if (gameIndex != -1) {
-                response.writeHead(400);
-                response.setHeader('Content-Type', 'application/javascript');
-                error = "Game not found";
-                responseBody = {error};
-                break;
-            } else { // All ok
-                console.log("Client opened connection");
-
-                const timer = setInterval(() => {
-                    if (successfulNotifyRequest) {
-                        successfulNotifyRequest = false;
-
-                        if (gameEndedByLeave) {
-                            responseBody = {winner};
-                            clearInterval(timer);
-                            gameEndedByLeave = false;
-                        } 
-                        else if (gameEndedByPlay) {
-                            responseBody = {winner, board};
-                            clearInterval(timer);
-                            gameEndedByPlay = false;
-                        } 
-                        else 
-                            responseBody = {board, score, turn}; //TODO mudar estrutura disto para como eles fizeram
-                        
-                        res.write(JSON.stringify(responseBody)); //TODO mudar responseBody para data? porque sse.onmessage(response) lê response.data
-                    }
-                  }, 1000);
-
-                request.on('close', () => {
-                    console.log("Client closed connection");
-                    res.end(); 
+                response.writeHead(400, {'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/javascript'
                 });
+                response.write(JSON.stringify({error: "Url incorrectly parsed"}));
+                break;
+            }  
+
+            [nick, game] = parsedUrl;
+            player1 = nick;
+            player2 = nick;
+                        
+            currentGameIndex = Math.max(getIndex({player1, game}, currentGames), getIndex({player2, game}, currentGames));
+            waitingQueueIndex = getIndex({nick, game}, waitingQueue);
+
+            if (currentGameIndex == -1 && waitingQueueIndex == -1) { // If not found in neither
+                response.writeHead(400, { 'Access-Control-Allow-Origin': '*',
+                    'Cache-Control': 'no-cache',
+                    'Connection': 'keep-alive',
+                    'Content-Type': 'application/javascript',
+                    'Transfer-Encoding': 'chunked'
+                });
+                if (!response.writableEnded) response.write(JSON.stringify({error: "Game not found"})); 
+                response.end();
+                return;   
             }
 
+            response.writeHead(200, { 'Access-Control-Allow-Origin': '*',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+                'Content-Type': 'text/event-stream',
+                'Transfer-Encoding': 'chunked'
+            });
 
-            response.write(JSON.stringify(responseBody));
-            response.end();
-            return;
+            if (currentGameIndex == -1) { // If found in waiting queue
+                waitingQueue[waitingQueueIndex].p1Resp = response;
+            }
+            else { // If found in current games
+                currentGames[currentGameIndex].p2Resp = response;
+                sendUpdateResponse(currentGameIndex);
+            }
+            break;
         default:
-            console.log("Wrong method called");
-            response.writeHead(400);
-            // TODO, deal with this
-            responseBody = {error};
+            response.writeHead(404);
+            response.write(JSON.stringify({error: "Unknown request"})); 
+            response.end();
             return;
     }
 
-    // Sending html file as response
-    /*
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    fs.readFile('index.html', function(error, data) {
-        if (error) {
-            res.writeHead(404);
-            res.write('Error: File Not Found');
-        }
-        else {
-            res.write(data);
-        }
-        res.end();
-    });
-    */
 });
 
 function processRegisterRequest(body) {
@@ -255,48 +245,41 @@ function processRegisterRequest(body) {
 function processJoinRequest(body) {
     const {size, initial, group, nick} = body;
 
-    if (!processRegisterRequest(body)) return "Invalid nick and password combination";  
+    if (!processRegisterRequest(body)) return "User registered with a different password";  
     if (!Number.isInteger(size)) return "Invalid size input";
     if (size < 2 || size > 6) return "Invalid size input";
     if (!Number.isInteger(initial)) return "Invalid initial input";
     if (initial < 1 || initial > 4) return "Invalid initial input";
     if (!Number.isInteger(group)) return "Invalid group input";
 
-    let game = "";
-    for (let i = 0; i < 32; i++) {
-        let randomByte = Math.floor(Math.random()*16);
-        game += randomByte.toString(16);
-    }
-
+    let game;
     let queueIndex = getIndex( {size, initial, group} , waitingQueue);
-    if (queueIndex != -1) {
-        game = waitingQueue[queueIndex].game;
-        let player1 = waitingQueue[queueIndex].nick;
-        let player2 = nick;
-        
-        let board = Array(size).fill(initial);
+    if (queueIndex != -1) { // If match was found
+        let gameInfo = waitingQueue[queueIndex];
+
+        game = gameInfo.game;
+        let board = Array(size*2).fill(initial);
         let score = Array(2).fill(0);
+        let player1 = gameInfo.nick;
+        let player2 = nick;
+        let p1Resp = gameInfo.p1Resp;
         let turn = player1;
 
-        // TODO, send SSE
-
         waitingQueue.splice(queueIndex, 1);
-        currentGames.push( {game, player1, player2, board, score, turn} );
+        currentGames.push({game, board, score, turn, player1, player2, p1Resp});
+
     }
-    else waitingQueue.push( {size, initial, group, nick, game} );
+    else {
+        game = crypto.createHash('md5').update(Date.now().toString()).digest('hex');
+        waitingQueue.push({size, initial, group, nick, game: hash});
+    }
 
     return game;
 
 }
 
 function processNotifyRequest(body) {
-
-    // {x, y} = foo;
-    // Is the equivalent to:
-    // x = foo.x;
-    // y = foo.y;
-
-    const {nick, game, move} = body;
+    let {nick, game, move} = body;
     let player1 = nick, player2 = nick;
 
     //TODO, mudar o sistema de returns 
@@ -314,49 +297,52 @@ function processNotifyRequest(body) {
     player1 = currentGame.player1;
     player2 = currentGame.player2;
 
+
     if (turn != nick) return -4; // Not your turn
     if (!(move in board)) return -5; // Pit index out of bound
-    if (board[move] == 0) return -6; // Empty pit
 
     let isPlayer1 = (nick == player1);
+    if (!isPlayer1) move += board.length/2;
 
-    if (isPlayer1) {
-        if (turn >= board.length/2) return -7; // Pit not on player side
-    } else {
-        if (turn < board.length/2) return -7; // Pit not on player side
+    if (isPlayer1) { // 0..5
+        if (0 > move || move >= board.length/2) return -6; // Pit not on player side
+    } else { // 6..11
+        if (board.length/2 > move || move > board.length) return -6; // Pit not on player side
     }
+    if (board[move] == 0) return -7; // Empty pit
 
-    // TODO continuar aqui
-    [board, score, isPlayer1] = executePlay(move, board, score, isPlayer1);
-    currentGames[gameIndex][board] = board; // TODO usar . ou [] ??
-    currentGames[gameIndex][score] = score; // TODO usar . ou [] ??
-    currentGames[gameIndex][turn] = isPlayer1 ? player1 : player2; // TODO usar . ou [] ??
+    [currentGame.board, currentGame.score, isPlayer1] = executePlay(move, board, score, isPlayer1);
+    currentGame.turn = isPlayer1 ? player1 : player2;
 
-    //TODO, send SSE
-    successfulNotifyRequest = true;
-    /*
-    eventEmitter.emit('updateGame', currentGame, nick, move);
-
-    if (isGameFinished(board, score, isPlayer1)) {
-        eventEmitter.emit('finishGame', currentGame);
-        //TODO, Remover listeners dos eventEmitter
-    }
-    */
+    sendUpdateResponse(gameIndex, move);
+    return 0;
 }
 
 function processLeaveRequest(body) {
-    const {game} = body;
+    const {nick, game} = body;
 
     //TODO, mudar o sistema de returns 
-    if (!processRegisterRequest(body)) return -1;
+    if (!processRegisterRequest(body)) return -1; // Invalid username/password combination
 
-    let gameIndex = getIndex( {game} , currentGames);
+    let queueIndex = getIndex( {game} , waitingQueue);
+    if (queueIndex != -1) {
+        waitingQueue[queueIndex].p1Resp.write(`data: ${JSON.stringify({winner: null})}\n\n`);
+        waitingQueue.splice(queueIndex, 1);
+        return 0;
+    }
+
+    let gameIndex = getIndex( {game}, currentGames);
     if (gameIndex != -1) {
-        // TODO, send SSE
+        let {player1, player2, p1Resp, p2Resp} = currentGames[gameIndex];
+        let winner = (nick == player1 ? {winner: player2} : {winner: player1});
+
+        p1Resp.write(`data: ${JSON.stringify(winner)}\n\n`);
+        p2Resp.write(`data: ${JSON.stringify(winner)}\n\n`);
+
         currentGames.splice(gameIndex, 1);
         return 0;
     }
-    return -2;
+    return -2; // Game not found
 }
 
 function getIndex(object, array) {
@@ -387,7 +373,7 @@ function parseUrl(url) {
 
     if (url.substring(0, 6) != "&game=") return;
 
-    return [nick, url.slice(6)];
+    return [name, url.slice(6)];
 }
 
 function executePlay(cavityIndex, b, s, isPlayer1) {
@@ -447,49 +433,49 @@ function isGameFinished(b, s, isPlayer1) {
         if (b[i+j] != 0)
             return false;
 
-    //TODO somo o board aqui?
-
     return true;
 }
 
+function sendUpdateResponse(currentGameIndex, cavityIndex) {
+    let {p1Resp, p2Resp, board, score, turn, player1, player2} = currentGames[currentGameIndex];
 
-let eventEmitter = new events.EventEmitter();
+    let boardCopy = board;
 
-/*
-TODO: descobrir onde por estes headers
-Access-Control-Allow-Origin: *
-Cache-Control: no-cache
-Connection: keep-alive
-Content-Type: text/event-stream
-*/
+    let stores = {};
+    stores[player1] = score[0];
+    stores[player2] = score[1];
 
-//TODO VER SE É PARA APAGAR ISTO OU NAO
-eventEmitter.on('updateGame', function (currentGame, nick, move) {
-    console.log('updateBoard event emitter called');
-    let {player1, player2, board, score, turn} = currentGame;
-    let isPlayer1 = (nick == player1);
+    let sides = {};
+    sides[player1] = {store: score[0], pits: board.slice(0, board.length/2)};
+    sides[player2] = {store: score[1], pits: board.slice(-board.length/2)};
 
-    [board, score, isPlayer1] = executePlay(move, board, score, isPlayer1);
-    currentGame[board] = board; //TODO usar . ou [] ??
-    currentGame[score] = score; //TODO usar . ou [] ??
-    currentGame[turn] = isPlayer1 ? player1 : player2; //TODO usar . ou [] ??
+    board = {turn: turn, sides: sides};
 
-    //TODO como mandar para os listeners a mensagem e os headers
-});
 
-eventEmitter.on('finishGame', function (currentGame) {
-    console.log('finishGame event emitter called');
-    let {player1, player2, board, score} = currentGame;
-    let winner;
+    let data = {board, stores};
+    if (arguments.length > 1) data.pit = cavityIndex;
 
-    if (score[0] > score[1]) winner = player1;
-    else if (score[1] > score[0]) winner = player2;
-    else winner = null;
-
-    if (winner) {
-        //TODO add to leaderboard if good score
+    var gameEnded = isGameFinished(boardCopy, score, (turn == player1));
+    if (gameEnded){
+        if (score[0] > score [1]) {
+            data.winner = player1;
+        }
+        else if (score[1] > score[0]) {
+            data.winner = player2;
+        }
+        else data.winner = null;
     }
-})
+    // {"board":{"turn":"edgar","sides":{"edgar":{"store":0,"pits":[4,4,4,4,4,4]},"sofia":{"store":0,"pits":[4,4,4,4,4,4]}}},"stores":{"edgar":0,"sofia":0}}
+    
+    p1Resp.write(`data: ${JSON.stringify(data)}\n\n`);
+    p2Resp.write(`data: ${JSON.stringify(data)}\n\n`);
+
+    if (gameEnded) {
+        p1Resp.end();
+        p2Resp.end();
+        currentGames.splice(currentGameIndex, 1);
+    }
+}
 
 
 server.listen(port, function(error) {
@@ -498,3 +484,23 @@ server.listen(port, function(error) {
     else 
         console.log("Listening on port " + port);
 });
+
+function arrayToFile(file, array, flag) {
+    let stream = fs.createWriteStream(file, {flags: flag});
+    stream.write('[');
+    array.forEach(item => stream.write(JSON.stringify(item)+'\n'));
+    stream.write(']');
+    stream.end();
+}
+
+server.on('close', () => {
+    // Erases file content when called
+    arrayToFile('loginCredentials.txt', loginCredentials, 'w'); // Erases file content when called
+    arrayToFile('waitingQueueLog.txt', waitingQueue, 'ax'); // Appends to file, fails if file doesnt exist
+    arrayToFile('gameLog.txt', currentGames, 'ax'); // Appends to file, fails if file doesnt exist
+});
+
+// Ensures data is written to files before exiting
+process.on('exit', exitHandler.bind(null, {cleanup:true}));
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));

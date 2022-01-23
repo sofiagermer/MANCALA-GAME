@@ -23,6 +23,8 @@ var ui;
 var score;
 var roundCounter; //TODO usar isto
 var isPlayerTurn;
+var serverUrl = "http://127.0.0.1:9028";
+//var serverUrl = "http://twserver.alunos.dcc.fc.up.pt:8008";
 
 /* --------------------------------------------------- */
 /*Auxiliar Functions to show/hide HTML elements*/
@@ -680,8 +682,8 @@ function register(hideID, showID) {
 
 
 const sendHttpRequest = (request, url, data) => {
-    return fetch('http://twserver.alunos.dcc.fc.up.pt:8008/'+ url, {
-    //return fetch('http://127.0.0.1:9028/'+ url, {
+    //return fetch('http://twserver.alunos.dcc.fc.up.pt:8008/'+ url, {
+    return fetch(serverUrl+'/'+ url, {
         method: request,
         body: JSON.stringify(data),
         headers: data ? {'Content-Type': 'application/json'} :  {}
@@ -753,16 +755,13 @@ const sendRegister = (hideID, showID) => {
 
 const endGame = (responseData) => {
     var gameEndedMessage;
-    if ("board" in responseData && responseData.winner == null)
-        gameEndedMessage = "Draw!";
-    else if ("board" in responseData)
-        gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
 
-    if (gameEndedMessage) {
-        alert(gameEndedMessage);
-        showPostGameMenu();
-    }
-    
+    if (responseData.winner != null)
+        gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
+    else if ("board" in responseData)
+        gameEndedMessage = "Draw!";
+
+    if (gameEndedMessage) alert(gameEndedMessage);
     clearBoard();
     hide('playZone');
     showFlex('beforePlay');
@@ -770,8 +769,7 @@ const endGame = (responseData) => {
 
 // Server-Sent Events com GET e dados urlencoded
 const sendUpdate = () => {
-    let sse = new EventSource('http://twserver.alunos.dcc.fc.up.pt:8008/update?nick='+nickInput+'&game='+token);
-    //let sse = new EventSource('http://127.0.0.1:9028/update?nick='+nickInput+'&game='+token);
+    let sse = new EventSource(serverUrl+'/update?nick='+nickInput+'&game='+token);
     sse.onmessage = response => {
         console.log("Received update from server");
         var responseData = JSON.parse(response.data);
@@ -804,7 +802,8 @@ const sendUpdate = () => {
         drawBoard();
     };
     sse.onerror = error => {
-        sendErrorMessage(error, "receiving server update");
+        alert("Comunication with server terminated.");
+        sse.close();
     }; 
 };
 
