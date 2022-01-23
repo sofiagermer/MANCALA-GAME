@@ -64,7 +64,7 @@
                         </div>
                         <div class= "field" class = "noselect">
                             <label for="nickname">
-                                <b class = "noselect" >Nickname
+                                <b class = "noselect loginTitle" >Nickname
                                 </b>
                             </label>
                             <div class = "inputPlaceHolder">
@@ -74,7 +74,7 @@
                         </div>
                         <div class = "field" class = "noselect">
                             <label for="psw">
-                                <b  class = "noselect">
+                                <b  class = "noselect loginTitle">
                                     Password
                                 </b>
                             </label>
@@ -169,24 +169,6 @@
                     </div>
                 </div>
             </div>
-        
-            <!-- 
-            ########################################################################################
-            #                             Waiting For Player 2                                     #
-            ########################################################################################-->
-            
-
-            <div class = "MancalaBox" id= "waitingForPlayer">
-                <div class = "MancalaTitle">
-                    Wating For Player
-                </div>
-                <hr class = "AboutUsHR">
-                <div id = "waitingLogoDIv">
-                    <div id = "waitinglogo">
-                        <img src = "images/logos/logoBranco.png" class = "imgLogo"> 
-                    </div>
-                </div>
-            </div>
 
             <div id= "playZone">
 
@@ -205,6 +187,23 @@
                     <!--<button id = "leaveQueue" onclick= "sendLeave()">
                         Leave Queue
                     </div>-->
+
+
+                <!-- 
+                ########################################################################################
+                #                             Waiting For Player 2                                     #
+                ########################################################################################-->
+                <div class = "MancalaBox" id= "waitingForPlayer">
+                    <div class = "MancalaTitle">
+                        Wating For Player
+                    </div>
+                    <hr class = "AboutUsHR">
+                    <div id = "waitingLogoDIv">
+                        <div id = "waitinglogo">
+                            <img src = "images/logos/logoBranco.png" class = "imgLogo"> 
+                        </div>
+                    </div>
+                </div>
                 <!-- 
                 ########################################################################################
                 #                                      Board                                          #
@@ -231,6 +230,59 @@
                     Not your turn to play
                 </div>
             </div>
+
+                <!-- 
+                ########################################################################################
+                #                                 Winner Page                                          #
+                ########################################################################################
+                -->
+                <div class = "MancalaBox" id = "WinnerPage">
+                    <div class = "MancalaTitle">
+                        You Won
+                    </div>
+                    <hr class = "AboutUsHR">
+                        Congratuations :)
+                    <div class = "AboutUsDivButton">
+                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','WinnerPage')">
+                            Play Again
+                        </div>
+                    </div>
+                </div>
+
+                            <!-- 
+                ########################################################################################
+                #                                 Loser Page                                          #
+                ########################################################################################
+                -->
+                <div class = "MancalaBox" id = "LoserPage">
+                    <div class = "MancalaTitle">
+                        You Lost
+                    </div>
+                    <hr class = "AboutUsHR">
+                        Nex Time you'll win ;) 
+                    <div class = "AboutUsDivButton">
+                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','LoserPage')">
+                            Play Again
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 
+                ########################################################################################
+                #                                  Draw Page                                          #
+                ########################################################################################
+                -->
+                <div class = "MancalaBox" id = "DrawPage">
+                    <div class = "MancalaTitle">
+                        This is a Draw
+                    </div>
+                    <hr class = "AboutUsHR">
+                    <div class = "AboutUsDivButton">
+                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','DrawPage')">
+                            Play Again
+                        </div>
+                    </div>
+                </div>
          </div>
     </div>
 
