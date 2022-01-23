@@ -615,11 +615,11 @@ function showRanking(ranking) {
         var playedGames = document.createElement("div");
         playedGames.className = "rankingInfoParam";
         playedGames.innerHTML =  "Played Games: "+ranking[i].playedGames;
-
         info.appendChild(nick);
         info.appendChild(victories);
         info.appendChild(playedGames);
         row.appendChild(info);
+        
         document.getElementById("MancalaRanking").appendChild(row);
         document.getElementById("MancalaRanking").innerHTML = "";
     }
