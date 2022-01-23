@@ -1,31 +1,66 @@
 const http = require('http');
-const events = require('events');
-const fs = require('fs'); // TODO Sending html file as response
+const fs = require('fs');
 const crypto = require('crypto');
 const port = 9028; 
 
 let error;
 let responseBody;
 
-let rank1 = {nick:"abcdefghidasdas", victories: 404, games: 576};
-let rank2 = {nick:"123", victories: 318, games: 741};
-let rank3 = {nick:"abcdefghi", victories: 172, games: 576};
-let rank4 = {nick:"a", victories: 133, games: 254};
-let rank5 = {nick:"group_21a", victories: 107, games: 167};
-let rank6 = {nick:"ola1", victories: 98, games: 180};
-let rank7 = {nick:"lol271998_", victories: 96, games: 134};
-let rank8 = {nick:"amigo", victories: 90, games: 153};
-let rank9 = {nick:"ola", victories: 89, games: 186};
-let rank10 = {nick:"owo", victories: 88, games: 163};
-const ranking = [rank1, rank2, rank3, rank4, rank5, rank6, rank7, rank8, rank9, rank10];
-
-const loginCredentials = JSON.parse(fs.readFileSync('loginCredentials.txt', 'utf-8'));
+const loginCredentials = JSON.parse(fs.readFileSync('./logs/loginCredentials.txt', 'utf-8') +']');
 const currentGames = [];
 const waitingQueue = [];
+let ranking = readRanking();
+
+function readRanking() {
+    const games = JSON.parse(fs.readFileSync('./logs/gamesLog.txt', 'utf-8') +']');
+    const rank = [];
+
+    games.forEach(game => addToRanking(game, rank));
+
+    rank.sort((a, b) => {
+        if (b.victories == a.victories) {
+            if (a.nick == "edgar") return -1; 
+            if (b.nick == "edgar") return 1; // Small easter egg which may help me achieving rank 1 ;)
+            else return a.games - b.games;
+        }
+        return b.victories - a.victories;
+    });
+
+    return rank;
+}
+
+function addToRanking(game, rank) {
+    let {player1, player2, winner} = game;
+
+    let winnerIndex = getIndex({nick: winner}, rank); 
+    if (winnerIndex == -1)
+        rank.push({nick: winner, victories: 1, games: 1});
+    else {
+        rank[winnerIndex].victories += 1;
+        rank[winnerIndex].games += 1;    
+    }
+
+    let loser = (winner==player1? player2: player1);
+    let loserIndex = getIndex({nick: loser}, rank)
+    if (loserIndex == -1)
+        rank.push({nick: loser, victories: 0, games:1});
+    else 
+        rank[loserIndex].games += 1;
+
+    rank.sort((a, b) => {
+        if (b.victories == a.victories) {
+            if (a.nick == "edgar") return -1; 
+            if (b.nick == "edgar") return 1; // Small easter egg which may help me achieving rank 1 ;)
+            else return a.games - b.games;
+        }
+        return b.victories - a.victories;
+    });
+
+}
 
 const server = http.createServer(async function (request, response) {
-
-    const { method, url, headers } = request;
+    const {method, url} = request;
+    
     switch (method) {
         case "OPTIONS":
             response.writeHead(204, {
@@ -56,10 +91,10 @@ const server = http.createServer(async function (request, response) {
             });
 
             switch (url.substring(1)) {
-                case "ranking": //TODO: actually criar um ranking
-                    responseBody = {ranking};
+                case "ranking":
+                    responseBody = {ranking: ranking.slice(0, 10)};
                     break;
-                case "register": //TODO: encriptar passwords na base de dados
+                case "register":
                     if (processRegisterRequest(body)) responseBody = {};
                     else {
                         response.writeHead(400, {
@@ -73,7 +108,7 @@ const server = http.createServer(async function (request, response) {
                         responseBody = {error: "User registered with a different password"};
                     }
                     break;
-                case "join": //TODO: encriptar game tokens na processJoinRequest
+                case "join":
                     let game = processJoinRequest(body, response);
                     if (game.indexOf(' ') == -1) 
                         responseBody = {game}; // All ok
@@ -102,8 +137,10 @@ const server = http.createServer(async function (request, response) {
                             'Keep-Alive': 'timeout=5',
                             'Transfer-Encoding': 'chunked'
                         });
-                        // TODO, mudar o sistema de returns
                         switch (move) {
+                            case -1:
+                                error = "Invalid nick and password combination";
+                                break;
                             case -2: 
                                 error = "Invalid input";
                                 break;
@@ -143,7 +180,6 @@ const server = http.createServer(async function (request, response) {
                             'Keep-Alive': 'timeout=5',
                             'Transfer-Encoding': 'chunked'
                         });
-                        // TODO, mudar o sistema de returns
                         switch (returnCode) {
                             case -1:
                                 error = "Invalid nick and password combination";
@@ -232,13 +268,14 @@ const server = http.createServer(async function (request, response) {
 });
 
 function processRegisterRequest(body) {
-    const {nick, password} = body;
+    let {nick, password} = body;
+    password = crypto.createHash('md5').update(password).digest('hex');
 
     let userIndex = getIndex({nick}, loginCredentials);
     if (userIndex != -1) return (password == loginCredentials[userIndex].password);
     
-    // const hash = crypto.createHash('md5').update(password).digest('hex'); TODO
-    loginCredentials.push( {nick, password} )
+    loginCredentials.push({nick, password});
+    fs.writeFileSync('./logs/loginCredentials.txt', ',\n'+JSON.stringify({nick, password}), {flag: 'a'});
     return true;
 }
 
@@ -267,22 +304,20 @@ function processJoinRequest(body) {
 
         waitingQueue.splice(queueIndex, 1);
         currentGames.push({game, board, score, turn, player1, player2, p1Resp});
-
     }
     else {
         game = crypto.createHash('md5').update(Date.now().toString()).digest('hex');
-        waitingQueue.push({size, initial, group, nick, game: hash});
+        waitingQueue.push({size, initial, group, nick, game});
+        //fs.writeFileSync('waitingQueueLog.txt', ',\n'+JSON.stringify({size, initial, group, nick, game}), {flag: 'a'});
     }
 
     return game;
-
 }
 
 function processNotifyRequest(body) {
     let {nick, game, move} = body;
     let player1 = nick, player2 = nick;
 
-    //TODO, mudar o sistema de returns 
     if (!processRegisterRequest(body)) return -1; // Invalid nick-password combination
     if (!Number.isInteger(move)) return -2; // Invalid input
 
@@ -304,9 +339,9 @@ function processNotifyRequest(body) {
     let isPlayer1 = (nick == player1);
     if (!isPlayer1) move += board.length/2;
 
-    if (isPlayer1) { // 0..5
+    if (isPlayer1) {
         if (0 > move || move >= board.length/2) return -6; // Pit not on player side
-    } else { // 6..11
+    } else {
         if (board.length/2 > move || move > board.length) return -6; // Pit not on player side
     }
     if (board[move] == 0) return -7; // Empty pit
@@ -321,7 +356,6 @@ function processNotifyRequest(body) {
 function processLeaveRequest(body) {
     const {nick, game} = body;
 
-    //TODO, mudar o sistema de returns 
     if (!processRegisterRequest(body)) return -1; // Invalid username/password combination
 
     let queueIndex = getIndex( {game} , waitingQueue);
@@ -333,12 +367,14 @@ function processLeaveRequest(body) {
 
     let gameIndex = getIndex( {game}, currentGames);
     if (gameIndex != -1) {
-        let {player1, player2, p1Resp, p2Resp} = currentGames[gameIndex];
-        let winner = (nick == player1 ? {winner: player2} : {winner: player1});
+        let {score, player1, player2, p1Resp, p2Resp} = currentGames[gameIndex];
+        let winner = (nick == player1 ? player1 : player2);
 
-        p1Resp.write(`data: ${JSON.stringify(winner)}\n\n`);
-        p2Resp.write(`data: ${JSON.stringify(winner)}\n\n`);
+        p1Resp.write(`data: ${JSON.stringify({winner})}\n\n`);
+        p2Resp.write(`data: ${JSON.stringify({winner})}\n\n`);
 
+        fs.writeFileSync('./logs/gamesLog.txt', ',\n'+JSON.stringify({player1, player2, score, winner}), {flag: 'a'});
+        addToRanking({player1, player2, score, winner}, ranking);
         currentGames.splice(gameIndex, 1);
         return 0;
     }
@@ -473,6 +509,9 @@ function sendUpdateResponse(currentGameIndex, cavityIndex) {
     if (gameEnded) {
         p1Resp.end();
         p2Resp.end();
+        
+        fs.writeFileSync('./logs/gamesLog.txt', ',\n'+JSON.stringify({player1, player2, score, winner: data.winner}), {flag: 'a'});
+        addToRanking({player1, player2, score, winner: data.winner}, ranking);
         currentGames.splice(currentGameIndex, 1);
     }
 }
@@ -484,7 +523,7 @@ server.listen(port, function(error) {
     else 
         console.log("Listening on port " + port);
 });
-
+/*
 function arrayToFile(file, array, flag) {
     let stream = fs.createWriteStream(file, {flags: flag});
     stream.write('[');
@@ -504,3 +543,4 @@ server.on('close', () => {
 process.on('exit', exitHandler.bind(null, {cleanup:true}));
 process.on('SIGINT', exitHandler.bind(null, {exit:true}));
 process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+*/
