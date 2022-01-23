@@ -1,0 +1,4 @@
+[{"player1":"edgar","player2":"sofia","score":[25,10],"winner":"edgar"},
+{"player1":"edgar","player2":"sofia","score":[17,23],"winner":"sofia"},
+{"player1":"sofia","player2":"edgar","score":[26,11],"winner":"sofia"},
+{"player1":"edgar","player2":"sofia","score":[25,20],"winner":"edgar"}

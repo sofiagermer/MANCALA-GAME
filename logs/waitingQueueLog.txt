@@ -1,0 +1,3 @@
+[{"size":6,"initial":4,"group":2725,"nick":"edgar","game":"d730060d9811d2fcd00ff773fdef658c"},
+{"size":6,"initial":4,"group":2725,"nick":"sofia","game":"e6dff86f37a9692797fa14fb84aa9433"},
+{"size":6,"initial":4,"group":2725,"nick":"sofia","game":"2bf02e9c3068e6f87ddf2ebbc9ae8047"}
