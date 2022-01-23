@@ -780,20 +780,21 @@ const endGame = (responseData) => {
         //gameEndedMessage = (responseData.winner == nickInput) ? "You won!" : "You lost!";
         //alert(gameEndedMessage);
         if(responseData.winner == nickInput){
-            console.log("estou aqui");
             hide("playZone");
             hide("beforePlay");
             showFlex("WinnerPage");
         }
         else{
-            console.log("estou aqui");
             hide("playZone");
             hide("beforePlay");
             showFlex("LoserPage");
         }
     }
-    else if ("board" in responseData)
-        gameEndedMessage = "Draw!";
+    else if ("board" in responseData){
+        hide("playZone");
+        hide("beforePlay");
+        showFlex("DrawPage");
+    }
 
     clearBoard();
 };

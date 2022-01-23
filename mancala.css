@@ -823,13 +823,16 @@ footer {
 /* ==================================== */
 
 /* WINNER PAGE */
-
 #WinnerPage{
     display: none;
 }
 
 /* LOSER PAGE */
-
 #LoserPage{
+    display: none;
+}
+
+/* LOSER PAGE */
+#DrawPage{
     display: none;
 }
