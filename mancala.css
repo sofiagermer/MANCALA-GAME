@@ -160,7 +160,7 @@ body{
     object-fit: contain;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password],textarea {
     outline: none;
     border: none;
     width: 85%;
@@ -318,6 +318,7 @@ input[type=text], input[type=password] {
 
 #waitingForPlayer{
     display: none;
+    margin-top: 30px;
 }
 
 #waitingLogoDIv{
@@ -625,7 +626,7 @@ input[type=text], input[type=password] {
 .MancalaPage{
     display: flex;
     flex-direction: column;
-    padding-top: 100px;
+    padding-top: 6%;
     justify-content: space-around;
     width:100%
 }
