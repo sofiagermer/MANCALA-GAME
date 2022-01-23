@@ -54,11 +54,12 @@
    ########################################################################################
     -->
     <div id="Play" class="tabcontent">
-        <!-- 
+        <div class = "MancalaPage" id = "LoginPage">
+
+            <!-- 
         ########################################################################################
         #                                      Login                                           #
         ########################################################################################-->
-        <div class = "MancalaPage" id = "LoginPage">
             <div id = "caixaLogin" class = "MancalaBox noselect">
                 <div id = "logo">   
                     <img src = "logoBranco.png" class = "imgLogo"> 
@@ -83,8 +84,8 @@
                                 <input id="passwordInput" type="password" placeholder="············"></input>
                             </div>
                         </div>
-                        <button class= "button" id="register-btn" onclick= "register()">REGISTER</button>
-                        <button id="ranking-btn">RANKING Button</button>
+                        <button class= "button" id="register-btn" onclick= "register('LoginPage', 'beforePlay')">REGISTER</button>
+                        <!-- <button id="ranking-btn">RANKING Button</button> -->
                     </div>
                 </div>
             </div>
@@ -93,8 +94,8 @@
         ########################################################################################
         #                               Board Options                                           #
         ########################################################################################-->
-        <div class = "MancalaPage">
-            <div class = "MancalaBox" id= "beforePlay">
+
+            <div class = "MancalaBox " id= "beforePlay">
                 <div id="caixaPlay">
                     <div class="arrowDiv" onclick="previousPlayOption()">
                         <div class = "arrow-left">
@@ -167,10 +168,12 @@
                     </div>
                 </div>
             </div>
+        
          <!-- 
         ########################################################################################
         #                             Waiting For Player 2                                     #
         ########################################################################################-->
+        
 
         <div class = "MancalaBox" id= "waitingForPlayer">
             <div class = "MancalaTitle">
@@ -183,46 +186,49 @@
                 </div>
             </div>
         </div>
-        <div id = "playZone">
-        <!-- 
-        ########################################################################################
-        #                                Give up Game                                          #
-        ########################################################################################-->
-        <div id = "giveUpDiv">
-            <div id = "giveUpContent"  onclick = "sendLeave()">
-                <i class="fas fa-times noselect" id= "giveupIcon"></i>
-                <div id = "giveupTitle" class ="noselect">
-                    QUIT GAME
+
+        <div class = "MancalaBox" id= "playZone">
+
+            <!-- 
+            ########################################################################################
+            #                                Give up Game                                          #
+            ########################################################################################-->
+            <div id = "giveUpDiv">
+                <div id = "giveUpContent"  onclick = "sendLeave()">
+                    <i class="fas fa-times noselect" id= "giveupIcon"></i>
+                    <div id = "giveupTitle" class ="noselect">
+                        QUIT GAME
+                    </div>
                 </div>
             </div>
-        </div>
-            <!--<button id = "leaveQueue" onclick= "sendLeave()">
-                Leave Queue
-            </div>-->
-        <!-- 
-        ########################################################################################
-        #                                      Board                                          #
-        ########################################################################################-->
-        <div id="zonaTabuleiro" class="noselect"> 
-        </div>
+                <!--<button id = "leaveQueue" onclick= "sendLeave()">
+                    Leave Queue
+                </div>-->
+            <!-- 
+            ########################################################################################
+            #                                      Board                                          #
+            ########################################################################################-->
+            <div id="zonaTabuleiro" class="noselect"> 
+            </div>
 
-        <!-- 
-        ########################################################################################
-        #                                    Messages                                          #
-        ########################################################################################
-        -->
-        
-        <div id = "MessagesDiv1" class = "MessagesDiv noselect">
-            Not your turn to play
-        </div>
+            <!-- 
+            ########################################################################################
+            #                                    Messages                                          #
+            ########################################################################################
+            -->
+            
+            <div id = "MessagesDiv1" class = "MessagesDiv noselect">
+                Not your turn to play
+            </div>
 
-        
-        <div id = "MessagesDiv2" class = "MessagesDiv noselect">
-            Invalid start position
-        </div>
+            
+            <div id = "MessagesDiv2" class = "MessagesDiv noselect">
+                Invalid start position
+            </div>
 
-        <div id = "MessagesDiv3" class = "MessagesDiv noselect">
-            Not your turn to play
+            <div id = "MessagesDiv3" class = "MessagesDiv noselect">
+                Not your turn to play
+            </div>
         </div>
     </div>
 
