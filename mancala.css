@@ -371,7 +371,7 @@ input[type=text], input[type=password] {
     width: 20px;
     height: 28px;
     border-radius: 50%;
-    background-image: url(seed.webp);
+    background-image: url(images/seed.webp);
     margin-left: 4px;
     margin-right: 4px;
     margin-top: 4px;
@@ -428,7 +428,7 @@ input[type=text], input[type=password] {
     flex-flow: column;
     justify-content: space-around;
     border-radius: 30px;
-    background-image: url(wood.png);
+    background-image: url(images/wood.png);
     width: auto;
     margin-top: 30px;
     padding-left: 10%;
