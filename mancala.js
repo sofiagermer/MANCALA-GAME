@@ -713,12 +713,20 @@ const sendJoin = () => {
 
 
 const sendLeave = () => {
-    sendHttpRequest('POST', 'leave', {nick: nickInput, password: passwordInput, game: token})
-    .then(() => {
-        console.log("Success sending leave request");
-        token = 0;
-    })
-    .catch( error => alert("Error when leaving game : "+error.data));
+    if (singlePlayer) {
+        alert('You lost!');
+        clearBoard();
+        hide('playZone');
+        showFlex('beforePlay');
+    }
+    else {
+        sendHttpRequest('POST', 'leave', {nick: nickInput, password: passwordInput, game: token})
+        .then(() => {
+            console.log("Success sending leave request");
+            token = 0;
+        })
+        .catch( error => alert("Error when leaving game : "+error.data));
+    }
 };
 
 
