@@ -71,25 +71,31 @@
                             <hr>
                         </div>
                         <div class= "field" class = "noselect">
-                            <label for="nickname"><b class = "noselect" >Nickname</b></label>
+                            <label for="nickname">
+                                <b class = "noselect" >Nickname
+                                </b>
+                            </label>
                             <div class = "inputPlaceHolder">
                                 <i class="fas fa-envelope icon"></i>
                                 <input id="nameInput" type="text" placeholder="your nickname"></input>
                             </div>
                         </div>
                         <div class = "field" class = "noselect">
-                            <label for="psw"><b  class = "noselect">Password</b></label>
+                            <label for="psw">
+                                <b  class = "noselect">
+                                    Password
+                                </b>
+                            </label>
                             <div class = "inputPlaceHolder">
                                 <i class="login__icon fas fa-lock icon"></i>
                                 <input id="passwordInput" type="password" placeholder="············"></input>
                             </div>
                         </div>
-                        <button class= "button" id="register-btn" onclick= "register('LoginPage', 'beforePlay')">REGISTER</button>
+                        <button class= "button" id="register-btn" onclick= "register('caixaLogin', 'beforePlay')">REGISTER</button>
                         <!-- <button id="ranking-btn">RANKING Button</button> -->
                     </div>
                 </div>
             </div>
-        </div>
         <!-- 
         ########################################################################################
         #                               Board Options                                           #
@@ -169,67 +175,68 @@
                 </div>
             </div>
         
-         <!-- 
-        ########################################################################################
-        #                             Waiting For Player 2                                     #
-        ########################################################################################-->
-        
-
-        <div class = "MancalaBox" id= "waitingForPlayer">
-            <div class = "MancalaTitle">
-                Wating For Player
-            </div>
-            <hr class = "AboutUsHR">
-            <div id = "waitingLogoDIv">
-                <div id = "waitinglogo">
-                    <img src = "logoBranco.png" class = "imgLogo"> 
-                </div>
-            </div>
-        </div>
-
-        <div class = "MancalaBox" id= "playZone">
-
             <!-- 
             ########################################################################################
-            #                                Give up Game                                          #
+            #                             Waiting For Player 2                                     #
             ########################################################################################-->
-            <div id = "giveUpDiv">
-                <div id = "giveUpContent"  onclick = "sendLeave()">
-                    <i class="fas fa-times noselect" id= "giveupIcon"></i>
-                    <div id = "giveupTitle" class ="noselect">
-                        QUIT GAME
+            
+
+            <div class = "MancalaBox" id= "waitingForPlayer">
+                <div class = "MancalaTitle">
+                    Wating For Player
+                </div>
+                <hr class = "AboutUsHR">
+                <div id = "waitingLogoDIv">
+                    <div id = "waitinglogo">
+                        <img src = "logoBranco.png" class = "imgLogo"> 
                     </div>
                 </div>
             </div>
-                <!--<button id = "leaveQueue" onclick= "sendLeave()">
-                    Leave Queue
-                </div>-->
-            <!-- 
-            ########################################################################################
-            #                                      Board                                          #
-            ########################################################################################-->
-            <div id="zonaTabuleiro" class="noselect"> 
-            </div>
 
-            <!-- 
-            ########################################################################################
-            #                                    Messages                                          #
-            ########################################################################################
-            -->
-            
-            <div id = "MessagesDiv1" class = "MessagesDiv noselect">
-                Not your turn to play
-            </div>
+            <div class = "MancalaBox" id= "playZone">
 
-            
-            <div id = "MessagesDiv2" class = "MessagesDiv noselect">
-                Invalid start position
-            </div>
+                <!-- 
+                ########################################################################################
+                #                                Give up Game                                          #
+                ########################################################################################-->
+                <div id = "giveUpDiv">
+                    <div id = "giveUpContent"  onclick = "sendLeave()">
+                        <i class="fas fa-times noselect" id= "giveupIcon"></i>
+                        <div id = "giveupTitle" class ="noselect">
+                            QUIT GAME
+                        </div>
+                    </div>
+                </div>
+                    <!--<button id = "leaveQueue" onclick= "sendLeave()">
+                        Leave Queue
+                    </div>-->
+                <!-- 
+                ########################################################################################
+                #                                      Board                                          #
+                ########################################################################################-->
+                <div id="zonaTabuleiro" class="noselect"> 
+                </div>
 
-            <div id = "MessagesDiv3" class = "MessagesDiv noselect">
-                Not your turn to play
+                <!-- 
+                ########################################################################################
+                #                                    Messages                                          #
+                ########################################################################################
+                -->
+                
+                <div id = "MessagesDiv1" class = "MessagesDiv noselect">
+                    Not your turn to play
+                </div>
+
+                
+                <div id = "MessagesDiv2" class = "MessagesDiv noselect">
+                    Invalid start position
+                </div>
+
+                <div id = "MessagesDiv3" class = "MessagesDiv noselect">
+                    Not your turn to play
+                </div>
             </div>
-        </div>
+         </div>
     </div>
 
     <!-- 

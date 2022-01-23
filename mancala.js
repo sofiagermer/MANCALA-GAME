@@ -23,8 +23,8 @@ var ui;
 var score;
 var roundCounter; //TODO usar isto
 var isPlayerTurn;
-var serverUrl = "http://127.0.0.1:9028";
-//var serverUrl = "http://twserver.alunos.dcc.fc.up.pt:8008";
+//var serverUrl = "http://127.0.0.1:9028";
+var serverUrl = "http://twserver.alunos.dcc.fc.up.pt:8008";
 
 /* --------------------------------------------------- */
 /*Auxiliar Functions to show/hide HTML elements*/
@@ -807,4 +807,4 @@ const sendUpdate = () => {
     }; 
 };
 
-rankingBtn.addEventListener('click', sendRanking);
+//rankingBtn.addEventListener('click', sendRanking);
