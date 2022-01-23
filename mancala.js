@@ -63,7 +63,7 @@ function carousel() {
 function rotateLogo() {
     document.getElementById('waitinglogo').style.transform +='rotate('+0.5+'deg)';
     setTimeout(rotateLogo, 50); // Change image every 2 seconds
-  }
+}
 
   rotateLogo();
 /* --------------------------------------------------- */
@@ -278,6 +278,10 @@ function createHoleBaixo(id){
     }
 }
 
+function clearBoard(){
+    document.getElementById("zonaTabuleiro").innerHTML = "";
+}
+
 function drawBoard() {
     hide('waitingForPlayer');
     var tabuleiro = document.createElement("div");
@@ -454,12 +458,10 @@ function verifyScoring(cavityIndex, b, s) {
         }
     }
 }
-// invalid start position: 8
-// invalid empty pit: 3
 function isCavityValid(index, b, calledByPlayer) {
-    console.log("isCavityValid called!");
-
-    if (!calledByPlayer) return true; // Without this line, it was impossible to distinguish if user played outside his turn or if AI played in his turn
+    // Without this line, it was impossible to distinguish if user played outside his turn or if AI played in his turn
+    // AI called isCavityValid functions are always true because only preemptively valid cavities are called to be played
+    if (!calledByPlayer) return true;
 
     if (!isPlayerTurn) {
         //alert("Not your turn to play");
@@ -534,15 +536,12 @@ function executePlay (cavityIndex, b, s) {
 
         b[cavityIndex]++;
         lastCavityWasStorage = false;
-
     }
-    if (!lastCavityWasStorage) verifyScoring(cavityIndex, b, s);
-    switchTurn(lastCavityWasStorage);
-}
 
-function switchTurn(lastSeedOnStorage) {
-    if (!lastSeedOnStorage) 
+    if (!lastCavityWasStorage) {
+        verifyScoring(cavityIndex, b, s);
         isPlayerTurn = !isPlayerTurn; // switch turn
+    }
 }
 
 function isGameFinished(b, s) {
@@ -605,7 +604,13 @@ function setHighscores(highScores) {
 
 function showRanking(ranking) {
     for (var i = 0; i < ranking.length; i++) {
-
+        var row = document.createElement("div");
+        //row.className = "row"; // Isto tá aqui para dar style com css, TODO
+        var info = document.createElement("div");
+        //info.className = "name"; // Isto tá aqui para dar style com css, TODO
+        info.innerHTML = (i + 1)+"º place => Nickname: "+ranking[i].nick+". Wins: "+ranking[i].victories+". Games played: "+ranking[i].games+".";
+        row.appendChild(info);
+        document.getElementById("MancalaRanking").appendChild(row);
     }
 }
 
@@ -616,20 +621,6 @@ function updateClassifications(s) {
         // highScoreTable.innerHTML += "<tr><td>" + retrievedScores[i].name + "</td><td>" + retrievedScores[i].score + "</td></tr>";
     }
     
-}
-
-function viewScore(s) {
-    console.log("Scoring. Player 1: " + s[0] + ", Player 2: " + s[1] + '\n');
-}
-
-function viewBoard(b) {
-    for (var i = 0; i < numHoles; i++) {
-        console.log("board[" + i + "] = " + b[i]);
-    }
-}
-
-function clearBoard(){
-    document.getElementById("zonaTabuleiro").innerHTML = "";
 }
   
 async function startGame(hideID, showID) {
@@ -743,7 +734,7 @@ const sendRanking = () => {
     sendHttpRequest('POST', 'ranking', {})
     .then( responseData => {
         console.log("Success sending ranking request");
-        showRanking(responseData.ranking);
+        updateRanking(responseData.ranking);
     })
     .catch( error => alert("Error when retrieving rankings : "+error.data));
 };
@@ -783,7 +774,7 @@ const sendUpdate = () => {
         var responseData = JSON.parse(response.data);
 
         if ("winner" in responseData) {
-            sse.close(); //TODO saber se isto funciona
+            sse.close();
             endGame(responseData);
             return;
         }
@@ -815,4 +806,4 @@ const sendUpdate = () => {
     }; 
 };
 
-//rankingBtn.addEventListener('click', sendRanking);
+rankingBtn.addEventListener('click', sendRanking);
