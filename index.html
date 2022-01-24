@@ -20,7 +20,7 @@
     <div id= "navbar" class = "noselect">
         
         <div class = "navBarLogoDiv">
-          <img src = "images/logos/logo.png" class = "imgLogo" id = "navbarLogo" onclick="openPage('Play', 'navbarPlayButton', 'navbarRulesButton', 'navbarRankingButton', 'navbarAboutUsButton', this)">  
+          <img src = "images/logos/logo.png" alt = "Logo" class = "imgLogo" id = "navbarLogo" onclick="openPage('Play', 'navbarPlayButton', 'navbarRulesButton', 'navbarRankingButton', 'navbarAboutUsButton', this)">  
         </div> 
 
         <div id = "navBarButtons">
@@ -54,7 +54,7 @@
         ########################################################################################-->
             <div id = "caixaLogin" class = "MancalaBox noselect">
                 <div id = "logo">   
-                    <img src = "images/logos/logoBranco.png" class = "imgLogo"> 
+                    <img src = "images/logos/logoBranco.png" alt = "Logo Branco" class = "imgLogo"> 
                 </div>
                 <div id = "loginInfo">
                     <div id = "subLoginInfo">
@@ -62,32 +62,31 @@
                             SIGN UP TO PLAY MANCALA
                             <hr>
                         </div>
-                        <div class= "field" class = "noselect">
-                            <label for="nickname">
+                        <div class= "field">
+                            <label for="nickInput">
                                 <b class = "noselect loginTitle" >Nickname
                                 </b>
                             </label>
                             <div class = "inputPlaceHolder">
                                 <i class="fas fa-envelope icon"></i>
-                                <input id="nameInput" type="text" placeholder="your nickname"></input>
+                                <input id="nickInput" type="text" placeholder="your nickname">
                             </div>
                         </div>
-                        <div class = "field" class = "noselect">
-                            <label for="psw">
+                        <div class = "field">
+                            <label for="passwordInput">
                                 <b  class = "noselect loginTitle">
                                     Password
                                 </b>
                             </label>
                             <div class = "inputPlaceHolder">
                                 <i class="login__icon fas fa-lock icon"></i>
-                                <input id="passwordInput" type="password" placeholder="············"></input>
+                                <input id="passwordInput" type="password" placeholder="············">
                             </div>
                         </div>
                         <div id = "loginError">
                             
                         </div>
                         <button class= "button" id="register-btn" onclick= "register('caixaLogin', 'beforePlay')">REGISTER</button>
-                        <button id="ranking-btn">RANKING Button</button>
                     </div>
                 </div>
             </div>
@@ -137,7 +136,7 @@
                         </div>
                         
                         
-                    <div class = "playOptions" div id = "SinglePlayerOptions">
+                        <div class = "playOptions" id = "SinglePlayerOptions">
         
                             <h2 class="Title playTitle noselect">Who Starts?</h2>
         
@@ -158,10 +157,8 @@
                         
                         </div>
         
-                        <div class="playOptions" div id="StartPlaying">
-                            <div>
+                        <div class="playOptions" id="StartPlaying">
                                 <div class="button" onclick="startGame('beforePlay', 'playZone')">Start Playing</div>
-                            </div>
                         </div>
                     </div>
                     <div class="arrowDiv" onclick="nextPlayOption()" >
@@ -200,7 +197,7 @@
                     <hr class = "AboutUsHR">
                     <div id = "waitingLogoDIv">
                         <div id = "waitinglogo">
-                            <img src = "images/logos/logoBranco.png" class = "imgLogo"> 
+                            <img src = "images/logos/logoBranco.png" alt = "Logo Branco" class = "imgLogo"> 
                         </div>
                     </div>
                 </div>
@@ -243,7 +240,7 @@
                     <hr class = "AboutUsHR">
                         Congratuations :)
                     <div class = "AboutUsDivButton">
-                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','WinnerPage')">
+                        <div class = "AboutUsButton" onclick = "goToRegister('caixaLogin','WinnerPage')">
                             Play Again
                         </div>
                     </div>
@@ -261,7 +258,7 @@
                     <hr class = "AboutUsHR">
                         Next Time you'll win ;) 
                     <div class = "AboutUsDivButton">
-                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','LoserPage')">
+                        <div class = "AboutUsButton" onclick = "goToRegister('caixaLogin','LoserPage')">
                             Play Again
                         </div>
                     </div>
@@ -278,7 +275,7 @@
                     </div>
                     <hr class = "AboutUsHR">
                     <div class = "AboutUsDivButton">
-                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','DrawPage')">
+                        <div class = "AboutUsButton" onclick = "goToRegister('caixaLogin','DrawPage')">
                             Play Again
                         </div>
                     </div>
@@ -573,13 +570,13 @@
                                 </div>
                             </div>
                             <div class = "AboutUsMemberPhoto">
-                                <img src = "images/developersPics/sofia.jpg" class = "AboutUsPhoto" id = "tempProfilePhoto">
+                                <img src = "images/developersPics/sofia.jpg" alt = "Sofia" class = "AboutUsPhoto">
                             </div>
                         </div>
         
                         <div class = "AboutUsMemberSpace">
                             <div class = "AboutUsMemberPhoto">
-                                <img src = "images/developersPics/edgar.jpg" class = "AboutUsPhoto" id = "tempProfilePhoto">
+                                <img src = "images/developersPics/edgar.jpg" alt = "Edgar" class = "AboutUsPhoto">
                             </div>
         
                             <div class = "AboutUsMember">
@@ -605,7 +602,7 @@
                     </div>
         
                     <div class = "AboutUsDivButton">
-                        <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "aboutUsButton('AboutUsPageInfo','AboutUsPageMembers')">
+                        <div class = "AboutUsButton" onclick = "aboutUsButton('AboutUsPageInfo','AboutUsPageMembers')">
                             Go Back To About Us Page
                         </div>
                     </div>
@@ -616,7 +613,7 @@
     <footer>
 
     <!-- Copyright -->
-    <div class="footer-copyright text-center">&copy; Developed with ❤️</i> by
+    <div class="footer-copyright text-center">&copy; Developed with ❤️ by
       <a href="https://github.com/sofiagermer" class="white-text" target="_blank">Sofia Germer</a>,
       <a href="https://github.com/edgarftorre" class="white-text" target="_blank">Edgar Torre </a>
     </div>

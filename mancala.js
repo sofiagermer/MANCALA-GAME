@@ -2,7 +2,7 @@
 /* GLOBAL VARIABLES*/
 
 var myIndex = 0;
-const RulesID = ["Rule1", "Rule2", "Rule3", "Rule4", "Rule5"];
+const RulesID = ["Rule1", "Rule2", "Rule3", "Rule4", "Rule5", "Rule6", "Rule7", "Rule8", "Rule9", "Rule10"];
 const PlayID = [ "BoardOptions", "SinglePlayerOptions", "StartPlaying"];
 const seedColors = ["url(padrao1.jpg)", "url(padrao2.jpg)", "url(padrao3.jpg)", "url(padrao4.jpg)", "url(padrao5.jpg)", "url(padrao6.jpg)",
                     "url(padrao7.jpg)", "url(padrao8.jpg)", "url(padrao9.jpg)", "url(padrao10.jpg)", "url(padrao11.jpg)", "url(padrao12.jpg)" ];
@@ -146,8 +146,8 @@ function multiPlayer(){
 function whoStarts(isComputerStarting,idActive, idOther){
     isPlayerTurn = !isComputerStarting;
     console.log(isComputerStarting);
-    document.getElementById(idActive).style.background = "rgb(103,155,155)";
-    document.getElementById(idOther).style.background = "rgb(103,155,155,0.5)";
+    document.getElementById(idActive).style.backgroundColor = "rgb(103,155,155)";
+    document.getElementById(idOther).style.backgroundColor = "rgb(103,155,155,0.5)";
 }
 
 function chooseLevel(level, idActive, idNonActive1, idNonActive2, idNonActive3, idNonActive4) {
@@ -197,7 +197,7 @@ function previousPlayOption() {
 function nextRule() {
     let beforeRule = RulesID[currentRule];
     currentRule += 1;
-    if (currentRule == 5) currentRule = 0;
+    if (currentRule == RulesID.length) currentRule = 0;
     let afterRule = RulesID[currentRule];
 
     hide(beforeRule);
@@ -207,7 +207,7 @@ function nextRule() {
 function previousRule() {
     let beforeRule = RulesID[currentRule];
     currentRule -= 1;
-    if (currentRule == -1) currentRule = 4;
+    if (currentRule == -1) currentRule = RulesID.length-1; // AAAAAAAAAAAAA
     let afterRule = RulesID[currentRule];
 
     hide(beforeRule);
@@ -657,10 +657,16 @@ async function startGame(hideID, showID) {
 // ########################################################################################
 // #                         RESEND USER TO REGISTER PAGE                                 #
 
-function goToRegister(showID,hideID){
+function goToRegister(showID, hideID) {
     showFlex(showID);
     hide(hideID);
     hide("celebration");
+    if (document.getElementById('iStart').style.backgroundColor == "rgb(103, 155, 155)") {
+        isPlayerTurn = true;
+    }
+    else if (document.getElementById('cpuStarts').style.backgroundColor == "rgb(103, 155, 155)") {
+        isPlayerTurn = false;
+    }
 }
 
 
@@ -673,8 +679,6 @@ function goToRegister(showID,hideID){
 
 // ########################################################################################
 // #                                      VARIABLES                                       #
-
-const rankingBtn = document.getElementById('ranking-btn');
 
 var token = 0; // Error token
 
@@ -696,7 +700,7 @@ var move;
 // #                               ASK USER REGIST INFO                                   #
 
 function register(hideID, showID) {
-    nickInput = document.getElementById('nameInput').value;
+    nickInput = document.getElementById('nickInput').value;
     passwordInput = document.getElementById('passwordInput').value;
     sendRegister(hideID, showID);
 }
@@ -738,7 +742,7 @@ const sendJoin = () => {
 
 const sendLeave = () => {
     if (singlePlayer) {
-        score[0] = 0; // Important to ensure player gets a defeat in ranking
+        score[0] = 0; // Important to ensure player gets a defeat in updateRanking
         hide("playZone");
         showFlex("LoserPage");
         updateRanking();
@@ -857,8 +861,6 @@ const sendUpdate = () => {
         sse.close();
     }; 
 };
-
-rankingBtn.addEventListener('click', sendRanking);
 
 
 // ########################################################################################
