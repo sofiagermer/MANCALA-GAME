@@ -97,12 +97,14 @@
         #                               Board Options                                           #
         ########################################################################################-->
 
-            <div class = "MancalaBox " id= "beforePlay">
-                <div id="caixaPlay">
-                    <div class="arrowDiv" onclick="previousPlayOption()">
-                        <div class = "arrow-left">
-                        </div>
-                    </div>   
+        <div class = "MancalaBox " id= "beforePlay">
+            <div id="caixaPlay">
+                <div class="arrowDiv" onclick="previousPlayOption()">
+                    <div class = "arrow-left">
+                    </div>
+                </div>
+                
+                <div id = "playContent">
                     <div class = "playOptions" id = "BoardOptions">
                         <h2 class="Title playTitle noselect">Number of Holes</h2>
     
@@ -131,37 +133,43 @@
                             <div class= "playerModeButton noselect" id="sP" onclick = "onePlayer()">Single Player</div>
                             <div class= "playerModeButton noselect" id="mP" onclick = "multiPlayer()">Two Players</div>
                         </div>
-
-                        <div class = "playOptions" id = "SinglePlayerOptions">
-                            <h2 class="Title playTitle noselect">Who Starts?</h2>
-        
-                            <div class = "playingMode">
-                                <div class= "playerModeButton noselect" id="iStart" onclick = "whoStarts(false,'iStart','cpuStarts')">I Start</div>
-                                <div class= "playerModeButton noselect" id="cpuStarts" onclick = "whoStarts(true,'cpuStarts','iStart')">Computer Starts</div>
-                            </div> 
-        
-                            <h2 class="Title playTitle noselect">Difficulty Level</h2>
-        
-                            <div class = "playingMode">
-                                <div class= "playerModeButton noselect" id="1level" onclick = "chooseLevel(1, '1level', '2level', '3level', '4level', '5level')">1</div>
-                                <div class= "playerModeButton noselect" id="2level" onclick = "chooseLevel(2, '2level', '1level', '3level', '4level', '5level')">2</div>
-                                <div class= "playerModeButton noselect" id="3level" onclick = "chooseLevel(3, '3level', '1level', '2level', '4level', '5level')">3</div>
-                                <div class= "playerModeButton noselect" id="4level" onclick = "chooseLevel(4, '4level', '1level', '2level', '3level', '5level')">4</div>
-                                <div class= "playerModeButton noselect" id="5level" onclick = "chooseLevel(5, '5level', '1level', '2level', '3level', '4level')">5</div>
-                            </div> 
-                        
-                        </div>
-        
-                        <div class="playOptions" id="StartPlaying">
-                                <div class="button" onclick="startGame('beforePlay', 'playZone')">Start Playing</div>
-                        </div>
-                    <div class="arrowDiv" onclick="nextPlayOption()" >
-                        <div class = "arrow-right"></div>
+                        <p></p>
+                
+                    </div>
+                    
+                    
+                    <div class = "playOptions" id = "SinglePlayerOptions">
+    
+                        <h2 class="Title playTitle noselect">Who Starts?</h2>
+    
+                        <div class = "playingMode">
+                            <div class= "playerModeButton noselect" id="iStart" onclick = "whoStarts(false,'iStart','cpuStarts')">I Start</div>
+                            <div class= "playerModeButton noselect" id="cpuStarts" onclick = "whoStarts(true,'cpuStarts','iStart')">Computer Starts</div>
+                        </div> 
+    
+                        <h2 class="Title playTitle noselect">Difficulty Level</h2>
+    
+                        <div class = "playingMode">
+                            <div class= "playerModeButton noselect" id="1level" onclick = "chooseLevel(1, '1level', '2level', '3level', '4level', '5level')">1</div>
+                            <div class= "playerModeButton noselect" id="2level" onclick = "chooseLevel(2, '2level', '1level', '3level', '4level', '5level')">2</div>
+                            <div class= "playerModeButton noselect" id="3level" onclick = "chooseLevel(3, '3level', '1level', '2level', '4level', '5level')">3</div>
+                            <div class= "playerModeButton noselect" id="4level" onclick = "chooseLevel(4, '4level', '1level', '2level', '3level', '5level')">4</div>
+                            <div class= "playerModeButton noselect" id="5level" onclick = "chooseLevel(5, '5level', '1level', '2level', '3level', '4level')">5</div>
+                        </div> 
+                    
+                    </div>
+    
+                    <div class="playOptions" id="StartPlaying">
+                            <div class="button" onclick="startGame('beforePlay', 'playZone')">Start Playing</div>
                     </div>
                 </div>
+                <div class="arrowDiv" onclick="nextPlayOption()" >
+                    <div class = "arrow-right"></div>
+                </div>
             </div>
+        </div>
 
-            <div id= "playZone">
+        <div id= "playZone">
 
                 <!-- 
                 ########################################################################################
