@@ -229,7 +229,7 @@ input[type=text], input[type=password],textarea {
 #register-btn{
     justify-content: center;
     font-size: 16px;
-    font-weight: 2000;
+    font-weight: 1000;
 }
 
 .loginTitle{
@@ -821,11 +821,6 @@ footer {
     color: #000000;
     text-align: center; 
     
-}
-::a {
-    text-decoration: none;
-    color: inherit;
-    border-bottom: 1px solid;
 }
 
 /* ==================================== */
