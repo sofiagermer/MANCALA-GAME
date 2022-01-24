@@ -39,26 +39,9 @@ function showFlex(elementID){
 function hide(elementID){
   document.getElementById(elementID).style.display = "none"; 
 }
-
-/* --------------------------------------------------- */
-/*SLIDESHOW*/
-
-//carousel();
-
-function carousel() {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";  
-  }
-  myIndex++;
-  if (myIndex > x.length) {myIndex = 1}    
-  x[myIndex-1].style.display = "block";  
-  setTimeout(carousel, 2000); // Change image every 2 seconds
-}
-
 /* --------------------------------------------------- */
 /*LOGIN*/
+
 //logo animation
 function rotateLogo() {
     document.getElementById('waitinglogo').style.transform +='rotate('+0.5+'deg)';
@@ -132,14 +115,12 @@ function onePlayer(){
     singlePlayer = true;
     document.getElementById('sP').style.background = "rgb(103,155,155)";
     document.getElementById('mP').style.background = "rgb(103,155,155,0.5)";
-    //document.getElementById('singlePlayerOptions').style.display = "block";
 }
 
 function multiPlayer(){
     singlePlayer = false;
     document.getElementById('mP').style.background = "rgb(103,155,155)";
     document.getElementById('sP').style.background = "rgb(103,155,155,0.5)";
-    //document.getElementById('singlePlayerOptions').style.display = "none";
 }
 
 /*choose who starts game*/
@@ -283,12 +264,19 @@ function clearBoard(){
     document.getElementById("zonaTabuleiro").innerHTML = "";
 }
 
-function drawBoard() {
-    hide('waitingForPlayer');
-    var tabuleiro = document.createElement("div");
-    tabuleiro.setAttribute("id", "tabuleiro");
-    document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
-    
+function drawScoreLeftHole(){
+    var numberSeedLeftDiv = document.createElement("div");
+    numberSeedLeftDiv.setAttribute("id", "numberSeedLeftDiv");
+    document.getElementById("tabuleiro").appendChild(numberSeedLeftDiv);
+
+    var numberSeedLeft = document.createElement("div");
+    numberSeedLeft.setAttribute("id", "numberSeedLeft");
+    numberSeedLeft.setAttribute("class", "numberSeeds");
+    document.getElementById("numberSeedLeftDiv").appendChild(numberSeedLeft);
+    document.getElementById("numberSeedLeft").innerHTML = score[1];
+}
+
+function drawScoreRightHole(){
     var numberSeedRightDiv = document.createElement("div");
     numberSeedRightDiv.setAttribute("id", "numberSeedRightDiv");
     document.getElementById("tabuleiro").appendChild(numberSeedRightDiv);
@@ -297,11 +285,77 @@ function drawBoard() {
     numberSeedRight.setAttribute("id", "numberSeedRight");
     numberSeedRight.setAttribute("class", "numberSeeds");
     document.getElementById("numberSeedRightDiv").appendChild(numberSeedRight);
+    document.getElementById("numberSeedRight").innerHTML = score[0];
+}
 
+function player2Board(){
+    var player2Points = document.createElement("div");
+    player2Points.setAttribute("id", "player2Points");
+    document.getElementById("sub-tabuleiro").appendChild(player2Points);
+
+    var d = document.createElement("div");
+    d.setAttribute("class", "sub-sub-tabuleiro");
+    d.setAttribute("id", "sub-sub-tabuleiro-2");
+    document.getElementById("sub-tabuleiro").appendChild(d);
+
+    /* ------ Player 2 Point ----- */
+
+    for (let i = 1; i < numHoles/2 + 1; i++) {
+        var name = "holePoints";
+        var number = (i+numHoles).toString();
+        var divID =  name.concat(number);
+        var divPoint = document.createElement("div");
+        divPoint.setAttribute("class", "holePoints");
+        divPoint.setAttribute("id", divID);
+        document.getElementById("player2Points").appendChild(divPoint);
+        document.getElementById(divID).innerHTML = board[i-1+board.length/2];
+
+        createHoleCima(numHoles-i);
+    }
+}
+
+function player1Board(){
+    var f = document.createElement("div");
+    f.setAttribute("class", "sub-sub-tabuleiro");
+    f.setAttribute("id", "sub-sub-tabuleiro-1")
+    document.getElementById("sub-tabuleiro").appendChild(f);
+
+    var player1Points = document.createElement("div");
+    player1Points.setAttribute("id", "player1Points");
+    document.getElementById("sub-tabuleiro").appendChild(player1Points);
+
+    /* ------ Player 1 Point ----- */
+
+    for (let i = 0; i < numHoles/2; i++) {
+        var name = "holePoints";
+        var number = i.toString();
+        var divID =  name.concat(number);
+        var divPoint = document.createElement("div");
+        divPoint.setAttribute("class", "holePoints");
+        divPoint.setAttribute("id", divID);
+        document.getElementById("player1Points").appendChild(divPoint);
+        document.getElementById(divID).innerHTML = board[i];
+
+        createHoleBaixo(i);
+    }
+}
+function drawBoard() {
+    hide('waitingForPlayer');
+    var tabuleiro = document.createElement("div");
+    tabuleiro.setAttribute("id", "tabuleiro");
+    document.getElementById("zonaTabuleiro").appendChild(tabuleiro);
+
+    /* ===================================== */
+    /* SCORE LEFT HOLE */
+    drawScoreLeftHole();
+    /* ===================================== */
+
+    /* ===================================== */
+    /* MIDDLE : hole -> board -> hole*/
     var middle = document.createElement("div");
     middle.setAttribute("id", "middle");
     document.getElementById("tabuleiro").appendChild(middle);
-
+     /* ===================================== */
 
     var lateralEsquerda = document.createElement("div");
     lateralEsquerda.setAttribute("class", "lateral");
@@ -318,8 +372,6 @@ function drawBoard() {
         var number = i.toString();
         var seedID =  name.concat(number);
         buracoEsquerda.setAttribute("id", seedID);
-        console.log(buracoEsquerda.id);
-        console.log("seedID :", seedID);
         seedsE.appendChild(buracoEsquerda);
         var randomRotation = Math.floor(Math.random() * 360);
         document.getElementById(seedID).style.transform= 'rotate('+randomRotation+'deg)';
@@ -328,26 +380,16 @@ function drawBoard() {
     }
 
     var c = document.createElement("div");
-    c.setAttribute("id", "sub-tabuleiro");
-    document.getElementById("middle").appendChild(c);
+     c.setAttribute("id", "sub-tabuleiro");
+     document.getElementById("middle").appendChild(c);
+    /* ===================================== */
+    /* Player 2 Board*/
 
-    var d = document.createElement("div");
-    d.setAttribute("class", "sub-sub-tabuleiro");
-    d.setAttribute("id", "sub-sub-tabuleiro-2");
-    document.getElementById("sub-tabuleiro").appendChild(d);
+    player2Board();
 
-    for (let i = 1; i < numHoles/2 + 1; i++) {
-        createHoleCima(numHoles-i);
-    }
-
-    var f = document.createElement("div");
-    f.setAttribute("class", "sub-sub-tabuleiro");
-    f.setAttribute("id", "sub-sub-tabuleiro-1")
-    document.getElementById("sub-tabuleiro").appendChild(f);
-
-    for (let i = 0; i < numHoles/2; i++) {
-        createHoleBaixo(i);
-    }
+    /* ===================================== */
+    /* Player 1 Board*/
+    player1Board();
 
     var lateralDireita = document.createElement("div");
     lateralDireita.setAttribute("class", "lateral");
@@ -363,14 +405,10 @@ function drawBoard() {
         seedsD.appendChild(buracoDireita);
     }
 
-    var numberSeedLeftDiv = document.createElement("div");
-    numberSeedLeftDiv.setAttribute("id", "numberSeedLeftDiv");
-    document.getElementById("tabuleiro").appendChild(numberSeedLeftDiv);
-
-    var numberSeedLeft = document.createElement("div");
-    numberSeedLeft.setAttribute("id", "numberSeedLeft");
-    numberSeedLeft.setAttribute("class", "numberSeeds");
-    document.getElementById("numberSeedLeftDiv").appendChild(numberSeedLeft);
+    /* ===================================== */
+    /* SCORE RIGHT HOLE */
+    drawScoreRightHole();
+    /* ===================================== */
 }
 
 /*------------*/
@@ -462,6 +500,7 @@ function isCavityValid(index, b, calledByPlayer) {
     if (!calledByPlayer) return true;
 
     if (!isPlayerTurn) {
+        console.log("Not your turn to play");
         showFlex('MessagesDiv1');
         hide('MessagesDiv2');
         hide('MessagesDiv3');
@@ -469,6 +508,7 @@ function isCavityValid(index, b, calledByPlayer) {
     }
 
     if (index > numHoles/2) {
+        console.log("Invalid start position");
         showFlex('MessagesDiv2');
         hide('MessagesDiv1');
         hide('MessagesDiv3');
@@ -481,7 +521,6 @@ function isCavityValid(index, b, calledByPlayer) {
         hide('MessagesDiv2');
         return false;
     }
-
     return true;
 } 
 
@@ -561,9 +600,18 @@ function finishGame (b, s) {
         i < (numHoles/2) ? s[0] += seeds : s[1] += seeds;
     }
 
-    if (s[0] > s[1]) showFlex("WinnerPage");
-    else if (s[0] < s[1]) showFlex("LoserPage");
-    else showFlex("DrawPage");
+    if (s[0] > s[1]) {
+        showFlex("WinnerPage");
+        hideErrorMessages();
+    }
+    else if (s[0] < s[1]) {
+        showFlex("LoserPage");
+        hideErrorMessages();
+    }
+    else {
+        showFlex("DrawPage");
+        hideErrorMessages();
+    }
 
     if (singlePlayer) updateRanking();
 }
@@ -597,7 +645,7 @@ function showRanking(ranking) {
 
         var nick = document.createElement("div");
         nick.className = "rankingInfoParam";
-        nick.innerHTML =  "Nickname: "+ranking[i].nick;
+        nick.innerHTML = "Nickname: " + ranking[i].nick;
 
         var victories = document.createElement("div");
         victories.className = "rankingInfoParam";
@@ -655,7 +703,16 @@ async function startGame(hideID, showID) {
 }
 
 // ########################################################################################
-// #                         RESEND USER TO REGISTER PAGE                                 #
+// #                      Hide Messages at the end of the game                            #
+
+function hideErrorMessages(){
+    hide('MessagesDiv1');
+    hide('MessagesDiv2');
+    hide('MessagesDiv3');
+}
+
+// ########################################################################################
+// #                        RESEND USER TO REGISTER PAGE                                 #
 
 function goToRegister(showID, hideID) {
     showFlex(showID);
@@ -746,10 +803,7 @@ const sendLeave = () => {
         hide("playZone");
         showFlex("LoserPage");
         updateRanking();
-        //alert('You lost!');
         clearBoard();
-        //hide('playZone');
-        //showFlex('beforePlay');
     }
     else {
         sendHttpRequest('POST', 'leave', {nick: nickInput, password: passwordInput, game: token})
@@ -792,7 +846,6 @@ const sendRegister = (hideID, showID) => {
         hide(hideID);
         showFlex(showID);
     })
-    //.catch( error => alert("Error when registering : "+error.data));
     .catch(  error => document.getElementById("loginError").innerHTML = error.data );
 };
 
@@ -803,6 +856,7 @@ const endGame = (responseData) => {
         if(responseData.winner == nickInput){
             hide("playZone");
             hide("beforePlay");
+            hideErrorMessages();
             showFlex("WinnerPage");
             showFlex("celebration");
             loop();
@@ -810,12 +864,14 @@ const endGame = (responseData) => {
         else{
             hide("playZone");
             hide("beforePlay");
+            hideErrorMessages();
             showFlex("LoserPage");
         }
     }
     else if ("board" in responseData){
         hide("playZone");
         hide("beforePlay");
+        hideErrorMessages();
         showFlex("DrawPage");
     }
 
@@ -861,7 +917,6 @@ const sendUpdate = () => {
         sse.close();
     }; 
 };
-
 
 // ########################################################################################
 // #                                                                                      #
