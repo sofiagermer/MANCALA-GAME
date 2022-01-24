@@ -558,16 +558,6 @@ input[type=text], input[type=password],textarea {
     display: flex;
 }
 
-#rulesContent{
-    display: flex;
-    align-self: center;
-    justify-content: center;
-    color: black;
-    width: 500px;
-    height: 500px;
-
-}
-
 #caixaRules{   
     background: white;
     border: 0 none;
@@ -641,6 +631,7 @@ input[type=text], input[type=password],textarea {
 .rulesContent{
     display: flex;
     flex-flow: row;
+    justify-content: space-around;
 }
 
 #Rule2{
@@ -656,6 +647,21 @@ input[type=text], input[type=password],textarea {
 }
 
 #Rule5{
+    display: none;
+}
+
+#Rule6{
+    display: none;
+}
+
+#Rule7{
+    display: none;
+}
+
+#Rule8{
+    display: none;
+}
+#Rule9{
     display: none;
 }
 

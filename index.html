@@ -311,7 +311,7 @@
             ###########################-->
             <div class = "MancalaBox" id = "Rule1">
                 <div class = "MancalaTitle">
-                    Ínicio do jogo
+                    Pieces
                 </div>
                 <hr class = "AboutUsHR">
                 <div class = "rulesContent">
@@ -323,15 +323,21 @@
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta"></i>
                             <div class = "textoCorrido">
-                                Os armazéns estão vazios (sem sementes)
+                                The pieces are called seeds.
                             </div>
                         </div>
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta"></i>
                             <div class = "textoCorrido">
-                                As restantes cavidades têm o mesmo número de sementes 
+                                Visually representable as disks or ellipses.
                             </div>
-                        </div>        
+                        </div>      
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                They must be placed inside the cavities.
+                            </div>
+                        </div>       
                     </div>
 
                     <div class="arrowDiv" onclick="nextRule()" >
@@ -346,7 +352,7 @@
             ###########################-->
             <div class = "MancalaBox" id = "Rule2">
                 <div class = "MancalaTitle">
-                    Começar a semear     
+                    Beginning of the game     
                 </div>
                 <hr class = "AboutUsHR">
                 <div class = "rulesContent">
@@ -358,13 +364,13 @@
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta"></i>
                             <div class = "textoCorrido">
-                                Os armazéns estão vazios (sem sementes)
+                                Storages are empty (no seeds)
                             </div>
                         </div>
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta"></i>
                             <div class = "textoCorrido">
-                                As restantes cavidades têm o mesmo número de sementes 
+                                The remaining cavities have the same number of seeds
                             </div>
                         </div>        
                     </div>
@@ -378,11 +384,11 @@
 
             <!-- 
             ############################
-            #         Rule 3           #
+            #       Playstyle          #
             ###########################-->
             <div class = "MancalaBox" id = "Rule3">
                 <div class = "MancalaTitle">
-                    Última semente em armazém   
+                    Playstyle 
                 </div>
                 <hr class = "AboutUsHR">
                 <div class = "rulesContent">
@@ -394,61 +400,37 @@
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta "></i>
                             <div class = "textoCorrido">
-                                Volta a jogar se a última semente for semeada for no seu próprio armazém
-                            </div>
-                        </div>
-                        <div class = "bulletPoint">
-                            <i class="fas fa-play seta"></i>
-                            <div class = "textoCorrido">
-                                Semeando cavidade agora vazia, a última semente cai no armazém e volta a jogar
-                            </div>
-                        </div>     
-                    </div>
-
-                    <div class="arrowDiv" onclick="nextRule()" >
-                        <div class = "arrow-right">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 
-            ############################
-            #         Rule 4           #
-            ###########################-->
-            <div class = "MancalaBox" id = "Rule4">
-                <div class = "MancalaTitle">
-                    Última semente em cavidade vazia  
-                </div>
-                <hr class = "AboutUsHR">
-                <div class = "rulesContent">
-                    <div class="arrowDiv" onclick="previousRule()">
-                        <div class = "arrow-left">
-                        </div>
-                    </div>
-                    <div class = "ruleText">
-                        <div class = "bulletPoint">
-                            <i class="fas fa-play seta "></i>
-                            <div class = "textoCorrido">
-                                Se a última semente calhar numa sua cavidade vazia, transferir para o seu armazém as sementes:
+                                Players sow their seeds alternately
                             </div>
                         </div>
                         <div class = "bulletPoint subBulletPoint">
                             <i class="fas fa-play sub-seta"></i>
                             <div class = "textoCorrido">
-                                na cavidade oposta, do adversário
+                                In their turn they sow from one of their cavities
                             </div>
                         </div>     
                         <div class = "bulletPoint subBulletPoint">
                             <i class="fas fa-play sub-seta"></i>
                             <div class = "textoCorrido">
-                                assim como essa última semente semeada
+                                Depending on the situation of the last seed sown, they can
                             </div>
                         </div>  
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta"></i>
                             <div class = "textoCorrido">
-                                Semeando a partir da 3ª cavidade a contar da esquerda acrescenta 6 + 1 sementes ao seu armazém
+                                play again
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                score some of the enemies' seeds
+                            </div>
+                        </div> 
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Ends when one of the players runs out of seeds
                             </div>
                         </div> 
                     </div> 
@@ -463,9 +445,9 @@
             ############################
             #         Rule 5           #
             ###########################-->
-            <div class = "MancalaBox" id = "Rule5">
+            <div class = "MancalaBox" id = "Rule4">
                 <div class = "MancalaTitle">
-                    Terminar  
+                    Starting seeding
                 </div>
                 <hr class = "AboutUsHR">
                 <div class = "rulesContent">
@@ -477,19 +459,189 @@
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta "></i>
                             <div class = "textoCorrido">
-                                Jogo termina quando um dos jogadores não pode jogar porque todas as suas cavidades estão vazias
+                                Choose a cavity on your side (other than the storage)
                             </div>
                         </div>
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta"></i>
                             <div class = "textoCorrido">
-                                O outro jogador recolhe sementes nas suas cavidades que são colocadas no seu armazém
+                                Collect all N seeds from this cavity
                             </div>
                         </div>     
                         <div class = "bulletPoint">
                             <i class="fas fa-play seta"></i>
                             <div class = "textoCorrido">
-                                Ganha jogador cujo armazém tem mais sementes
+                                Place 1 seed in the next N cavities
+                            </div>
+                        </div> 
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Sowing is done in a counterclockwise direction
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+            ############################
+            #         Rule 5           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule5">
+                <div class = "MancalaTitle">
+                    Keep on seeding 
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta "></i>
+                            <div class = "textoCorrido">
+                                If the next cavity is your store, sow also
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                If seeds still remain, continue on the opponent's side
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                If it hits the opponent's warehouse, don't sow
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                But then continue on your side, if you still have seeds
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 
+            ############################
+            #         Rule 5           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule6">
+                <div class = "MancalaTitle">
+                    Last seed on storage  
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta "></i>
+                            <div class = "textoCorrido">
+                                Plays again if the last seed sown is in your own storage
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Sowing now empty cavity, the last seed drops into the warehouse and returns to play
+                            </div>
+                        </div>     
+                    </div>
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+            ############################
+            #         Rule 5           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule7">
+                <div class = "MancalaTitle">
+                    Last seed on empty cavity 
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta "></i>
+                            <div class = "textoCorrido">
+                                If the last seed lands in your empty cavity, transfer the seeds to your storage
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                in the opposite cavity, of the opponent
+                            </div>
+                        </div>     
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                just like that last seed sown
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="arrowDiv" onclick="nextRule()" >
+                        <div class = "arrow-right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+            ############################
+            #         Rule 5           #
+            ###########################-->
+            <div class = "MancalaBox" id = "Rule8">
+                <div class = "MancalaTitle">
+                    Finish game  
+                </div>
+                <hr class = "AboutUsHR">
+                <div class = "rulesContent">
+                    <div class="arrowDiv" onclick="previousRule()">
+                        <div class = "arrow-left">
+                        </div>
+                    </div>
+                    <div class = "ruleText">
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta "></i>
+                            <div class = "textoCorrido">
+                                Game ends when one of the players cannot play because all his cavities are empty
+                            </div>
+                        </div>
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                The other player collects seeds in their cavities that are placed in your storage
+                            </div>
+                        </div>     
+                        <div class = "bulletPoint">
+                            <i class="fas fa-play seta"></i>
+                            <div class = "textoCorrido">
+                                Wins whoever's storage has more seeds
                             </div>
                         </div> 
                     </div>

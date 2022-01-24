@@ -2,10 +2,8 @@
 /* GLOBAL VARIABLES*/
 
 var myIndex = 0;
-const RulesID = ["Rule1", "Rule2", "Rule3", "Rule4", "Rule5", "Rule6", "Rule7", "Rule8", "Rule9", "Rule10"];
+const RulesID = ["Rule1", "Rule2", "Rule3", "Rule4", "Rule5", "Rule6", "Rule7", "Rule8"];
 const PlayID = [ "BoardOptions", "SinglePlayerOptions", "StartPlaying"];
-const seedColors = ["url(padrao1.jpg)", "url(padrao2.jpg)", "url(padrao3.jpg)", "url(padrao4.jpg)", "url(padrao5.jpg)", "url(padrao6.jpg)",
-                    "url(padrao7.jpg)", "url(padrao8.jpg)", "url(padrao9.jpg)", "url(padrao10.jpg)", "url(padrao11.jpg)", "url(padrao12.jpg)" ];
 var currentPlayOption = 0;
 var currentRule = 0;
 
@@ -188,7 +186,7 @@ function nextRule() {
 function previousRule() {
     let beforeRule = RulesID[currentRule];
     currentRule -= 1;
-    if (currentRule == -1) currentRule = RulesID.length-1; // AAAAAAAAAAAAA
+    if (currentRule == -1) currentRule = RulesID.length-1;
     let afterRule = RulesID[currentRule];
 
     hide(beforeRule);
@@ -708,6 +706,7 @@ function hideErrorMessages(){
     hide('MessagesDiv1');
     hide('MessagesDiv2');
     hide('MessagesDiv3');
+    hide('MessagesMultiPlayer');
 }
 
 // ########################################################################################
