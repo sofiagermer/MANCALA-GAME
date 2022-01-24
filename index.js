@@ -68,7 +68,7 @@ const server = http.createServer(async function (request, response) {
                 'Access-Control-Allow-Headers': 'content-type',
                 'Access-Control-Allow-Max-Age': '86400',
                 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-                'Access-Control-Allow-Origin': 'http://127.0.0.1:5500',
+                'Access-Control-Allow-Origin': '*',
                 'Connection': 'Keep-Alive',
                 'Keep-Alive': 'timeout=2, max=100',
                 'Vary': 'Accept-Encoding, Origin'
