@@ -277,6 +277,7 @@ input[type=text], input[type=password],textarea {
 #playContent{ 
     display: flex;
     justify-content: center;
+    width: 90%;
 }
 .playingMode{
     display: flex;

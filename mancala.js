@@ -822,7 +822,11 @@ const sendLeave = () => {
 const sendNotify = (currentBestMoveIndex) => {
     sendHttpRequest('POST', 'notify', {nick: nickInput, password: passwordInput, game:token, move: currentBestMoveIndex})
     .then(() => console.log("Sucess sending notify request"))
-    .catch( error => alert("Error when playing cavity : "+error.data));
+    //.catch( error => alert("Error when playing cavity : "+error.data));
+    .catch( error =>{
+        document.getElementById("MessagesMultiPlayer").innerHTML = error.data;
+        showFlex("MessagesMultiPlayer");
+    })
 };
 
 
