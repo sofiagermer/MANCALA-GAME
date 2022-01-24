@@ -498,14 +498,13 @@ async function selectCavity(idCavity, b, s, calledByPlayer) {
         console.log("Player " + (isPlayerTurn ? 1 : 2) + " chose cavity " + idCavity);
         executePlay(idCavity, b, s);
         drawBoard();
-        if (!isPlayerTurn) {
+        if (isGameFinished(board, score)) {
+            finishGame(board, score);
+        }
+        else if (!isPlayerTurn) {
             await sleep(500);
             selectCavity(getBestMove(aiLevel*2, [...board], [...score]), b, s, false);
             return;
-        }
-
-        if (isGameFinished(board, score)) {
-            finishGame(board, score);
         }
     }
 }
@@ -555,6 +554,7 @@ function isGameFinished(b, s) {
 function finishGame (b, s) {
     hide("playZone");
     hide("beforePlay");
+    clearBoard();
     
     for (var i = 0; i < numHoles; i++) {
         var seeds = b[i];
@@ -574,6 +574,7 @@ function getRanking() {
 }
 
 function showRanking(ranking) {
+    document.getElementById("MancalaRanking").innerHTML = "";
     if (ranking == null){
         document.getElementById("MancalaRanking").innerHTML = "No ranking entries yet! Play some games and come back to flex your skill. ;)";
         return;
