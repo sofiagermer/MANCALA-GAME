@@ -235,7 +235,6 @@ function createHoleBaixo(id){
     document.getElementById("sub-sub-tabuleiro-1").appendChild(ui[id]);
     ui[id].addEventListener("click", () => selectCavity(id, board, score, true));
 
-
     var seeds = document.createElement("div");
     seeds.setAttribute("class", "seedspace");
     ui[id].appendChild(seeds);
