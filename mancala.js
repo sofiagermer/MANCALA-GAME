@@ -660,6 +660,7 @@ async function startGame(hideID, showID) {
 function goToRegister(showID,hideID){
     showFlex(showID);
     hide(hideID);
+    hide("celebration");
 }
 
 
