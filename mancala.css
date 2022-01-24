@@ -126,6 +126,13 @@ body{
 
 /* Classe de Login e Rules */
 
+#divLogoLogin{
+    width: 40%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
 .active{
     display: flex;
     align-content: center;
@@ -139,12 +146,13 @@ body{
     justify-content: center;
     width: 40%
 }
+
 #logo{
     padding-bottom: 30px;
     display: flex;
     justify-content: center;
     object-fit: cover;
-    width: 30%;
+    width: 80%;
 }
 
 #loginInfo{
@@ -194,7 +202,7 @@ input[type=text], input[type=password],textarea {
 }
 
 #subLoginInfo{
-    width: 80%;
+    width: 75%;
     float: right;
 }
 
@@ -286,6 +294,7 @@ input[type=text], input[type=password],textarea {
     color: rgb(255,255,255);
     border: none;
     font-weight: 600;
+    justify-content: center;
 }
 
 .loginTitle{
@@ -298,11 +307,14 @@ input[type=text], input[type=password],textarea {
 .playOptions{
     display: none;
     align-self: center;
+    flex-flow: column;
+    width:60%
 }
 
 #BoardOptions{
     display: flex;
     flex-flow: column;
+    width:60%
 }
 
 #PlayOptionsContent{
@@ -395,7 +407,7 @@ input[type=text], input[type=password],textarea {
 .lateral{
     background-color: rgb(136, 104, 61, 0.5);
     width: 100px;
-    height: 80%;
+    height: 60%;
     align-self: center;
     flex-flow: row;
     border-radius: 40px;
@@ -425,7 +437,7 @@ input[type=text], input[type=password],textarea {
 #tabuleiro{
     align-self: center;
     display:flex;
-    flex-flow: column;
+    /*flex-flow: column;*/
     justify-content: space-around;
     border-radius: 30px;
     background-image: url(images/wood.png);
@@ -473,29 +485,55 @@ input[type=text], input[type=password],textarea {
     align-self: center;
     display:flex;
     justify-content: space-around;
-    height: 35vh;
+    height: 40vh;
     margin-top: -15px;
     margin-bottom: -15px;
 }
 
 .numberSeeds{
     color: rgba(104, 76, 40, 0.5);
-    background-color: rgba(104, 76, 40, 0.5);
+    /*background-color: rgba(104, 76, 40, 0.5);*/
     height: 70px;
     width:150px;
     border-radius: 15px;
     align-self: center;
     display: flex;
+    width: 100px;
+    font-size: 25px;
+    color: rgb(68, 44, 14);
+    font-weight: 900;
+    justify-content: center;
+    align-items: center;
 }
 
 #numberSeedRight{
-    margin-top: 2%;
-    width: 100px;
+    width: 60px;
 }
 
 #numberSeedLeft{
-    margin-bottom: 2%;
+    width: 60px;
+}
+
+#player2Points{
+    height: 20%;
+    display: flex;
+    flex-flow: row;
+}
+
+#player1Points{
+    height: 20%;
+    display: flex;
+    flex-flow: row;
+}
+
+.holePoints{
     width: 100px;
+    width: 100px;
+    margin: 10px;
+    font-size: 20px;
+    color: rgb(68, 44, 14);
+    font-weight: 900;
+    text-align: center;
 }
 /* ------------------------------------ */
 /* RULES */
@@ -650,13 +688,6 @@ input[type=text], input[type=password],textarea {
     font-size: 20px;
     padding-bottom: 15px;
 }
-
-
-
-
-/* ------------------------------------ */
-/* RANKING */
-
 
 
 /* ------------------------------------ */

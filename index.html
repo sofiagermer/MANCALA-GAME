@@ -53,8 +53,10 @@
         #                                      Login                                           #
         ########################################################################################-->
             <div id = "caixaLogin" class = "MancalaBox noselect">
-                <div id = "logo">   
-                    <img src = "images/logos/logoBranco.png" class = "imgLogo"> 
+                <div id = "divLogoLogin">
+                    <div id = "logo">   
+                        <img src = "images/logos/logoBranco.png" class = "imgLogo"> 
+                    </div>
                 </div>
                 <div id = "loginInfo">
                     <div id = "subLoginInfo">
@@ -220,7 +222,7 @@
                 </div>
 
                 <div id = "MessagesDiv3" class = "MessagesDiv noselect">
-                    Not your turn to play
+                    Empty Pit
                 </div>
             </div>
 
@@ -234,7 +236,9 @@
                         You Won
                     </div>
                     <hr class = "AboutUsHR">
+                    <div class = "endingMesssage">
                         Congratuations :)
+                    </div>
                     <div class = "AboutUsDivButton">
                         <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','WinnerPage')">
                             Play Again
@@ -252,7 +256,9 @@
                         You Lost
                     </div>
                     <hr class = "AboutUsHR">
-                        Next Time you'll win ;) 
+                        <div>
+                            Next Time you'll win ;) 
+                        </div>
                     <div class = "AboutUsDivButton">
                         <div id = "AboutUsGoBackButton" class = "AboutUsButton" onclick = "goToRegister('caixaLogin','LoserPage')">
                             Play Again
