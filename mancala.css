@@ -825,6 +825,7 @@ footer {
 /* WINNER PAGE */
 #WinnerPage{
     display: none;
+    z-index: 1;
 }
 
 /* LOSER PAGE */
