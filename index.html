@@ -87,7 +87,6 @@
                             
                         </div>
                         <button class= "button" id="register-btn" onclick= "register('caixaLogin', 'beforePlay')">REGISTER</button>
-                        <button id="ranking-btn">RANKING Button</button>
                     </div>
                 </div>
             </div>
@@ -101,42 +100,37 @@
                     <div class="arrowDiv" onclick="previousPlayOption()">
                         <div class = "arrow-left">
                         </div>
-                    </div>
-                    
-                    <div id = "playContent">
-                        <div class = "playOptions" id = "BoardOptions">
-                            <h2 class="Title playTitle noselect">Number of Holes</h2>
-        
-                            <div class = "playingMode">
-                                <div class= "playerModeButton noselect" id="4holes" onclick = "getNumberHoles(4,'4holes','6holes','8holes','10holes','12holes')">4</div>
-                                <div class= "playerModeButton noselect" id="6holes" onclick = "getNumberHoles(6,'6holes','4holes','8holes','10holes','12holes')">6</div>
-                                <div class= "playerModeButton noselect" id="8holes" onclick = "getNumberHoles(8,'8holes','4holes','6holes','10holes','12holes')">8</div>
-                                <div class= "playerModeButton noselect" id="10holes" onclick = "getNumberHoles(10,'10holes','4holes','6holes','8holes','12holes')">10</div>
-                                <div class= "playerModeButton noselect" id="12holes" onclick = "getNumberHoles(12,'12holes','4holes','6holes','8holes','10holes')">12</div>
-                            </div>
-                            <p></p>
-        
-                            <h2 class="Title playTitle noselect">Number of Seeds</h2>
-        
-                            <div class = "playingMode">
-                                <div class= "playerModeButton noselect" id="1seed" onclick = "getNumberSeeds(1, '1seed', '2seed', '3seed','4seed')">1</div>
-                                <div class= "playerModeButton noselect" id="2seed" onclick = "getNumberSeeds(2, '2seed', '1seed', '3seed','4seed' )">2</div>
-                                <div class= "playerModeButton noselect" id="3seed" onclick = "getNumberSeeds(3, '3seed', '1seed', '2seed','4seed')">3</div>
-                                <div class= "playerModeButton noselect" id="4seed" onclick = "getNumberSeeds(4, '4seed', '1seed', '2seed','3seed')">4</div>
-                            </div>
-                            <p></p>
-        
-                            <h2 class="Title playTitle noselect">Number of Players</h2>
-                        
-                            <div class = "playingMode">
-                                <div class= "playerModeButton noselect" id="sP" onclick = "onePlayer()">Single Player</div>
-                                <div class= "playerModeButton noselect" id="mP" onclick = "multiPlayer()">Two Players</div>
-                            </div>
-                            <p></p>
-                    
+                    </div>   
+                    <div class = "playOptions" id = "BoardOptions">
+                        <h2 class="Title playTitle noselect">Number of Holes</h2>
+    
+                        <div class = "playingMode">
+                            <div class= "playerModeButton noselect" id="4holes" onclick = "getNumberHoles(4,'4holes','6holes','8holes','10holes','12holes')">4</div>
+                            <div class= "playerModeButton noselect" id="6holes" onclick = "getNumberHoles(6,'6holes','4holes','8holes','10holes','12holes')">6</div>
+                            <div class= "playerModeButton noselect" id="8holes" onclick = "getNumberHoles(8,'8holes','4holes','6holes','10holes','12holes')">8</div>
+                            <div class= "playerModeButton noselect" id="10holes" onclick = "getNumberHoles(10,'10holes','4holes','6holes','8holes','12holes')">10</div>
+                            <div class= "playerModeButton noselect" id="12holes" onclick = "getNumberHoles(12,'12holes','4holes','6holes','8holes','10holes')">12</div>
                         </div>
-                        
-                        
+                        <p></p>
+    
+                        <h2 class="Title playTitle noselect">Number of Seeds</h2>
+    
+                        <div class = "playingMode">
+                            <div class= "playerModeButton noselect" id="1seed" onclick = "getNumberSeeds(1, '1seed', '2seed', '3seed','4seed')">1</div>
+                            <div class= "playerModeButton noselect" id="2seed" onclick = "getNumberSeeds(2, '2seed', '1seed', '3seed','4seed' )">2</div>
+                            <div class= "playerModeButton noselect" id="3seed" onclick = "getNumberSeeds(3, '3seed', '1seed', '2seed','4seed')">3</div>
+                            <div class= "playerModeButton noselect" id="4seed" onclick = "getNumberSeeds(4, '4seed', '1seed', '2seed','3seed')">4</div>
+                        </div>
+                        <p></p>
+    
+                        <h2 class="Title playTitle noselect">Number of Players</h2>
+                    
+                        <div class = "playingMode">
+                            <div class= "playerModeButton noselect" id="sP" onclick = "onePlayer()">Single Player</div>
+                            <div class= "playerModeButton noselect" id="mP" onclick = "multiPlayer()">Two Players</div>
+                        </div>
+                        <p></p>
+                    </div>       
                     <div class = "playOptions" div id = "SinglePlayerOptions">
         
                             <h2 class="Title playTitle noselect">Who Starts?</h2>
@@ -163,7 +157,6 @@
                                 <div class="button" onclick="startGame('beforePlay', 'playZone')">Start Playing</div>
                             </div>
                         </div>
-                    </div>
                     <div class="arrowDiv" onclick="nextPlayOption()" >
                         <div class = "arrow-right"></div>
                     </div>

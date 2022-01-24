@@ -119,9 +119,6 @@ body{
     margin: -15px;
     width: 60%;
 }
-/* #Rules {background-color: rgb(249, 249, 249);}
-#Play {background-color: rgb(249,249,249);}
-#Login {background-color: rgb(249, 249, 249);} */
   
 
 /* ==================================== */
@@ -264,15 +261,12 @@ input[type=text], input[type=password],textarea {
 
 #caixaPlay{   
     display: flex;
-	flex-flow: row nowrap;
-    /* justify-content: center;
-    text-align: center;
-    align-items: center; */
+    flex-flow: row nowrap;
+    width: 100%;
+    justify-content: space-around;
 }
 
 #playContent{ 
-    width: 400px;
-    height:350px;
     display: flex;
     justify-content: center;
 }
@@ -307,7 +301,8 @@ input[type=text], input[type=password],textarea {
 }
 
 #BoardOptions{
-    display: block;
+    display: flex;
+    flex-flow: column;
 }
 
 #PlayOptionsContent{
@@ -874,7 +869,7 @@ footer {
     border: 2px solid;
     background-color:rgb(255, 154, 118,0.5);
     color: #ff9a76;
-    align-self: center;
+    align-self: center ;
 }
 
 .rankingInfo{

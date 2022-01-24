@@ -39,26 +39,9 @@ function showFlex(elementID){
 function hide(elementID){
   document.getElementById(elementID).style.display = "none"; 
 }
-
-/* --------------------------------------------------- */
-/*SLIDESHOW*/
-
-//carousel();
-
-function carousel() {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";  
-  }
-  myIndex++;
-  if (myIndex > x.length) {myIndex = 1}    
-  x[myIndex-1].style.display = "block";  
-  setTimeout(carousel, 2000); // Change image every 2 seconds
-}
-
 /* --------------------------------------------------- */
 /*LOGIN*/
+
 //logo animation
 function rotateLogo() {
     document.getElementById('waitinglogo').style.transform +='rotate('+0.5+'deg)';
@@ -132,14 +115,12 @@ function onePlayer(){
     singlePlayer = true;
     document.getElementById('sP').style.background = "rgb(103,155,155)";
     document.getElementById('mP').style.background = "rgb(103,155,155,0.5)";
-    //document.getElementById('singlePlayerOptions').style.display = "block";
 }
 
 function multiPlayer(){
     singlePlayer = false;
     document.getElementById('mP').style.background = "rgb(103,155,155)";
     document.getElementById('sP').style.background = "rgb(103,155,155,0.5)";
-    //document.getElementById('singlePlayerOptions').style.display = "none";
 }
 
 /*choose who starts game*/
@@ -597,7 +578,7 @@ function showRanking(ranking) {
 
         var nick = document.createElement("div");
         nick.className = "rankingInfoParam";
-        nick.innerHTML =  "Nickname: "+ranking[i].nick;
+        nick.innerHTML = "Nickname: " + ranking[i].nick;
 
         var victories = document.createElement("div");
         victories.className = "rankingInfoParam";
@@ -655,7 +636,7 @@ async function startGame(hideID, showID) {
 }
 
 // ########################################################################################
-// #                         RESEND USER TO REGISTER PAGE                                 #
+// #               caixaPlay          RESEND USER TO REGISTER PAGE                                 #
 
 function goToRegister(showID,hideID){
     showFlex(showID);
@@ -857,9 +838,6 @@ const sendUpdate = () => {
         sse.close();
     }; 
 };
-
-rankingBtn.addEventListener('click', sendRanking);
-
 
 // ########################################################################################
 // #                                                                                      #
