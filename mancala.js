@@ -14,14 +14,14 @@ var currentRule = 0;
 /*variáveis escolhidas pelo utilizador*/
 var numHoles = 12;
 var numSeeds = 4;
-var singlePlayer = false; // AQUI
+var singlePlayer = false;
 var aiLevel = 1;
 
 /*variáveis auxiliares*/
 var board;
 var ui;
 var score;
-var roundCounter; //TODO usar isto
+var roundCounter;
 var isPlayerTurn;
 //var serverUrl = "http://127.0.0.1:9028";
 var serverUrl = "http://twserver.alunos.dcc.fc.up.pt:8008";
@@ -240,8 +240,8 @@ function createHoleCima(id){
         seeds.appendChild(s1);
         var randomRotation = Math.floor(Math.random() * 360);
         document.getElementById(seedID).style.transform= 'rotate('+randomRotation+'deg)';
-        document.getElementById(seedID).style.left=  Math.floor(Math.random() * 20)+'px'; 
-        document.getElementById(seedID).style.top = Math.floor(Math.random() * 20)+'px';
+        document.getElementById(seedID).style.left=  Math.floor(Math.random() * 10)+'px'; 
+        document.getElementById(seedID).style.top = Math.floor(Math.random() * 10)+'px';
         //var random_color = seedColors[Math.floor(Math.random() * seedColors.length)];
         //document.getElementById(seedID).style.backgroundImage = random_color;
     }
@@ -420,10 +420,7 @@ function getBestMove(maxDepth, boardMock = [], scoreMock = [], depth = 0) {
         isPlayerTurn = isPlayerTurnCopy;
     }
 
-    if (depth == 0) {
-        console.log("Player 2 chose cavity " + currentBestIndex);
-        return currentBestIndex;
-    }
+    if (depth == 0) return currentBestIndex;
     return currentBestValue;
 }
 
@@ -465,11 +462,9 @@ function isCavityValid(index, b, calledByPlayer) {
     if (!calledByPlayer) return true;
 
     if (!isPlayerTurn) {
-        //alert("Not your turn to play");
         showFlex('MessagesDiv1');
         hide('MessagesDiv2');
         hide('MessagesDiv3');
-        console.log("estou aqui \n");
         return false;
     }
 
@@ -477,7 +472,6 @@ function isCavityValid(index, b, calledByPlayer) {
         showFlex('MessagesDiv2');
         hide('MessagesDiv1');
         hide('MessagesDiv3');
-        //alert("Invalid start position: " + index);
         return false;
     }
 
@@ -485,7 +479,6 @@ function isCavityValid(index, b, calledByPlayer) {
         showFlex('MessagesDiv3');
         hide('MessagesDiv1');
         hide('MessagesDiv2');
-        //alert("Invalid empty pit: " + index);
         return false;
     }
 
@@ -758,6 +751,9 @@ const sendLeave = () => {
         .then(() => {
             console.log("Success sending leave request");
             token = 0;
+            hide("playZone");
+            showFlex("beforePlay");
+            clearBoard();
         })
         .catch( error => alert("Error when leaving game : "+error.data));
     }
